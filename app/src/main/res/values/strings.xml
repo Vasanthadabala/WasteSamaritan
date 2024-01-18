@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">Waste Samaritan</string>
+    <string name="Home">Home</string>
+    <string name="About_Us">About Us</string>
+    <string name="About_Project">About_Project</string>
+    <string name="My_Ratings">My_Ratings</string>
+    <string name="Complaints">Complaints</string>
+    <string name="Logout">Logout</string>
 </resources>

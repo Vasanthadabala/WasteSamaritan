@@ -1,5 +1,6 @@
 package com.example.wastesamaritan.screens
 
+
 import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -39,7 +40,7 @@ import kotlinx.coroutines.launch
 @ExperimentalMaterial3Api
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun HomeScreen(navController:NavHostController) {
+fun AboutScreen(navController:NavHostController) {
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
 
@@ -48,10 +49,6 @@ fun HomeScreen(navController:NavHostController) {
     val currentRoute = navController.currentBackStackEntry?.destination?.route ?: ""
     selectedItemIndex = items.indexOfFirst { it.title == currentRoute }
 
-    var bottomBarselectedItemIndex by rememberSaveable { mutableIntStateOf(0) }
-
-    val bottomBarCurrentRoute = navController.currentBackStackEntry?.destination?.route ?: ""
-    bottomBarselectedItemIndex = items.indexOfFirst { it.title == bottomBarCurrentRoute }
 
     ModalNavigationDrawer(
         drawerContent = {
@@ -71,14 +68,14 @@ fun HomeScreen(navController:NavHostController) {
             Column(
                 Modifier.fillMaxSize().background(Color(0XFFF0F5F9))
             ) {
-                HomeScreenComponent()
+                AboutScreenComponent()
             }
         }
     }
 }
 
 @Composable
-fun HomeScreenComponent(){
+fun AboutScreenComponent(){
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -88,7 +85,7 @@ fun HomeScreenComponent(){
         horizontalAlignment = Alignment.CenterHorizontally
     ){
         Text(
-            text = "HomeScreen",
+            text = "About Us",
             color = MyColor.text,
             fontWeight = FontWeight.W700,
             fontSize = 20.sp
