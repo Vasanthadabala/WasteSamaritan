@@ -11,6 +11,7 @@ import com.example.wastesamaritan.screens.AboutScreen
 import com.example.wastesamaritan.screens.ComplaintsScreen
 import com.example.wastesamaritan.screens.HomeScreen
 import com.example.wastesamaritan.screens.MyRatingsScreen
+import com.example.wastesamaritan.screens.ProfileScreen
 import com.example.wastesamaritan.screens.SigninScreen
 import com.example.wastesamaritan.screens.SyncScreen
 
@@ -19,13 +20,16 @@ import com.example.wastesamaritan.screens.SyncScreen
 @Composable
 fun MyNavigation(){
     val navController = rememberNavController()
-    NavHost(navController = navController, startDestination = Signin.route)
+    NavHost(navController = navController, startDestination = Home.route)
     {
         composable(Signin.route){
             SigninScreen(navController)
         }
         composable(Home.route){
             HomeScreen(navController)
+        }
+        composable(Profile.route){
+            ProfileScreen(navController)
         }
         composable(AboutUs.route){
             AboutScreen(navController)

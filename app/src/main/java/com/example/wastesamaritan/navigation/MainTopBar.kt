@@ -46,8 +46,8 @@ fun MainTopBar(scope:CoroutineScope,drawerState: DrawerState,navController:NavHo
                     .size(35.dp)
             )
         },
-        actions = {
-            IconButton(onClick = { scope.launch { drawerState.open() } }) {
+                actions = {
+            IconButton(onClick = { navController.navigate(Profile.route) }) {
                 Icon(
                     imageVector = Icons.Default.AccountCircle,
                     contentDescription = "Profile",

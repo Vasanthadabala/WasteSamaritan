@@ -133,14 +133,14 @@ fun SigninScreen(navController: NavHostController) {
                             imageVector = Icons.Rounded.Person,
                             contentDescription = "",
                             modifier = Modifier.size(26.dp))}},
-                trailingIcon = {
-                    Box(modifier = Modifier.padding(end = 10.dp),
-                        contentAlignment = Alignment.Center) {
-                        Icon(
-                            imageVector = Icons.Rounded.Error,
-                            contentDescription = "",
-                            modifier = Modifier.size(26.dp))
-                    }},
+//                trailingIcon = {
+//                    Box(modifier = Modifier.padding(end = 10.dp),
+//                        contentAlignment = Alignment.Center) {
+//                        Icon(
+//                            imageVector = Icons.Rounded.Error,
+//                            contentDescription = "",
+//                            modifier = Modifier.size(26.dp))
+//                    }},
                 colors = TextFieldDefaults.colors(
                     focusedIndicatorColor = MyColor.primary,
                     unfocusedIndicatorColor = Color.DarkGray,

@@ -32,10 +32,10 @@ import com.example.wastesamaritan.ui.theme.MyColor
 @Composable
 fun BottomBar(navController: NavHostController) {
 
-    var bottomBarselectedItemIndex by rememberSaveable { mutableIntStateOf(0) }
+    var bottomSelectedItemIndex by rememberSaveable { mutableIntStateOf(0) }
 
-    val bottomBarCurrentRoute = navController.currentBackStackEntry?.destination?.route ?: ""
-    bottomBarselectedItemIndex = items.indexOfFirst { it.title == bottomBarCurrentRoute }
+    val currentRoute = navController.currentBackStackEntry?.destination?.route ?: ""
+    bottomSelectedItemIndex = bottomNavItems.indexOfFirst { it.title == currentRoute }
 
     Card(
         elevation = CardDefaults.cardElevation(5.dp),
@@ -46,13 +46,13 @@ fun BottomBar(navController: NavHostController) {
     ) {
         NavigationBar(
             tonalElevation = 5.dp,
-            containerColor = MyColor.background,
+            containerColor = Color.White
         ) {
-            bottomBarItems.forEachIndexed { index, item ->
+            bottomNavItems.forEachIndexed { index, item ->
                 NavigationBarItem(
-                    selected = bottomBarselectedItemIndex == index,
+                    selected = bottomSelectedItemIndex == index,
                     onClick = {
-                        bottomBarselectedItemIndex = index
+                        bottomSelectedItemIndex = index
                         navController.navigate(item.title){
                             popUpTo(item.title){
                                 inclusive = true
@@ -63,7 +63,7 @@ fun BottomBar(navController: NavHostController) {
                     label = {
                         Text(
                             text = item.title,
-                            fontSize = 15.sp,
+                            fontSize = 12.sp,
                             fontWeight = FontWeight.Bold ,
                             color = Color(0xff0C2D48))
                     },
@@ -74,7 +74,7 @@ fun BottomBar(navController: NavHostController) {
                             contentAlignment = Alignment.Center
                         ) {
                             Image(
-                                painterResource(id = if (index == bottomBarselectedItemIndex) {
+                                painterResource(id = if (index == bottomSelectedItemIndex) {
                                     item.selectedIcon
                                 } else {
                                     item.unselectedIcon
@@ -84,7 +84,7 @@ fun BottomBar(navController: NavHostController) {
                             )
                         }
                     },
-                    colors = if (bottomBarselectedItemIndex == index){
+                    colors = if (bottomSelectedItemIndex == index){
                         NavigationBarItemDefaults.colors(
                             indicatorColor = MyColor.secondary
                         )
@@ -102,7 +102,7 @@ data class BottomNavigationItem(
     val unselectedIcon: Int
 )
 
-val bottomBarItems = listOf(
+val bottomNavItems = listOf(
     BottomNavigationItem(
         title = "Home",
         selectedIcon = R.drawable.selectedhome,

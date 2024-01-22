@@ -24,7 +24,7 @@ import com.example.wastesamaritan.ui.theme.MyColor
 
 @Composable
 fun DrawerNav(
-    selectedItemIndex: Int,
+    drawerSelectedItemIndex: Int,
     onItemSelect: (Int) -> Unit,
     onCloseDrawer: () -> Unit,
     navController: NavHostController
@@ -33,7 +33,7 @@ fun DrawerNav(
         drawerContainerColor = Color(0XFFF0F5F9)
     ) {
         Spacer(modifier = Modifier.height(40.dp))
-        items.forEachIndexed { index, item ->
+        drawerItems.forEachIndexed { index, item ->
             NavigationDrawerItem(
                 label = {
                     Text(
@@ -45,15 +45,20 @@ fun DrawerNav(
                             .padding(5.dp)
                     )
                 },
-                selected = selectedItemIndex == index,
+                selected = drawerSelectedItemIndex == index,
                 onClick = {
                     onItemSelect(index)
                     onCloseDrawer()
-                    navController.navigate(item.title) {
-                        popUpTo(item.title) {
-                            inclusive = true
+                    if (item.title == "Logout") {
+                        navController.navigate(Signin.route) {
                         }
-                        launchSingleTop = true
+                    } else {
+                        navController.navigate(item.title) {
+                            popUpTo(item.title) {
+                                inclusive = true
+                            }
+                            launchSingleTop = true
+                        }
                     }
                 },
                 icon = {
@@ -64,7 +69,7 @@ fun DrawerNav(
                     ) {
                         Image(
                             painterResource(
-                                id = if (index == selectedItemIndex) {
+                                id = if (index == drawerSelectedItemIndex) {
                                     item.selectedIcon
                                 } else {
                                     item.unselectedIcon
@@ -93,7 +98,7 @@ data class DrawerNavigationItem(
     val unselectedIcon: Int,
 )
 
-val items = listOf(
+val drawerItems = listOf(
     DrawerNavigationItem(
         title = "Home",
         selectedIcon = R.drawable.selectedhome ,
