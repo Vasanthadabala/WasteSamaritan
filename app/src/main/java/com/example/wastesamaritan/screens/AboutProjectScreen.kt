@@ -78,7 +78,7 @@ fun AboutProjectScreenComponent(){
             color = MyColor.text,
             fontWeight = FontWeight.W500,
             fontSize = 17.sp,
-            modifier = Modifier.padding(top = 20.dp)
+            modifier = Modifier.padding(top = 20.dp, bottom = 20.dp)
         )
         Box(
             modifier = Modifier

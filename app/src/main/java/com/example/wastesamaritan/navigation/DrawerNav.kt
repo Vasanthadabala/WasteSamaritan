@@ -1,5 +1,6 @@
 package com.example.wastesamaritan.navigation
 
+import android.content.Context
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
@@ -7,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.NavigationDrawerItem
 import androidx.compose.material3.NavigationDrawerItemDefaults
@@ -14,6 +16,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -29,8 +32,14 @@ fun DrawerNav(
     onCloseDrawer: () -> Unit,
     navController: NavHostController
 ) {
+    val context = LocalContext.current
+
+    val sharedPreferences = context.getSharedPreferences("MY_PRE", Context.MODE_PRIVATE)
+    val editor = sharedPreferences.edit()
+
     ModalDrawerSheet(
-        drawerContainerColor = Color(0XFFF0F5F9)
+        modifier = Modifier.width(300.dp),
+        drawerContainerColor = MyColor.background
     ) {
         Spacer(modifier = Modifier.height(40.dp))
         drawerItems.forEachIndexed { index, item ->
@@ -50,7 +59,12 @@ fun DrawerNav(
                     onItemSelect(index)
                     onCloseDrawer()
                     if (item.title == "Logout") {
-                        navController.navigate(Signin.route) {
+                        editor.clear().apply()
+                        editor.putBoolean("isLoggedin", false).apply()
+                        navController.navigate(Signin.route){
+                            popUpTo(navController.graph.id) {
+                                inclusive = true
+                            }
                         }
                     } else {
                         navController.navigate(item.title) {
@@ -99,11 +113,11 @@ data class DrawerNavigationItem(
 )
 
 val drawerItems = listOf(
-    DrawerNavigationItem(
-        title = "Home",
-        selectedIcon = R.drawable.selectedhome ,
-        unselectedIcon = R.drawable.unselectedhome,
-    ),
+//    DrawerNavigationItem(
+//        title = "Home",
+//        selectedIcon = R.drawable.selectedhome ,
+//        unselectedIcon = R.drawable.unselectedhome,
+//    ),
     DrawerNavigationItem(
         title = "About Us",
         selectedIcon = R.drawable.info,

@@ -5,15 +5,16 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -56,205 +57,213 @@ fun AboutScreen(navController:NavHostController) {
 
 @Composable
 fun AboutScreenComponent() {
-    val context  = LocalContext.current
+    val context = LocalContext.current
+
     Column(
-        modifier = Modifier.padding(10.dp)
+        modifier = Modifier
+            .padding(10.dp)
+            .fillMaxSize()
     ) {
-        Column {
-            Text(
-                text = "Marketing Head",
-                color = MyColor.text,
-                fontWeight = FontWeight.W700,
-                fontSize = 22.sp,
-                modifier = Modifier.padding(10.dp)
-            )
-            Card(
-                elevation = CardDefaults.cardElevation(3.dp),
-                shape = RoundedCornerShape(15),
-                colors = CardDefaults.cardColors(Color.White),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(5.dp)
-            ) {
-                Column(
-                    modifier = Modifier.padding(10.dp)
-                ) {
-                    Text(
-                        text = "Wisvesh B.S.",
-                        color = MyColor.text,
-                        fontWeight = FontWeight.W500,
-                        fontSize = 20.sp,
-                        modifier = Modifier.padding(5.dp)
-                    )
-                    Row {
-                        Text(
-                            text = "Email ID:",
-                            color = MyColor.text,
-                            fontWeight = FontWeight.W500,
-                            fontSize = 20.sp,
-                            modifier = Modifier.padding(5.dp)
-                        )
-                        ClickableText(
-                            text = buildAnnotatedString {
-                                append("wisvesh@gmail.com")
-                            },
-                            onClick = { _ ->
-                                val email = "wisvesh@gmail.com"
-                                val intent =
-                                    Intent(Intent.ACTION_SENDTO, Uri.parse("mailto:$email"))
-                                context.startActivity(intent)
-                            },
-                            modifier = Modifier.padding(5.dp),
-                            style = TextStyle(
-                                color = Color(0XFF0B60B0),
-                                fontSize = 20.sp,
-                                fontWeight = FontWeight.W500
-                            )
-                        )
-                    }
-                    Row {
-                        Text(
-                            text = "Phone:",
-                            color = MyColor.text,
-                            fontWeight = FontWeight.W500,
-                            fontSize = 20.sp,
-                            modifier = Modifier.padding(5.dp)
-                        )
-                        ClickableText(
-                            text = buildAnnotatedString {
-                                append("8147515627")
-                            },
-                            onClick = { _ ->
-                                val phoneNumber = "tel:8147515627"
-                                val intent = Intent(Intent.ACTION_DIAL, Uri.parse(phoneNumber))
-                                context.startActivity(intent)
-                            },
-                            modifier = Modifier.padding(5.dp),
-                            style = TextStyle(
-                                color = Color(0XFF0B60B0),
-                                fontSize = 20.sp,
-                                fontWeight = FontWeight.W500
-                            )
-                        )
-                    }
-                }
-            }
-        }
         Column(
-            modifier = Modifier.padding(top = 20.dp)
-        ){
-            Text(
-                text = "Operations Head",
-                color = MyColor.text,
-                fontWeight = FontWeight.W700,
-                fontSize = 22.sp,
-                modifier = Modifier.padding(10.dp)
-            )
-
-            Card(
-                elevation = CardDefaults.cardElevation(3.dp),
-                shape = RoundedCornerShape(15),
-                colors = CardDefaults.cardColors(Color.White),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(5.dp)
-            )
-            {
-                Column(
-                    modifier = Modifier.padding(10.dp)
-                ) {
-                    Text(
-                        text = "Krishna A",
-                        color = MyColor.text,
-                        fontWeight = FontWeight.W500,
-                        fontSize = 20.sp,
-                        modifier = Modifier.padding(5.dp)
-                    )
-                    Row{
-                        Text(
-                            text = "Phone:",
-                            color = MyColor.text,
-                            fontWeight = FontWeight.W500,
-                            fontSize = 20.sp,
-                            modifier = Modifier.padding(5.dp)
-                        )
-                        ClickableText(
-                            text = buildAnnotatedString {
-                                append("9449565171")
-                            },
-                            onClick = { _ ->
-                                val phoneNumber1 = "tel:9449565171"
-                                val intent = Intent(Intent.ACTION_DIAL, Uri.parse(phoneNumber1))
-                                context.startActivity(intent)
-                            },
-                            modifier = Modifier.padding(5.dp),
-                            style = TextStyle(
-                                color = Color(0XFF0B60B0),
-                                fontSize = 20.sp,
-                                fontWeight = FontWeight.W500
-                            )
-                        )
-                        ClickableText(
-                            text = buildAnnotatedString {
-                                append("9738888512")
-                            },
-                            onClick = { _ ->
-                                val phoneNumber2 = "tel:9738888512"
-                                val intent = Intent(Intent.ACTION_DIAL, Uri.parse(phoneNumber2))
-                                context.startActivity(intent)
-                            },
-                            modifier = Modifier.padding(5.dp),
-                            style = TextStyle(
-                                color = Color(0XFF0B60B0),
-                                fontSize = 20.sp,
-                                fontWeight = FontWeight.W500
-                            )
-                        )
-                    }
-                }
-            }
-        }
-        Column(
-            modifier = Modifier.padding(top = 20.dp)
+            modifier = Modifier
+                .verticalScroll(rememberScrollState())
+                .weight(1f)
         ) {
-            Text(
-                text = "Developers",
-                color = MyColor.text,
-                fontWeight = FontWeight.W700,
-                fontSize = 22.sp,
-                modifier = Modifier.padding(10.dp)
-            )
-
-            Card(
-                elevation = CardDefaults.cardElevation(3.dp),
-                shape = RoundedCornerShape(15),
-                colors = CardDefaults.cardColors(Color.White),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(5.dp)
-            )
-            {
-                Column(
+            Column {
+                Text(
+                    text = "Marketing Head",
+                    color = MyColor.text,
+                    fontWeight = FontWeight.W700,
+                    fontSize = 20.sp,
                     modifier = Modifier.padding(10.dp)
+                )
+                Card(
+                    elevation = CardDefaults.cardElevation(3.dp),
+                    shape = RoundedCornerShape(10),
+                    colors = CardDefaults.cardColors(Color.White),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(5.dp)
                 ) {
-                    Text(
-                        text = "Devi Priya Sarkar",
-                        color = MyColor.text,
-                        fontWeight = FontWeight.W500,
-                        fontSize = 20.sp,
-                        modifier = Modifier.padding(5.dp)
-                    )
-                    Text(
-                        text = "Sharath Huddar",
-                        color = MyColor.text,
-                        fontWeight = FontWeight.W500,
-                        fontSize = 20.sp,
-                        modifier = Modifier.padding(5.dp)
-                    )
+                    Column(
+                        modifier = Modifier.padding(10.dp)
+                    ) {
+                        Text(
+                            text = "Wisvesh B.S.",
+                            color = MyColor.text,
+                            fontWeight = FontWeight.W500,
+                            fontSize = 18.sp,
+                            modifier = Modifier.padding(5.dp)
+                        )
+                        Row {
+                            Text(
+                                text = "Email ID:",
+                                color = MyColor.text,
+                                fontWeight = FontWeight.W500,
+                                fontSize = 18.sp,
+                                modifier = Modifier.padding(5.dp)
+                            )
+                            ClickableText(
+                                text = buildAnnotatedString {
+                                    append("wisvesh@gmail.com")
+                                },
+                                onClick = { _ ->
+                                    val email = "wisvesh@gmail.com"
+                                    val intent =
+                                        Intent(Intent.ACTION_SENDTO, Uri.parse("mailto:$email"))
+                                    context.startActivity(intent)
+                                },
+                                modifier = Modifier.padding(5.dp),
+                                style = TextStyle(
+                                    color = Color(0XFF39A7FF),
+                                    fontSize = 18.sp,
+                                    fontWeight = FontWeight.W500
+                                )
+                            )
+                        }
+                        Row {
+                            Text(
+                                text = "Phone:",
+                                color = MyColor.text,
+                                fontWeight = FontWeight.W500,
+                                fontSize = 18.sp,
+                                modifier = Modifier.padding(5.dp)
+                            )
+                            ClickableText(
+                                text = buildAnnotatedString {
+                                    append("8147515627")
+                                },
+                                onClick = { _ ->
+                                    val phoneNumber = "tel:8147515627"
+                                    val intent = Intent(Intent.ACTION_DIAL, Uri.parse(phoneNumber))
+                                    context.startActivity(intent)
+                                },
+                                modifier = Modifier.padding(5.dp),
+                                style = TextStyle(
+                                    color = Color(0XFF39A7FF),
+                                    fontSize = 18.sp,
+                                    fontWeight = FontWeight.W500
+                                )
+                            )
+                        }
+                    }
+                }
+            }
+            Column(
+                modifier = Modifier.padding(top = 20.dp)
+            ) {
+                Text(
+                    text = "Operations Head",
+                    color = MyColor.text,
+                    fontWeight = FontWeight.W700,
+                    fontSize = 20.sp,
+                    modifier = Modifier.padding(10.dp)
+                )
+
+                Card(
+                    elevation = CardDefaults.cardElevation(3.dp),
+                    shape = RoundedCornerShape(10),
+                    colors = CardDefaults.cardColors(Color.White),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(5.dp)
+                )
+                {
+                    Column(
+                        modifier = Modifier.padding(10.dp)
+                    ) {
+                        Text(
+                            text = "Krishna A",
+                            color = MyColor.text,
+                            fontWeight = FontWeight.W500,
+                            fontSize = 18.sp,
+                            modifier = Modifier.padding(5.dp)
+                        )
+                        Row {
+                            Text(
+                                text = "Phone:",
+                                color = MyColor.text,
+                                fontWeight = FontWeight.W500,
+                                fontSize = 18.sp,
+                                modifier = Modifier.padding(5.dp)
+                            )
+                            ClickableText(
+                                text = buildAnnotatedString {
+                                    append("9449565171")
+                                },
+                                onClick = { _ ->
+                                    val phoneNumber1 = "tel:9449565171"
+                                    val intent = Intent(Intent.ACTION_DIAL, Uri.parse(phoneNumber1))
+                                    context.startActivity(intent)
+                                },
+                                modifier = Modifier.padding(5.dp),
+                                style = TextStyle(
+                                    color = Color(0XFF39A7FF),
+                                    fontSize = 18.sp,
+                                    fontWeight = FontWeight.W500
+                                )
+                            )
+                            ClickableText(
+                                text = buildAnnotatedString {
+                                    append("9738888512")
+                                },
+                                onClick = { _ ->
+                                    val phoneNumber2 = "tel:9738888512"
+                                    val intent = Intent(Intent.ACTION_DIAL, Uri.parse(phoneNumber2))
+                                    context.startActivity(intent)
+                                },
+                                modifier = Modifier.padding(5.dp),
+                                style = TextStyle(
+                                    color = Color(0XFF39A7FF),
+                                    fontSize = 18.sp,
+                                    fontWeight = FontWeight.W500
+                                )
+                            )
+                        }
+                    }
+                }
+            }
+            Column(
+                modifier = Modifier.padding(top = 20.dp)
+            ) {
+                Text(
+                    text = "Developers",
+                    color = MyColor.text,
+                    fontWeight = FontWeight.W700,
+                    fontSize = 20.sp,
+                    modifier = Modifier.padding(10.dp)
+                )
+
+                Card(
+                    elevation = CardDefaults.cardElevation(3.dp),
+                    shape = RoundedCornerShape(10),
+                    colors = CardDefaults.cardColors(Color.White),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(5.dp)
+                )
+                {
+                    Column(
+                        modifier = Modifier.padding(10.dp)
+                    ) {
+                        Text(
+                            text = "Devi Priya Sarkar",
+                            color = MyColor.text,
+                            fontWeight = FontWeight.W500,
+                            fontSize = 18.sp,
+                            modifier = Modifier.padding(5.dp)
+                        )
+                        Text(
+                            text = "Sharath Huddar",
+                            color = MyColor.text,
+                            fontWeight = FontWeight.W500,
+                            fontSize = 18.sp,
+                            modifier = Modifier.padding(5.dp)
+                        )
+                    }
                 }
             }
         }
-        Spacer(modifier = Modifier.weight(1f))
         Text(
             text = "Copyright © Waste Samaritans",
             color = Color.Gray,

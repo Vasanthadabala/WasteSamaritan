@@ -39,14 +39,11 @@ fun BottomBar(navController: NavHostController) {
 
     Card(
         elevation = CardDefaults.cardElevation(5.dp),
-        shape = RoundedCornerShape(0.dp),
-        colors = CardDefaults.cardColors(Color.White),
-        modifier = Modifier
-            .padding(1.dp)
+        shape = RoundedCornerShape(0.dp)
     ) {
         NavigationBar(
             tonalElevation = 5.dp,
-            containerColor = Color.White
+            containerColor = MyColor.background
         ) {
             bottomNavItems.forEachIndexed { index, item ->
                 NavigationBarItem(
@@ -115,8 +112,8 @@ val bottomNavItems = listOf(
     ),
     BottomNavigationItem(
         title = "Complaints",
-        selectedIcon = R.drawable.selectedlist,
-        unselectedIcon = R.drawable.unselectedlist
+        selectedIcon = R.drawable.selectedfeedback,
+        unselectedIcon = R.drawable.unselectedfeedback
     ),
     BottomNavigationItem(
         title = "Sync",

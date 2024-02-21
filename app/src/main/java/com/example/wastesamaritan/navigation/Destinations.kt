@@ -28,4 +28,16 @@ object Sync: Destinations {
 object Profile: Destinations {
     override val route = "Profile"
 }
+object QrScan: Destinations {
+    override val route = "QrScan"
+}
+object IndividualHouse: Destinations {
+    override val route = "IndividualHouse"
+}
+object Segregated: Destinations {
+    override val route = "Segregated"
+}
+object NotSegregated: Destinations {
+    override val route = "NotSegregated"
+}
 

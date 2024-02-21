@@ -16,13 +16,12 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Error
 import androidx.compose.material.icons.rounded.Key
 import androidx.compose.material.icons.rounded.Person
-import androidx.compose.material.icons.rounded.RemoveRedEye
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
@@ -57,20 +56,22 @@ fun SigninScreen(navController: NavHostController) {
     val context = LocalContext.current
     val keyboardController = LocalSoftwareKeyboardController.current
 
+    var passwordVisibility by remember { mutableStateOf(false) }
 
-    var email by remember { mutableStateOf(TextFieldValue("")) }
+    var username by remember { mutableStateOf(TextFieldValue("")) }
     var password by remember { mutableStateOf(TextFieldValue("")) }
 
-    val mail = email.text
+    val userName = username.text
 
     val sharedPreferences = context.getSharedPreferences("MY_PRE", Context.MODE_PRIVATE)
     val editor = sharedPreferences.edit()
 
-    editor.putString("Mail", mail).apply()
+    editor.putString("username", userName).apply()
 
     Column(
         verticalArrangement = Arrangement.Top,
-        modifier = Modifier.background(MyColor.background)
+        modifier = Modifier
+            .background(MyColor.background)
     ) {
         Column {
             Image(
@@ -92,7 +93,7 @@ fun SigninScreen(navController: NavHostController) {
                 modifier = Modifier
                     .fillMaxWidth()
                     .background(MyColor.primary)
-                    .padding(30.dp)
+                    .padding(20.dp)
             )
             Text(
                 text = "Signin Information",
@@ -111,10 +112,10 @@ fun SigninScreen(navController: NavHostController) {
             )
             OutlinedTextField(
                 singleLine = true,
-                value = email,
+                value = username,
                 onValueChange = {
                     if (it.text.length <= 32) {
-                        email = it
+                        username = it
                     }
                 },
                 placeholder = { Text(text = "Username/CollectorID") },
@@ -133,14 +134,6 @@ fun SigninScreen(navController: NavHostController) {
                             imageVector = Icons.Rounded.Person,
                             contentDescription = "",
                             modifier = Modifier.size(26.dp))}},
-//                trailingIcon = {
-//                    Box(modifier = Modifier.padding(end = 10.dp),
-//                        contentAlignment = Alignment.Center) {
-//                        Icon(
-//                            imageVector = Icons.Rounded.Error,
-//                            contentDescription = "",
-//                            modifier = Modifier.size(26.dp))
-//                    }},
                 colors = TextFieldDefaults.colors(
                     focusedIndicatorColor = MyColor.primary,
                     unfocusedIndicatorColor = Color.DarkGray,
@@ -187,13 +180,24 @@ fun SigninScreen(navController: NavHostController) {
                             contentDescription = "",
                             modifier = Modifier.size(26.dp))}},
                 trailingIcon = {
-                    Box(modifier = Modifier.padding(end = 10.dp),
-                        contentAlignment = Alignment.Center) {
-                        Icon(
-                            imageVector = Icons.Rounded.RemoveRedEye,
-                            contentDescription = "",
-                            modifier = Modifier.size(26.dp))
-                    }},
+                    Box(
+                        modifier = Modifier.padding(end = 10.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        IconButton(
+                            onClick = {
+                                passwordVisibility = !passwordVisibility
+                            }
+                        ){
+                            Image(
+                                painter =
+                                    if (passwordVisibility) painterResource(id = R.drawable.eye)
+                                    else painterResource(id = R.drawable.eye_slash) ,
+                                contentDescription = "",
+                                modifier = Modifier.size(25.dp))
+                        }
+                    }
+                },
                 colors = TextFieldDefaults.colors(
                     focusedIndicatorColor = MyColor.primary,
                     unfocusedIndicatorColor = Color.DarkGray,
@@ -216,19 +220,30 @@ fun SigninScreen(navController: NavHostController) {
         ) {
             Button(
                 onClick = {
-                    if (password.text.isBlank() || email.text.isBlank()) {
+                    if (password.text.isBlank() || username.text.isBlank()) {
                         Toast.makeText(
                             context,
                             "Signin Unsuccessful. Please enter all data",
                             Toast.LENGTH_SHORT
                         ).show()
-                    } else {
+                    }else if (username.text != "krishna" && password.text !="krishna"){
+                        Toast.makeText(
+                            context,
+                            "Signin Unsuccessful. Username && Password not matching",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }else if(username.text == "krishna" && password.text=="krishna"){
                         Toast.makeText(
                             context,
                             "Signin successful.",
                             Toast.LENGTH_SHORT
                         ).show()
-                        navController.navigate(Home.route)
+                        editor.putBoolean("isSignedin",true).apply()
+                        navController.navigate(Home.route){
+                            popUpTo(navController.graph.id){
+                                inclusive = true
+                            }
+                        }
                     }
                 },
                 elevation = ButtonDefaults.buttonElevation(

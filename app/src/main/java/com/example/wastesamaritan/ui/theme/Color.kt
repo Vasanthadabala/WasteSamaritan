@@ -11,8 +11,8 @@ val PurpleGrey40 = Color(0xFF625b71)
 val Pink40 = Color(0xFF7D5260)
 
 object MyColor {
-    val primary = Color(0xFF65B741)
+    val primary = Color(0XFF65B741)
     val secondary = Color(0XFFC1F2B0)
-    val background = Color(0XFFF0F5F9)
+    val background = Color.White //Color(0XFFF0F5F9)
     val text = Color(0XFF1E2022)
 }
