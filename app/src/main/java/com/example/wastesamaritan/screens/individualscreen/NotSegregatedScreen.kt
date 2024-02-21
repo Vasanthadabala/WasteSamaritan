@@ -360,7 +360,7 @@ fun NotSegregatedScreenComponent(navController: NavHostController) {
                             items(weightCards) { weight ->
                                 val iconSize = 16.dp
                                 val offsetInPx =
-                                    LocalDensity.current.run { ((iconSize - 32.dp) / 2).roundToPx() }
+                                    LocalDensity.current.run { ((iconSize - 5.dp) / 2).roundToPx() }
                                 Box(
                                     modifier = Modifier
                                         .padding(iconSize / 2)
@@ -374,26 +374,26 @@ fun NotSegregatedScreenComponent(navController: NavHostController) {
                                             modifier = Modifier.padding(10.dp)
                                         )
                                     }
-                                }
-                                IconButton(
-                                    onClick = {
-                                        weightCards = weightCards - listOf(weight)
-                                    },
-                                    modifier = Modifier
-                                        .offset {
-                                            IntOffset(x = +offsetInPx, y = -offsetInPx)
-                                        }
-                                        .clip(CircleShape)
-                                        .background(Color(0xFFEA4141))
-                                        .size(iconSize)
-                                        .align(Alignment.End)
-                                ) {
-                                    Icon(
-                                        modifier = Modifier.padding(0.dp),
-                                        imageVector = Icons.Rounded.Close,
-                                        contentDescription = "close",
-                                        tint = Color.White
-                                    )
+                                    IconButton(
+                                        onClick = {
+                                            weightCards = weightCards - listOf(weight)
+                                        },
+                                        modifier = Modifier
+                                            .offset {
+                                                IntOffset(x = +offsetInPx, y = -offsetInPx)
+                                            }
+                                            .clip(CircleShape)
+                                            .background(Color(0xFFEA4141))
+                                            .size(iconSize)
+                                            .align(Alignment.TopEnd)
+                                    ) {
+                                        Icon(
+                                            modifier = Modifier.padding(0.dp),
+                                            imageVector = Icons.Rounded.Close,
+                                            contentDescription = "close",
+                                            tint = Color.White
+                                        )
+                                    }
                                 }
                             }
                         }
