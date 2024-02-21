@@ -116,9 +116,12 @@ fun NotSegregatedScreenComponent(navController: NavHostController) {
     val keyboardController = LocalSoftwareKeyboardController.current
     val context = LocalContext.current
 
-    var quantity by remember { mutableIntStateOf(0) }
+    var weight by remember { mutableIntStateOf(0) }
     var rating by remember { mutableDoubleStateOf(0.0) }
     var capturedImageUris by remember { mutableStateOf<List<Uri>>(emptyList()) }
+
+    var totalWeight by remember { mutableStateOf(0) }
+    var weightCards by remember { mutableStateOf<List<Int>>(emptyList()) }
 
     var currentUri : Uri? = null
 
@@ -286,7 +289,7 @@ fun NotSegregatedScreenComponent(navController: NavHostController) {
                             modifier = Modifier.padding(10.dp)
                         ) {
                             Text(
-                                text = "Total Weight: 10kgs",
+                                text = "Total Weight: $totalWeight kgs",
                                 fontSize = 20.sp,
                                 fontWeight = FontWeight.W500,
                                 color = MyColor.text,
@@ -297,8 +300,8 @@ fun NotSegregatedScreenComponent(navController: NavHostController) {
                             ) {
                                 OutlinedTextField(
                                     singleLine = true,
-                                    value = if (quantity == 0) "" else quantity.toString(),
-                                    onValueChange = { quantity = it.toIntOrNull() ?: 0 },
+                                    value = if (weight == 0) "" else weight.toString(),
+                                    onValueChange = { weight = it.toIntOrNull() ?: 0 },
                                     placeholder = { Text(text = "Quantity") },
                                     modifier = Modifier
                                         .padding(10.dp)
@@ -325,7 +328,11 @@ fun NotSegregatedScreenComponent(navController: NavHostController) {
                                     )
                                 )
                                 Button(
-                                    onClick = {},
+                                    onClick = {
+                                        totalWeight = totalWeight + weight
+                                        weightCards = weightCards + listOf(weight)
+                                        weight = 0
+                                    },
                                     elevation = ButtonDefaults.buttonElevation(
                                         defaultElevation = 1.dp,
                                         pressedElevation = 5.dp,
@@ -341,6 +348,51 @@ fun NotSegregatedScreenComponent(navController: NavHostController) {
                                         fontSize = 22.sp,
                                         color = Color.Black,
                                         modifier = Modifier.padding(0.dp)
+                                    )
+                                }
+                            }
+                        }
+                        LazyRow(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(start = 10.dp, top = 5.dp, bottom = 5.dp, end = 10.dp)
+                        ) {
+                            items(weightCards) { weight ->
+                                val iconSize = 16.dp
+                                val offsetInPx =
+                                    LocalDensity.current.run { ((iconSize - 32.dp) / 2).roundToPx() }
+                                Box(
+                                    modifier = Modifier
+                                        .padding(iconSize / 2)
+                                ) {
+                                    Card(
+                                        elevation = CardDefaults.cardElevation(5.dp)
+                                    ) {
+                                        Text(
+                                            text = weight.toString(),
+                                            color = Color.Black,
+                                            modifier = Modifier.padding(10.dp)
+                                        )
+                                    }
+                                }
+                                IconButton(
+                                    onClick = {
+                                        weightCards = weightCards - listOf(weight)
+                                    },
+                                    modifier = Modifier
+                                        .offset {
+                                            IntOffset(x = +offsetInPx, y = -offsetInPx)
+                                        }
+                                        .clip(CircleShape)
+                                        .background(Color(0xFFEA4141))
+                                        .size(iconSize)
+                                        .align(Alignment.End)
+                                ) {
+                                    Icon(
+                                        modifier = Modifier.padding(0.dp),
+                                        imageVector = Icons.Rounded.Close,
+                                        contentDescription = "close",
+                                        tint = Color.White
                                     )
                                 }
                             }
