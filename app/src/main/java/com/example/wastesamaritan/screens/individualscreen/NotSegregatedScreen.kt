@@ -17,7 +17,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
@@ -36,9 +35,6 @@ import androidx.compose.material.Icon
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material.icons.rounded.Mic
-import androidx.compose.material.icons.rounded.Star
-import androidx.compose.material.icons.rounded.StarHalf
-import androidx.compose.material.icons.rounded.StarOutline
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -71,7 +67,6 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
@@ -82,6 +77,7 @@ import androidx.navigation.NavHostController
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.example.wastesamaritan.R
+import com.example.wastesamaritan.components.RatingBar
 import com.example.wastesamaritan.navigation.TopBar
 import com.example.wastesamaritan.ui.theme.MyColor
 import java.io.File
@@ -366,7 +362,10 @@ fun NotSegregatedScreenComponent(navController: NavHostController) {
                                         .padding(iconSize / 2)
                                 ) {
                                     Card(
-                                        elevation = CardDefaults.cardElevation(5.dp)
+                                        elevation = CardDefaults.cardElevation(5.dp),
+                                        colors = CardDefaults.cardColors(
+                                            containerColor = Color.White
+                                        )
                                     ) {
                                         Text(
                                             text = weight.toString(),
@@ -455,7 +454,7 @@ fun NotSegregatedScreenComponent(navController: NavHostController) {
                                 text = "Feedback",
                                 fontWeight = FontWeight.W500,
                                 fontSize = 20.sp,
-                                color = if (rating != 0.0) Color.Black else Color.Red
+                                color = Color.Black
                             )
                         }
                         Button(
@@ -503,36 +502,6 @@ fun NotSegregatedScreenComponent(navController: NavHostController) {
                 text = "Save", textAlign = TextAlign.Center, fontSize = 24.sp,
                 color = Color.Black,
                 modifier = Modifier.padding(2.dp)
-            )
-        }
-    }
-}
-
-@Composable
-fun RatingBar(
-    rating: Double = 0.0,
-    stars:Int = 5,
-    onRatingChanged: (Double) -> Unit,
-    modifier: Modifier = Modifier
-) {
-    var isHalfStar = (rating % 1) !=0.0
-
-    Row{
-        for (index in 1..stars){
-            Icon(
-                modifier = modifier.clickable{onRatingChanged(index.toDouble())},
-                contentDescription = null,
-                tint = Color(0XFFFFC000),
-                imageVector = if(index<=rating){
-                    Icons.Rounded.Star
-                }else{
-                    if(isHalfStar){
-                        isHalfStar = false
-                        Icons.Rounded.StarHalf
-                    }else{
-                        Icons.Rounded.StarOutline
-                    }
-                }
             )
         }
     }
