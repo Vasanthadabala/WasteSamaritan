@@ -6,9 +6,11 @@ import android.net.Uri
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -38,6 +40,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.FileProvider
@@ -129,6 +132,7 @@ fun SegregatedScreenComponent(navController: NavHostController){
             colors = CardDefaults.cardColors(Color.White),
             modifier = Modifier
                 .fillMaxWidth()
+                .padding(10.dp)
         ) {
             LazyVerticalGrid(columns = GridCells.Fixed(3)) {
                 items(Categories) { category ->
@@ -140,41 +144,91 @@ fun SegregatedScreenComponent(navController: NavHostController){
                 }
             }
         }
-        OutlinedReusableComponent(
-            context = context,
-            capturedImageUris = capturedImageUris,
-            onCameraClicked = { permissionLauncher.launch(Manifest.permission.CAMERA) },
-            totalWeight = totalWeight,
-            weight = weight,
-            onWeightChange = { newWeight -> weight = newWeight },
-            onAddWeightClicked = { /* handle add weight clicked */ },
-            weightCards = weightCards,
-            onWeightCardRemove = { removedWeight, updatedTotalWeight ->
-                weightCards = weightCards.filter { it != removedWeight }
-                totalWeight = updatedTotalWeight // Update the total weight here
-            },
-            rating = rating,
-            onRatingChanged = { newRating -> rating = newRating },
-            onFeedbackButtonClicked = { /* handle feedback button clicked */ },
-            onImageRemove = { removedUri ->
-                capturedImageUris = capturedImageUris.filter { it != removedUri }
-            }
-        )
+        Column(
+            modifier = Modifier
+                .weight(1f)
+        ) {
+            OutlinedReusableComponent(
+                context = context,
+                capturedImageUris = capturedImageUris,
+                onCameraClicked = { permissionLauncher.launch(Manifest.permission.CAMERA) },
+                totalWeight = totalWeight,
+                weight = weight,
+                onWeightChange = { newWeight -> weight = newWeight },
+                onAddWeightClicked = { /* handle add weight clicked */ },
+                weightCards = weightCards,
+                onWeightCardRemove = { removedWeight, updatedTotalWeight ->
+                    weightCards = weightCards.filter { it != removedWeight }
+                    totalWeight = updatedTotalWeight // Update the total weight here
+                },
+                rating = rating,
+                onRatingChanged = { newRating -> rating = newRating },
+                onFeedbackButtonClicked = { /* handle feedback button clicked */ },
+                onImageRemove = { removedUri ->
+                    capturedImageUris = capturedImageUris.filter { it != removedUri }
+                }
+            )
+        }
+
+        Button(
+            onClick = { /* handle save button click */ },
+            elevation = ButtonDefaults.buttonElevation(
+                defaultElevation = 1.dp,
+                pressedElevation = 5.dp
+            ),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(5.dp),
+            shape = RoundedCornerShape(24),
+            colors = ButtonDefaults.buttonColors(MyColor.primary)
+        ) {
+            Text(
+                text = "Save",
+                textAlign = TextAlign.Center,
+                fontSize = 24.sp,
+                color = Color.Black,
+                modifier = Modifier.padding(2.dp)
+            )
+        }
     }
 }
 
 @Composable
-fun WasteCategory(category: String,isSelected:Boolean,onCategorySelected:()-> Unit) {
+fun WasteCategory(
+    category: String,
+    isSelected:Boolean,
+    onCategorySelected:()-> Unit
+) {
+    val backgroundColor = when (category) {
+        "Wet" -> if (isSelected) Color(0XFF65B741) else Color.White
+        "Rejected" -> if (isSelected) Color(0XFFD80032) else Color.White
+        "Dry" -> if (isSelected) Color(0XFF39A7FF) else Color.White
+        "Sanitary" -> if (isSelected) Color.Magenta else Color.White
+        "E-Waste" -> if (isSelected) Color.Yellow else Color.White
+        else -> Color.White
+    }
+
+    val borderColor = when (category) {
+        "Wet" -> Color(0XFF65B741)
+        "Rejected" -> Color(0XFFD80032)
+        "Dry" -> Color(0XFF39A7FF)
+        "Sanitary" -> Color.Magenta
+        "E-Waste" -> Color.Yellow
+        else -> Color.White
+    }
+
     Button(
         onClick = { onCategorySelected() },
-        colors = ButtonDefaults.buttonColors(if (isSelected) Color.DarkGray else Color.LightGray),
+        colors = ButtonDefaults.buttonColors(backgroundColor),
         shape = RoundedCornerShape(32),
-        modifier = Modifier.padding(vertical = 2.dp, horizontal = 5.dp)
+
+        modifier = Modifier.padding(vertical = 2.dp, horizontal = 5.dp),
+        border = BorderStroke(1.dp, borderColor )
     ) {
         Text(
             text = category,
             fontSize = 12.sp,
-            color = (if (isSelected) Color.White else Color(0XFF41544E)),
+            color = Color.Black,
             fontWeight = FontWeight.W800
         )
     }

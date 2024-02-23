@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.FilterList
+import androidx.compose.material.icons.rounded.QrCode2
 import androidx.compose.material.icons.rounded.QrCodeScanner
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -40,6 +41,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.wastesamaritan.navigation.BottomBar
 import com.example.wastesamaritan.navigation.Home
+import com.example.wastesamaritan.navigation.QrScan
 import com.example.wastesamaritan.navigation.bottomNavItems
 import com.example.wastesamaritan.ui.theme.MyColor
 
@@ -94,21 +96,27 @@ fun SyncScreenComponent() {
             contentAlignment = Alignment.Center
         ) {
             Button(
-                onClick = {},
+                onClick = { },
                 elevation = ButtonDefaults.buttonElevation(
                     defaultElevation = 5.dp,
                     pressedElevation = 5.dp,
                 ),
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 40.dp),
+                    .padding(vertical = 15.dp, horizontal = 60.dp),
                 shape = RoundedCornerShape(24),
-                colors = ButtonDefaults.buttonColors(MyColor.primary)
+                colors = ButtonDefaults.buttonColors(Color(0XFF87C4FF))
             ) {
-                Icon(imageVector = Icons.Rounded.QrCodeScanner, contentDescription = "" )
+                Icon(
+                    imageVector = Icons.Rounded.QrCode2,
+                    contentDescription = "",
+                    tint = Color.Black
+                )
                 Text(
-                    text = " Barcode Scan", textAlign = TextAlign.Center, fontSize = 20.sp,
-                    color = Color.White,
+                    text = " Scan",
+                    textAlign = TextAlign.Center,
+                    fontSize = 22.sp,
+                    color = MyColor.text,
                     modifier = Modifier.padding(2.dp)
                 )
             }

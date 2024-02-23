@@ -6,6 +6,7 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -17,6 +18,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.QrCode2
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Divider
 import androidx.compose.material3.DrawerValue
@@ -28,9 +30,11 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -54,6 +58,7 @@ import com.example.wastesamaritan.navigation.QrScan
 import com.example.wastesamaritan.navigation.bottomNavItems
 import com.example.wastesamaritan.navigation.drawerItems
 import com.example.wastesamaritan.ui.theme.MyColor
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @ExperimentalComposeUiApi
@@ -110,6 +115,41 @@ fun HomeScreenComponent(navController: NavHostController) {
     val username = sharedPreferences.getString("username", "")
 
     var codes = 0
+
+    var isTimerRunning by remember { mutableStateOf(false) }
+    var elapsedTime by remember { mutableStateOf(0L) }
+
+    var buttonState by remember { mutableStateOf(ButtonState.START) }
+
+    // Function to handle the button click
+    val onButtonClick: () -> Unit = {
+        when (buttonState) {
+            ButtonState.START -> {
+                buttonState = ButtonState.PAUSE
+                isTimerRunning = true
+            }
+            ButtonState.PAUSE -> {
+                buttonState = ButtonState.START
+                isTimerRunning = false
+            }
+        }
+    }
+
+    // Function to handle the stop button click
+    val onStopButtonClick: () -> Unit = {
+        buttonState = ButtonState.START
+        isTimerRunning = false
+        elapsedTime = 0L
+    }
+
+    LaunchedEffect(isTimerRunning) {
+        if (isTimerRunning) {
+            while (true) {
+                delay(1000) // Update timer every second
+                elapsedTime++
+            }
+        }
+    }
 
     Column(
         modifier = Modifier
@@ -231,5 +271,90 @@ fun HomeScreenComponent(navController: NavHostController) {
                 }
             }
         }
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier.padding(vertical = 20.dp, horizontal = 10.dp)
+        ) {
+            Row(
+                horizontalArrangement = Arrangement.Center
+            ) {
+                Button(
+                    onClick = { onButtonClick() },
+                    elevation = ButtonDefaults.buttonElevation(
+                        defaultElevation = 1.dp,
+                        pressedElevation = 5.dp
+                    ),
+                    modifier = Modifier
+                        .padding(5.dp),
+                    shape = RoundedCornerShape(24),
+                    colors = when (buttonState) {
+                        ButtonState.START -> ButtonDefaults.buttonColors(MyColor.primary)
+                        ButtonState.PAUSE -> ButtonDefaults.buttonColors(Color.Yellow)
+                    }
+                ) {
+                    Text(
+                        text = buttonState.text,
+                        textAlign = TextAlign.Center,
+                        fontSize = 22.sp,
+                        color = Color.Black,
+                        modifier = Modifier.padding(horizontal = 20.dp)
+                    )
+                }
+                Button(
+                    onClick = { onStopButtonClick() },
+                    elevation = ButtonDefaults.buttonElevation(
+                        defaultElevation = 1.dp,
+                        pressedElevation = 5.dp
+                    ),
+                    modifier = Modifier
+                        .padding(5.dp),
+                    shape = RoundedCornerShape(24),
+                    colors = ButtonDefaults.buttonColors(Color.Red)
+                ) {
+                    Text(
+                        text = "Stop",
+                        textAlign = TextAlign.Center,
+                        fontSize = 22.sp,
+                        color = Color.Black,
+                        modifier = Modifier.padding(horizontal = 20.dp)
+                    )
+                }
+            }
+            Card(
+                elevation = CardDefaults.cardElevation(3.dp),
+                shape = RoundedCornerShape(15),
+                colors = CardDefaults.cardColors(Color.White),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 20.dp, horizontal = 80.dp)
+            ) {
+                Box(
+                    contentAlignment = Alignment.Center,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text(
+                        text = formatElapsedTime(elapsedTime),
+                        fontSize = 20.sp,
+                        color = Color.DarkGray,
+                        fontWeight = FontWeight.W600,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.padding(10.dp)
+                    )
+                }
+            }
+        }
     }
+}
+
+@SuppressLint("DefaultLocale")
+private fun formatElapsedTime(seconds: Long): String {
+    val hours = seconds / 3600
+    val minutes = (seconds % 3600) / 60
+    val remainingSeconds = seconds % 60
+    return String.format("%02d:%02d:%02d", hours, minutes, remainingSeconds)
+}
+
+enum class ButtonState(val text: String) {
+    START("Start"),
+    PAUSE("Pause")
 }

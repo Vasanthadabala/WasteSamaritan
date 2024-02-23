@@ -27,7 +27,7 @@ import com.example.wastesamaritan.screens.individualscreen.SegregatedScreen
 @Composable
 fun MyNavigation(context:Context){
     val navController = rememberNavController()
-    NavHost(navController = navController, startDestination = Segregated.route )//destination(context)
+    NavHost(navController = navController, startDestination = destination(context) )//destination(context)
     {
         composable(Signin.route){
             SigninScreen(navController)

@@ -9,6 +9,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -142,6 +143,7 @@ fun NotSegregatedScreenComponent(navController: NavHostController) {
                 }
             )
         }
+
         Button(
             onClick = { /* handle save button click */ },
             elevation = ButtonDefaults.buttonElevation(
