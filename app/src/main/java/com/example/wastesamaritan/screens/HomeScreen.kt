@@ -309,7 +309,7 @@ fun HomeScreenComponent(navController: NavHostController) {
                     modifier = Modifier
                         .padding(5.dp),
                     shape = RoundedCornerShape(24),
-                    colors = ButtonDefaults.buttonColors(Color.Red)
+                    colors = ButtonDefaults.buttonColors(Color(0XFFFF0000))
                 ) {
                     Text(
                         text = "Stop",

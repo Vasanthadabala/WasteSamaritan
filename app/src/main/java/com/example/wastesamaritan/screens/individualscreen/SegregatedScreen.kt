@@ -50,6 +50,8 @@ import com.example.wastesamaritan.R
 import com.example.wastesamaritan.components.OutlinedReusableComponent
 import com.example.wastesamaritan.components.createImageFile
 import com.example.wastesamaritan.data.Categories
+import com.example.wastesamaritan.data.ModelForCategoryData
+import com.example.wastesamaritan.data.SegregatedViewModel
 import com.example.wastesamaritan.navigation.TopBar
 import com.example.wastesamaritan.ui.theme.MyColor
 
@@ -59,7 +61,7 @@ import com.example.wastesamaritan.ui.theme.MyColor
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @ExperimentalMaterial3Api
 @Composable
-fun SegregatedScreen(navController: NavHostController) {
+fun SegregatedScreen(navController: NavHostController,viewModel:SegregatedViewModel) {
     Scaffold(
         topBar = { TopBar(name = "Segregated Screen", navController = navController) },
     ) {
@@ -69,14 +71,14 @@ fun SegregatedScreen(navController: NavHostController) {
                 .background(MyColor.background)
                 .padding(top = 60.dp)
         ) {
-            SegregatedScreenComponent(navController)
+            SegregatedScreenComponent(navController, viewModel)
         }
     }
 }
 @ExperimentalGlideComposeApi
 @ExperimentalComposeUiApi
 @Composable
-fun SegregatedScreenComponent(navController: NavHostController){
+fun SegregatedScreenComponent(navController: NavHostController,viewModel:SegregatedViewModel){
 
     val context = LocalContext.current
     var selectedCategory by remember { mutableStateOf(Categories.first()) }
@@ -154,18 +156,26 @@ fun SegregatedScreenComponent(navController: NavHostController){
                 onCameraClicked = { permissionLauncher.launch(Manifest.permission.CAMERA) },
                 totalWeight = totalWeight,
                 weight = weight,
-                onWeightChange = { newWeight -> weight = newWeight },
+                onWeightChange = { newWeight ->
+                    weight = newWeight
+                    viewModel.updateCategoryData(selectedCategory, ModelForCategoryData(capturedImageUris.map { it.toString() }, totalWeight.toFloat(), rating.toFloat()))
+                },
                 onAddWeightClicked = { /* handle add weight clicked */ },
                 weightCards = weightCards,
                 onWeightCardRemove = { removedWeight, updatedTotalWeight ->
                     weightCards = weightCards.filter { it != removedWeight }
                     totalWeight = updatedTotalWeight // Update the total weight here
+                    viewModel.updateCategoryData(selectedCategory, ModelForCategoryData(capturedImageUris.map { it.toString() }, totalWeight.toFloat(), rating.toFloat()))
                 },
                 rating = rating,
-                onRatingChanged = { newRating -> rating = newRating },
+                onRatingChanged = { newRating ->
+                    rating = newRating
+                    viewModel.updateCategoryData(selectedCategory, ModelForCategoryData(capturedImageUris.map { it.toString() }, totalWeight.toFloat(), rating.toFloat()))
+                },
                 onFeedbackButtonClicked = { /* handle feedback button clicked */ },
                 onImageRemove = { removedUri ->
                     capturedImageUris = capturedImageUris.filter { it != removedUri }
+                    viewModel.updateCategoryData(selectedCategory, ModelForCategoryData(capturedImageUris.map { it.toString() }, totalWeight.toFloat(), rating.toFloat()))
                 }
             )
         }
@@ -200,7 +210,7 @@ fun WasteCategory(
 ) {
     val backgroundColor = when (category) {
         "Wet" -> if (isSelected) Color(0XFF65B741) else Color.White
-        "Rejected" -> if (isSelected) Color(0XFFD80032) else Color.White
+        "Rejected" -> if (isSelected) Color(0XFFFF0000) else Color.White
         "Dry" -> if (isSelected) Color(0XFF39A7FF) else Color.White
         "Sanitary" -> if (isSelected) Color.Magenta else Color.White
         "E-Waste" -> if (isSelected) Color.Yellow else Color.White
@@ -217,10 +227,9 @@ fun WasteCategory(
     }
 
     Button(
-        onClick = { onCategorySelected() },
+        onClick = onCategorySelected,
         colors = ButtonDefaults.buttonColors(backgroundColor),
         shape = RoundedCornerShape(32),
-
         modifier = Modifier.padding(vertical = 2.dp, horizontal = 5.dp),
         border = BorderStroke(1.dp, borderColor )
     ) {

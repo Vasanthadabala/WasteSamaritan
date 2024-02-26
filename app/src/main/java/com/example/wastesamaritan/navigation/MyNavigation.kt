@@ -4,10 +4,12 @@ import android.content.Context
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.ExperimentalComposeUiApi
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
+import com.example.wastesamaritan.data.SegregatedViewModel
 import com.example.wastesamaritan.screens.AboutProjectScreen
 import com.example.wastesamaritan.screens.AboutScreen
 import com.example.wastesamaritan.screens.ComplaintsScreen
@@ -25,8 +27,10 @@ import com.example.wastesamaritan.screens.individualscreen.SegregatedScreen
 @ExperimentalMaterial3Api
 @ExperimentalComposeUiApi
 @Composable
-fun MyNavigation(context:Context){
+fun MyNavigation(context:Context,viewModel: SegregatedViewModel){
+
     val navController = rememberNavController()
+
     NavHost(navController = navController, startDestination = destination(context) )//destination(context)
     {
         composable(Signin.route){
@@ -63,7 +67,7 @@ fun MyNavigation(context:Context){
             NotSegregatedScreen(navController)
         }
         composable(Segregated.route){
-            SegregatedScreen(navController)
+            SegregatedScreen(navController,viewModel)
         }
     }
 }
