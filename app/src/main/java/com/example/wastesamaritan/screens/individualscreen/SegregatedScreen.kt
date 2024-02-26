@@ -177,8 +177,7 @@ fun SegregatedScreenComponent(navController: NavHostController){
                 pressedElevation = 5.dp
             ),
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(5.dp),
+                .fillMaxWidth(),
             shape = RoundedCornerShape(24),
             colors = ButtonDefaults.buttonColors(MyColor.primary)
         ) {

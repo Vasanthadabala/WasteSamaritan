@@ -57,7 +57,7 @@ fun FeedbackSection(
             )
         }
         Button(
-            onClick = {},
+            onClick = {onFeedbackButtonClicked},
             elevation = ButtonDefaults.buttonElevation(
                 defaultElevation = 1.dp,
                 pressedElevation = 5.dp,
