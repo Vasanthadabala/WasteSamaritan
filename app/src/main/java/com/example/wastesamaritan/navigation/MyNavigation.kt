@@ -31,7 +31,7 @@ fun MyNavigation(context:Context,viewModel: SegregatedViewModel){
 
     val navController = rememberNavController()
 
-    NavHost(navController = navController, startDestination = destination(context) )//destination(context)
+    NavHost(navController = navController, startDestination = Segregated.route )//destination(context)
     {
         composable(Signin.route){
             SigninScreen(navController)

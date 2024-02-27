@@ -10,7 +10,6 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -28,6 +27,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -52,6 +52,7 @@ import com.example.wastesamaritan.components.createImageFile
 import com.example.wastesamaritan.data.Categories
 import com.example.wastesamaritan.data.ModelForCategoryData
 import com.example.wastesamaritan.data.SegregatedViewModel
+import com.example.wastesamaritan.data.SegregatedViewModel.Companion.DEFAULT_CATEGORY
 import com.example.wastesamaritan.navigation.TopBar
 import com.example.wastesamaritan.ui.theme.MyColor
 
@@ -81,20 +82,28 @@ fun SegregatedScreen(navController: NavHostController,viewModel:SegregatedViewMo
 fun SegregatedScreenComponent(navController: NavHostController,viewModel:SegregatedViewModel){
 
     val context = LocalContext.current
-    var selectedCategory by remember { mutableStateOf(Categories.first()) }
+//    var selectedCategory by remember { mutableStateOf(Categories.first()) }
+    val selectedCategory by viewModel.selectedCategory.observeAsState(initial = DEFAULT_CATEGORY)
+    val categoryDataMap by viewModel.categoryDataMap.observeAsState(initial = emptyMap())
+    val categoryData = categoryDataMap[selectedCategory] ?: ModelForCategoryData(emptyList(), 0.0, 0.0)
 
-    var weight by remember { mutableStateOf(0) }
-    var rating by remember { mutableStateOf(0.0) }
-    var capturedImageUris by remember { mutableStateOf<List<Uri>>(emptyList()) }
+    // Observe the LiveData for captured image URIs
+    val capturedImageUris by viewModel.getCapturedImageUris(selectedCategory).observeAsState(initial = emptyList())
 
-    var totalWeight by remember { mutableStateOf(0) }
-    var weightCards by remember { mutableStateOf<List<Int>>(emptyList()) }
+    // Extract weight and rating from category data
+    var weight by remember { mutableStateOf(categoryData.totalWeight) }
+    var rating by remember { mutableStateOf(categoryData.rating) }
+
+    var totalWeight by remember { mutableStateOf(0.0) }
+    var weightCards by remember { mutableStateOf<List<Double>>(emptyList()) }
 
     var currentUri: Uri? = null
 
     val cameraLauncher = rememberLauncherForActivityResult(ActivityResultContracts.TakePicture()) { result ->
         if (result) {
-            capturedImageUris = capturedImageUris + listOfNotNull(currentUri)
+            currentUri?.let { uri ->
+                viewModel.addCapturedImageUri(selectedCategory, uri)
+            }
         }
     }
     val permissionLauncher = rememberLauncherForActivityResult(
@@ -141,7 +150,7 @@ fun SegregatedScreenComponent(navController: NavHostController,viewModel:Segrega
                     WasteCategory(
                         category = category,
                         isSelected = selectedCategory == category,
-                        onCategorySelected = { selectedCategory = category }
+                        onCategorySelected = { viewModel.setSelectedCategory(category)  }
                     )
                 }
             }
@@ -152,30 +161,42 @@ fun SegregatedScreenComponent(navController: NavHostController,viewModel:Segrega
         ) {
             OutlinedReusableComponent(
                 context = context,
-                capturedImageUris = capturedImageUris,
+                capturedImageUris =  viewModel.getCapturedImageUris(selectedCategory).observeAsState(initial = emptyList()).value,
                 onCameraClicked = { permissionLauncher.launch(Manifest.permission.CAMERA) },
                 totalWeight = totalWeight,
                 weight = weight,
                 onWeightChange = { newWeight ->
                     weight = newWeight
-                    viewModel.updateCategoryData(selectedCategory, ModelForCategoryData(capturedImageUris.map { it.toString() }, totalWeight.toFloat(), rating.toFloat()))
+                    viewModel.updateCategoryData(
+                        selectedCategory,
+                        ModelForCategoryData(capturedImageUris.map { it.toString() },
+                            totalWeight,
+                            rating),
+                        newWeight
+                    )
                 },
                 onAddWeightClicked = { /* handle add weight clicked */ },
                 weightCards = weightCards,
                 onWeightCardRemove = { removedWeight, updatedTotalWeight ->
                     weightCards = weightCards.filter { it != removedWeight }
-                    totalWeight = updatedTotalWeight // Update the total weight here
-                    viewModel.updateCategoryData(selectedCategory, ModelForCategoryData(capturedImageUris.map { it.toString() }, totalWeight.toFloat(), rating.toFloat()))
+                    totalWeight = updatedTotalWeight// Update the total weight here
+                    weight = totalWeight // Convert totalWeight to Double
+                    viewModel.updateCategoryData(
+                        selectedCategory,
+                        ModelForCategoryData(capturedImageUris.map { it.toString() },
+                            totalWeight,
+                            rating
+                        ),updatedTotalWeight)
                 },
                 rating = rating,
                 onRatingChanged = { newRating ->
                     rating = newRating
-                    viewModel.updateCategoryData(selectedCategory, ModelForCategoryData(capturedImageUris.map { it.toString() }, totalWeight.toFloat(), rating.toFloat()))
+                    viewModel.updateCategoryData(selectedCategory, ModelForCategoryData(capturedImageUris.map { it.toString() }, totalWeight, rating),weight)
                 },
                 onFeedbackButtonClicked = { /* handle feedback button clicked */ },
                 onImageRemove = { removedUri ->
-                    capturedImageUris = capturedImageUris.filter { it != removedUri }
-                    viewModel.updateCategoryData(selectedCategory, ModelForCategoryData(capturedImageUris.map { it.toString() }, totalWeight.toFloat(), rating.toFloat()))
+                    viewModel.removeCapturedImageUri(selectedCategory, removedUri)
+                    viewModel.updateCategoryData(selectedCategory, ModelForCategoryData(capturedImageUris.map { it.toString() }, totalWeight.toDouble(), rating),weight)
                 }
             )
         }

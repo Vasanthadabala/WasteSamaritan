@@ -72,12 +72,12 @@ fun NotSegregatedScreenComponent(navController: NavHostController) {
 
     val context = LocalContext.current
 
-    var weight by remember { mutableStateOf(0) }
+    var weight by remember { mutableStateOf(0.0) }
     var rating by remember { mutableStateOf(0.0) }
     var capturedImageUris by remember { mutableStateOf<List<Uri>>(emptyList()) }
 
-    var totalWeight by remember { mutableStateOf(0) }
-    var weightCards by remember { mutableStateOf<List<Int>>(emptyList()) }
+    var totalWeight by remember { mutableStateOf(0.0) }
+    var weightCards by remember { mutableStateOf<List<Double>>(emptyList()) }
 
     var currentUri: Uri? = null
 
@@ -126,8 +126,8 @@ fun NotSegregatedScreenComponent(navController: NavHostController) {
                 context = context,
                 capturedImageUris = capturedImageUris,
                 onCameraClicked = { permissionLauncher.launch(Manifest.permission.CAMERA) },
-                totalWeight = totalWeight,
-                weight = weight,
+                totalWeight = totalWeight.toDouble(),
+                weight = weight.toDouble(),
                 onWeightChange = { newWeight -> weight = newWeight },
                 onAddWeightClicked = { /* handle add weight clicked */ },
                 weightCards = weightCards,

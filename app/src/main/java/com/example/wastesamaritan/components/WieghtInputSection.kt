@@ -53,12 +53,12 @@ import com.example.wastesamaritan.ui.theme.MyColor
 @ExperimentalComposeUiApi
 @Composable
 fun WeightInputSection(
-    totalWeight: Int,
-    initialWeight: Int,
-    onWeightChange: (Int) -> Unit,
+    totalWeight: Double,
+    initialWeight: Double,
+    onWeightChange: (Double) -> Unit,
     onAddWeightClicked: () -> Unit,
-    initialWeightCards: List<Int>,
-    onWeightCardRemove: (Int,Int) -> Unit
+    initialWeightCards: List<Double>,
+    onWeightCardRemove: (Double,Double) -> Unit
 ) {
     var weight by remember { mutableStateOf(initialWeight) }
     var weightCards by remember { mutableStateOf(initialWeightCards) }
@@ -92,9 +92,9 @@ fun WeightInputSection(
             ) {
                 OutlinedTextField(
                     singleLine = true,
-                    value = if(weight == 0) "" else weight.toString(),
+                    value = if(weight == 0.0) "" else weight.toString(),
                     onValueChange = {
-                        weight = it.toIntOrNull() ?: weight // Keep the previous value if input is null
+                        weight = it.toDoubleOrNull() ?: weight // Keep the previous value if input is null
                     },
                     placeholder = { Text(text = "Quantity") },
                     modifier = Modifier
@@ -126,7 +126,7 @@ fun WeightInputSection(
                         totalWeightValue += weight
                         weightCards += weight
                         onAddWeightClicked() // Call the callback to handle adding weight
-                        weight = 0
+                        weight = 0.0
                     },
                     elevation = ButtonDefaults.buttonElevation(
                         defaultElevation = 1.dp,
