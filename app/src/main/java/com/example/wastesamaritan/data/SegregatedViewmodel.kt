@@ -10,7 +10,6 @@ data class ModelForCategoryData(
     val totalWeight: Double,
     val rating: Double
 )
-
 class SegregatedViewModel : ViewModel() {
 
     // Mutable LiveData for the selected category
@@ -26,6 +25,9 @@ class SegregatedViewModel : ViewModel() {
 
     // Mutable map to hold weight for each category
     private val _categoryWeightMap = mutableMapOf<String, MutableLiveData<Double>>()
+
+    // Mutable map to hold rating for each category
+    private val _categoryRatingMap = mutableMapOf<String, MutableLiveData<Double>>()
 
     init {
         // Initialize selected category with a default value
@@ -44,6 +46,12 @@ class SegregatedViewModel : ViewModel() {
         _categoryDataMap.value = updatedMap
         // Update weight for the category
         _categoryWeightMap[category]?.value = weight
+    }
+
+    // Function to update the rating for a specific category
+    fun updateCategoryRating(category: String, rating: Double) {
+        // Update rating for the category
+        _categoryRatingMap[category]?.value = rating
     }
 
     // Function to get data for a specific category
@@ -71,6 +79,11 @@ class SegregatedViewModel : ViewModel() {
     // Function to get weight for a specific category
     fun getCategoryWeight(category: String): LiveData<Double> {
         return _categoryWeightMap.getOrPut(category) { MutableLiveData(0.0) }
+    }
+
+    // Function to get rating for a specific category
+    fun getCategoryRating(category: String): LiveData<Double> {
+        return _categoryRatingMap.getOrPut(category) { MutableLiveData(0.0) }
     }
 
     companion object {

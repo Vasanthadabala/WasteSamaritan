@@ -161,19 +161,13 @@ fun SegregatedScreenComponent(navController: NavHostController,viewModel:Segrega
         ) {
             OutlinedReusableComponent(
                 context = context,
-                capturedImageUris =  viewModel.getCapturedImageUris(selectedCategory).observeAsState(initial = emptyList()).value,
+                capturedImageUris =  capturedImageUris,
                 onCameraClicked = { permissionLauncher.launch(Manifest.permission.CAMERA) },
                 totalWeight = totalWeight,
                 weight = weight,
                 onWeightChange = { newWeight ->
-                    weight = newWeight
-                    viewModel.updateCategoryData(
-                        selectedCategory,
-                        ModelForCategoryData(capturedImageUris.map { it.toString() },
-                            totalWeight,
-                            rating),
-                        newWeight
-                    )
+                    val newData = categoryData.copy(totalWeight = newWeight)
+                    viewModel.updateCategoryData(selectedCategory, newData, newWeight)
                 },
                 onAddWeightClicked = { /* handle add weight clicked */ },
                 weightCards = weightCards,
@@ -183,20 +177,23 @@ fun SegregatedScreenComponent(navController: NavHostController,viewModel:Segrega
                     weight = totalWeight // Convert totalWeight to Double
                     viewModel.updateCategoryData(
                         selectedCategory,
-                        ModelForCategoryData(capturedImageUris.map { it.toString() },
-                            totalWeight,
-                            rating
-                        ),updatedTotalWeight)
+                        categoryData.copy(capturedImageUris = capturedImageUris.map { it.toString() }, totalWeight = updatedTotalWeight),
+                        updatedTotalWeight
+                    )
                 },
                 rating = rating,
                 onRatingChanged = { newRating ->
                     rating = newRating
-                    viewModel.updateCategoryData(selectedCategory, ModelForCategoryData(capturedImageUris.map { it.toString() }, totalWeight, rating),weight)
+                    viewModel.updateCategoryData(selectedCategory, categoryData.copy(rating = newRating), weight)
                 },
                 onFeedbackButtonClicked = { /* handle feedback button clicked */ },
                 onImageRemove = { removedUri ->
                     viewModel.removeCapturedImageUri(selectedCategory, removedUri)
-                    viewModel.updateCategoryData(selectedCategory, ModelForCategoryData(capturedImageUris.map { it.toString() }, totalWeight.toDouble(), rating),weight)
+                    viewModel.updateCategoryData(
+                        selectedCategory,
+                        categoryData.copy(capturedImageUris = capturedImageUris.map { it.toString() }),
+                        weight
+                    )
                 }
             )
         }
