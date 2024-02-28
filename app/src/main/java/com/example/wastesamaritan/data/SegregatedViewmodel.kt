@@ -70,13 +70,13 @@ class SegregatedViewModel : ViewModel() {
     }
 
     // Function to get weight for a specific category
-    fun getCategoryWeight(category: String): LiveData<Double>? {
-        return _categoryWeightMap[category]
+    fun getCategoryWeight(category: String): LiveData<Double> {
+        return _categoryWeightMap[category] ?: MutableLiveData(0.0)
     }
 
     // Function to get rating for a specific category
-    fun getCategoryRating(category: String): LiveData<Double>? {
-        return _categoryRatingMap[category]
+    fun getCategoryRating(category: String): LiveData<Double> {
+        return _categoryRatingMap[category] ?: MutableLiveData(0.0)
     }
 
     // Function to update weight for a specific category

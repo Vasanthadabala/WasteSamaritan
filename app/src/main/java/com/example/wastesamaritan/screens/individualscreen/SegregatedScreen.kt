@@ -86,8 +86,8 @@ fun SegregatedScreenComponent(navController: NavHostController, viewModel: Segre
 
     // Observe the LiveData for captured image URIs
     val capturedImageUris by viewModel.getCapturedImageUris(selectedCategory).observeAsState(initial = emptyList())
-    val weightLiveData by viewModel.getCategoryWeight(selectedCategory)?.observeAsState(initial = 0.0)
-    val ratingLiveData by viewModel.getCategoryRating(selectedCategory)?.observeAsState(initial = 0.0)
+    val weightLiveData by viewModel.getCategoryWeight(selectedCategory).observeAsState(initial = 0.0)
+    val ratingLiveData by viewModel.getCategoryRating(selectedCategory).observeAsState(initial = 0.0)
 
     // Extract weight and rating values from LiveData
     var weight by remember { mutableStateOf(weightLiveData ?: 0.0) }
