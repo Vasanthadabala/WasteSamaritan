@@ -18,6 +18,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
@@ -144,7 +147,7 @@ fun SegregatedScreenComponent(navController: NavHostController, viewModel: Segre
                 .fillMaxWidth()
                 .padding(10.dp)
         ) {
-            LazyColumn {
+            LazyVerticalGrid(columns = GridCells.Fixed(3) ) {
                 items(Categories) { category ->
                     WasteCategory(
                         category = category,
