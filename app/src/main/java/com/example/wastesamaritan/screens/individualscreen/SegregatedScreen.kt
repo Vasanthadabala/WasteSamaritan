@@ -185,6 +185,7 @@ fun SegregatedScreenComponent(navController: NavHostController, viewModel: Segre
                         ),
                         updatedTotalWeight
                     )
+                    viewModel.updateCategoryWeight(selectedCategory, updatedTotalWeight)
                 },
                 rating = rating,
                 onRatingChanged = { newRating ->
