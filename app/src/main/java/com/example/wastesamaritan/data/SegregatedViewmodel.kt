@@ -1,15 +1,14 @@
-package com.example.wastesamaritan.data
-
 import android.net.Uri
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 
 data class ModelForCategoryData(
     val capturedImageUris: List<String>,
     val totalWeight: Double,
     val rating: Double
 )
+
 class SegregatedViewModel : ViewModel() {
 
     // Mutable LiveData for the selected category
@@ -17,7 +16,7 @@ class SegregatedViewModel : ViewModel() {
     val selectedCategory: LiveData<String> = _selectedCategory
 
     // Mutable LiveData to hold the data for each category
-    private val _categoryDataMap = MutableLiveData<Map<String, ModelForCategoryData>>(emptyMap())
+    private val _categoryDataMap = MutableLiveData<Map<String, ModelForCategoryData>>()
     val categoryDataMap: LiveData<Map<String, ModelForCategoryData>> = _categoryDataMap
 
     // Mutable map to hold captured image URIs for each category
@@ -32,6 +31,7 @@ class SegregatedViewModel : ViewModel() {
     init {
         // Initialize selected category with a default value
         _selectedCategory.value = DEFAULT_CATEGORY
+        _categoryDataMap.value = emptyMap()
     }
 
     // Function to update the selected category
@@ -44,14 +44,7 @@ class SegregatedViewModel : ViewModel() {
         val updatedMap = _categoryDataMap.value?.toMutableMap() ?: mutableMapOf()
         updatedMap[category] = newData
         _categoryDataMap.value = updatedMap
-        // Update weight for the category
         _categoryWeightMap[category]?.value = weight
-    }
-
-    // Function to update the rating for a specific category
-    fun updateCategoryRating(category: String, rating: Double) {
-        // Update rating for the category
-        _categoryRatingMap[category]?.value = rating
     }
 
     // Function to get data for a specific category
@@ -77,13 +70,25 @@ class SegregatedViewModel : ViewModel() {
     }
 
     // Function to get weight for a specific category
-    fun getCategoryWeight(category: String): LiveData<Double> {
-        return _categoryWeightMap.getOrPut(category) { MutableLiveData(0.0) }
+    fun getCategoryWeight(category: String): LiveData<Double>? {
+        return _categoryWeightMap[category]
     }
 
     // Function to get rating for a specific category
-    fun getCategoryRating(category: String): LiveData<Double> {
-        return _categoryRatingMap.getOrPut(category) { MutableLiveData(0.0) }
+    fun getCategoryRating(category: String): LiveData<Double>? {
+        return _categoryRatingMap[category]
+    }
+
+    // Function to update weight for a specific category
+    fun updateCategoryWeight(category: String, weight: Double) {
+        // Update weight for the category
+        _categoryWeightMap[category]?.value = weight
+    }
+
+    // Function to update rating for a specific category
+    fun updateCategoryRating(category: String, rating: Double) {
+        // Update rating for the category
+        _categoryRatingMap[category]?.value = rating
     }
 
     companion object {

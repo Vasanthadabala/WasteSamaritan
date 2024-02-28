@@ -1,5 +1,8 @@
 package com.example.wastesamaritan.screens.individualscreen
 
+import ModelForCategoryData
+import SegregatedViewModel
+import SegregatedViewModel.Companion.DEFAULT_CATEGORY
 import android.Manifest
 import android.annotation.SuppressLint
 import android.net.Uri
@@ -14,9 +17,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -50,19 +52,15 @@ import com.example.wastesamaritan.R
 import com.example.wastesamaritan.components.OutlinedReusableComponent
 import com.example.wastesamaritan.components.createImageFile
 import com.example.wastesamaritan.data.Categories
-import com.example.wastesamaritan.data.ModelForCategoryData
-import com.example.wastesamaritan.data.SegregatedViewModel
-import com.example.wastesamaritan.data.SegregatedViewModel.Companion.DEFAULT_CATEGORY
 import com.example.wastesamaritan.navigation.TopBar
 import com.example.wastesamaritan.ui.theme.MyColor
 
-
-@ExperimentalComposeUiApi
 @ExperimentalGlideComposeApi
+@ExperimentalComposeUiApi
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @ExperimentalMaterial3Api
 @Composable
-fun SegregatedScreen(navController: NavHostController,viewModel:SegregatedViewModel) {
+fun SegregatedScreen(navController: NavHostController, viewModel: SegregatedViewModel) {
     Scaffold(
         topBar = { TopBar(name = "Segregated Screen", navController = navController) },
     ) {
@@ -72,32 +70,33 @@ fun SegregatedScreen(navController: NavHostController,viewModel:SegregatedViewMo
                 .background(MyColor.background)
                 .padding(top = 60.dp)
         ) {
-            SegregatedScreenComponent(navController, viewModel)
+            SegregatedScreenComponent(navController = navController, viewModel = viewModel)
         }
     }
 }
+
 @ExperimentalGlideComposeApi
 @ExperimentalComposeUiApi
 @Composable
-fun SegregatedScreenComponent(navController: NavHostController,viewModel:SegregatedViewModel){
-
+fun SegregatedScreenComponent(navController: NavHostController, viewModel: SegregatedViewModel) {
     val context = LocalContext.current
-//    var selectedCategory by remember { mutableStateOf(Categories.first()) }
     val selectedCategory by viewModel.selectedCategory.observeAsState(initial = DEFAULT_CATEGORY)
     val categoryDataMap by viewModel.categoryDataMap.observeAsState(initial = emptyMap())
     val categoryData = categoryDataMap[selectedCategory] ?: ModelForCategoryData(emptyList(), 0.0, 0.0)
 
     // Observe the LiveData for captured image URIs
     val capturedImageUris by viewModel.getCapturedImageUris(selectedCategory).observeAsState(initial = emptyList())
+    val weightLiveData by viewModel.getCategoryWeight(selectedCategory)?.observeAsState(initial = 0.0)
+    val ratingLiveData by viewModel.getCategoryRating(selectedCategory)?.observeAsState(initial = 0.0)
 
-    // Extract weight and rating from category data
-    var weight by remember { mutableStateOf(categoryData.totalWeight) }
-    var rating by remember { mutableStateOf(categoryData.rating) }
+    // Extract weight and rating values from LiveData
+    var weight by remember { mutableStateOf(weightLiveData ?: 0.0) }
+    var rating by remember { mutableStateOf(ratingLiveData ?: 0.0) }
 
     var totalWeight by remember { mutableStateOf(0.0) }
     var weightCards by remember { mutableStateOf<List<Double>>(emptyList()) }
 
-    var currentUri: Uri? = null
+    var currentUri: Uri? by remember { mutableStateOf(null) }
 
     val cameraLauncher = rememberLauncherForActivityResult(ActivityResultContracts.TakePicture()) { result ->
         if (result) {
@@ -145,12 +144,12 @@ fun SegregatedScreenComponent(navController: NavHostController,viewModel:Segrega
                 .fillMaxWidth()
                 .padding(10.dp)
         ) {
-            LazyVerticalGrid(columns = GridCells.Fixed(3)) {
+            LazyColumn {
                 items(Categories) { category ->
                     WasteCategory(
                         category = category,
                         isSelected = selectedCategory == category,
-                        onCategorySelected = { viewModel.setSelectedCategory(category)  }
+                        onCategorySelected = { viewModel.setSelectedCategory(category) }
                     )
                 }
             }
@@ -161,7 +160,7 @@ fun SegregatedScreenComponent(navController: NavHostController,viewModel:Segrega
         ) {
             OutlinedReusableComponent(
                 context = context,
-                capturedImageUris =  capturedImageUris,
+                capturedImageUris = capturedImageUris,
                 onCameraClicked = { permissionLauncher.launch(Manifest.permission.CAMERA) },
                 totalWeight = totalWeight,
                 weight = weight,
@@ -173,11 +172,14 @@ fun SegregatedScreenComponent(navController: NavHostController,viewModel:Segrega
                 weightCards = weightCards,
                 onWeightCardRemove = { removedWeight, updatedTotalWeight ->
                     weightCards = weightCards.filter { it != removedWeight }
-                    totalWeight = updatedTotalWeight// Update the total weight here
+                    totalWeight = updatedTotalWeight // Update the total weight here
                     weight = totalWeight // Convert totalWeight to Double
                     viewModel.updateCategoryData(
                         selectedCategory,
-                        categoryData.copy(capturedImageUris = capturedImageUris.map { it.toString() }, totalWeight = updatedTotalWeight),
+                        categoryData.copy(
+                            capturedImageUris = capturedImageUris.map { it.toString() },
+                            totalWeight = updatedTotalWeight
+                        ),
                         updatedTotalWeight
                     )
                 },
@@ -185,6 +187,7 @@ fun SegregatedScreenComponent(navController: NavHostController,viewModel:Segrega
                 onRatingChanged = { newRating ->
                     rating = newRating
                     viewModel.updateCategoryData(selectedCategory, categoryData.copy(rating = newRating), weight)
+                    viewModel.updateCategoryRating(selectedCategory, newRating)
                 },
                 onFeedbackButtonClicked = { /* handle feedback button clicked */ },
                 onImageRemove = { removedUri ->
@@ -223,8 +226,8 @@ fun SegregatedScreenComponent(navController: NavHostController,viewModel:Segrega
 @Composable
 fun WasteCategory(
     category: String,
-    isSelected:Boolean,
-    onCategorySelected:()-> Unit
+    isSelected: Boolean,
+    onCategorySelected: () -> Unit
 ) {
     val backgroundColor = when (category) {
         "Wet" -> if (isSelected) Color(0XFF65B741) else Color.White
@@ -244,17 +247,26 @@ fun WasteCategory(
         else -> Color.White
     }
 
+    val textColor = when (category) {
+        "Wet" -> if (isSelected) Color.White else Color.Black
+        "Rejected" -> if (isSelected) Color.White else Color.Black
+        "Dry" -> if (isSelected) Color.Black else Color.Black
+        "Sanitary" -> if (isSelected) Color.White else Color.Black
+        "E-Waste" -> if (isSelected) Color.Black else Color.Black
+        else -> Color.White
+    }
+
     Button(
         onClick = onCategorySelected,
         colors = ButtonDefaults.buttonColors(backgroundColor),
         shape = RoundedCornerShape(32),
         modifier = Modifier.padding(vertical = 2.dp, horizontal = 5.dp),
-        border = BorderStroke(1.dp, borderColor )
+        border = BorderStroke(1.dp, borderColor)
     ) {
         Text(
             text = category,
             fontSize = 12.sp,
-            color = Color.Black,
+            color = textColor,
             fontWeight = FontWeight.W800
         )
     }
