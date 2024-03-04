@@ -1,6 +1,5 @@
 package com.example.wastesamaritan.screens.individualscreen
 
-import ModelForCategoryData
 import SegregatedViewModel
 import SegregatedViewModel.Companion.DEFAULT_CATEGORY
 import android.Manifest
@@ -50,8 +49,8 @@ import androidx.core.content.FileProvider
 import androidx.navigation.NavHostController
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.example.wastesamaritan.R
-import com.example.wastesamaritan.components.OutlinedReusableComponent
 import com.example.wastesamaritan.components.CaptureImage.createImageFile
+import com.example.wastesamaritan.components.OutlinedReusableComponent
 import com.example.wastesamaritan.data.Categories
 import com.example.wastesamaritan.navigation.TopBar
 import com.example.wastesamaritan.ui.theme.MyColor
@@ -80,19 +79,18 @@ fun SegregatedScreen(navController: NavHostController, viewModel: SegregatedView
 @ExperimentalComposeUiApi
 @Composable
 fun SegregatedScreenComponent(navController: NavHostController, viewModel: SegregatedViewModel) {
+
     val context = LocalContext.current
+
     val selectedCategory by viewModel.selectedCategory.observeAsState(initial = DEFAULT_CATEGORY)
-    val categoryDataMap by viewModel.categoryDataMap.observeAsState(initial = emptyMap())
-    val categoryData = categoryDataMap[selectedCategory] ?: ModelForCategoryData(emptyList(), 0.0, 0.0)
 
-    // Observe the LiveData for captured image URIs
-    val capturedImageUris by viewModel.getCapturedImageUris(selectedCategory).observeAsState(initial = emptyList())
-    val weightLiveData by viewModel.getCategoryWeight(selectedCategory).observeAsState(initial = 0.0)
-    val ratingLiveData by viewModel.getCategoryRating(selectedCategory).observeAsState(initial = 0.0)
+    // Observe the LiveData for selected category data
+    val categoryData = viewModel.getCategoryData(selectedCategory)?.observeAsState()
 
-    // Extract weight and rating values from LiveData
-    var weight by remember { mutableStateOf(weightLiveData ?: 0.0) }
-    var rating by remember { mutableStateOf(ratingLiveData ?: 0.0) }
+    // Extract data from LiveData
+    val capturedImageUris = categoryData?.value?.capturedImageUris ?: emptyList()
+    val weight = categoryData?.value?.totalWeight ?: 0.0
+    val rating = categoryData?.value?.rating ?: 0.0
 
     var totalWeight by remember { mutableStateOf(0.0) }
     var weightCards by remember { mutableStateOf<List<Double>>(emptyList()) }
@@ -166,38 +164,21 @@ fun SegregatedScreenComponent(navController: NavHostController, viewModel: Segre
                 totalWeight = totalWeight,
                 weight = weight,
                 onWeightChange = { newWeight ->
-                    val newData = categoryData.copy(totalWeight = newWeight)
-                    viewModel.updateCategoryData(selectedCategory, newData, newWeight)
+                    viewModel.updateCategoryWeight(selectedCategory, newWeight)
                 },
                 onAddWeightClicked = { /* handle add weight clicked */ },
                 weightCards = weightCards,
                 onWeightCardRemove = { removedWeight, updatedTotalWeight ->
                     weightCards = weightCards.filter { it != removedWeight }
                     totalWeight = updatedTotalWeight // Update the total weight here
-                    weight = totalWeight // Convert totalWeight to Double
-                    viewModel.updateCategoryData(
-                        selectedCategory,
-                        categoryData.copy(
-                            capturedImageUris = capturedImageUris.map { it.toString() },
-                            totalWeight = updatedTotalWeight
-                        ),
-                        updatedTotalWeight
-                    )
                     viewModel.updateCategoryWeight(selectedCategory, updatedTotalWeight)
                 },
                 rating = rating,
                 onRatingChanged = { newRating ->
-                    rating = newRating
-                    viewModel.updateCategoryData(selectedCategory, categoryData.copy(rating = newRating), weight)
                     viewModel.updateCategoryRating(selectedCategory, newRating)
                 },
                 onImageRemove = { removedUri ->
                     viewModel.removeCapturedImageUri(selectedCategory, removedUri)
-                    viewModel.updateCategoryData(
-                        selectedCategory,
-                        categoryData.copy(capturedImageUris = capturedImageUris.map { it.toString() }),
-                        weight
-                    )
                 }
             )
         }
