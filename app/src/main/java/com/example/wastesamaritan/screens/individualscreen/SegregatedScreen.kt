@@ -17,11 +17,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -53,7 +51,7 @@ import androidx.navigation.NavHostController
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.example.wastesamaritan.R
 import com.example.wastesamaritan.components.OutlinedReusableComponent
-import com.example.wastesamaritan.components.createImageFile
+import com.example.wastesamaritan.components.CaptureImage.createImageFile
 import com.example.wastesamaritan.data.Categories
 import com.example.wastesamaritan.navigation.TopBar
 import com.example.wastesamaritan.ui.theme.MyColor
@@ -193,7 +191,6 @@ fun SegregatedScreenComponent(navController: NavHostController, viewModel: Segre
                     viewModel.updateCategoryData(selectedCategory, categoryData.copy(rating = newRating), weight)
                     viewModel.updateCategoryRating(selectedCategory, newRating)
                 },
-                onFeedbackButtonClicked = { /* handle feedback button clicked */ },
                 onImageRemove = { removedUri ->
                     viewModel.removeCapturedImageUri(selectedCategory, removedUri)
                     viewModel.updateCategoryData(

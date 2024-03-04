@@ -1,4 +1,4 @@
-package com.example.wastesamaritan.components
+package com.example.wastesamaritan.components.Weight
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -92,7 +92,7 @@ fun WeightInputSection(
             ) {
                 OutlinedTextField(
                     singleLine = true,
-                    value = if(weight == 0.0) "" else weight.toString(),
+                    value = if(weight == 0.0) "" else weight.toString().removePrefix(".0"),
                     onValueChange = {
                         weight = it.toDoubleOrNull() ?: weight // Keep the previous value if input is null
                     },

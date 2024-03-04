@@ -1,4 +1,4 @@
-package com.example.wastesamaritan.components
+package com.example.wastesamaritan.components.Rating
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement

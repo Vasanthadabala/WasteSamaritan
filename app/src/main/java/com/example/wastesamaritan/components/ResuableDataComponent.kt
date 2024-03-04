@@ -1,5 +1,6 @@
 package com.example.wastesamaritan.components
 
+import FeedbackSection
 import android.content.Context
 import android.net.Uri
 import androidx.compose.foundation.BorderStroke
@@ -22,6 +23,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
+import com.example.wastesamaritan.components.CaptureImage.CameraButton
+import com.example.wastesamaritan.components.CaptureImage.CapturedImagesRow
+import com.example.wastesamaritan.components.CaptureImage.createImageFile
+import com.example.wastesamaritan.components.Rating.RatingSection
+import com.example.wastesamaritan.components.Weight.WeightInputSection
 
 @ExperimentalComposeUiApi
 @ExperimentalGlideComposeApi
@@ -38,7 +44,6 @@ fun OutlinedReusableComponent(
     onWeightCardRemove: (Double,Double) -> Unit,
     rating: Double,
     onRatingChanged: (Double) -> Unit,
-    onFeedbackButtonClicked: () -> Unit,
     onImageRemove:(Uri)-> Unit
 ) {
 
@@ -85,7 +90,7 @@ fun OutlinedReusableComponent(
                 }
             )
             RatingSection(initialRating = rating, onRatingChanged = onRatingChanged)
-            FeedbackSection(onFeedbackButtonClicked = onFeedbackButtonClicked)
+            FeedbackSection()
         }
     }
 }
