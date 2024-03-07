@@ -60,29 +60,29 @@ fun FeedbackSection() {
     val player by lazy { AndroidAudioPlayer(context) }
     val isRecording = remember { mutableStateOf(false) }
     val isPlaying = remember { mutableStateOf(false) }
-    var audioFile: File? = null
+    var audioFile: File? by remember { mutableStateOf(null) }
 
 
     var isTimerRunning by remember { mutableStateOf(false) }
     var elapsedTime by remember { mutableStateOf(0L) }
 
-    val startTimer: () -> Unit = {
-        isTimerRunning = true
-    }
-
-    val stopTimer: () -> Unit = {
-        isTimerRunning = false
-        elapsedTime = 0L
-    }
-
-    LaunchedEffect(isTimerRunning) {
-        if (isTimerRunning) {
-            while (true) {
-                delay(1000) // Update timer every second
-                elapsedTime++
-            }
-        }
-    }
+//    val startTimer: () -> Unit = {
+//        isTimerRunning = true
+//    }
+//
+//    val stopTimer: () -> Unit = {
+//        isTimerRunning = false
+//        elapsedTime = 0L
+//    }
+//
+//    LaunchedEffect(isTimerRunning) {
+//        if (isTimerRunning) {
+//            while (true) {
+//                delay(1000) // Update timer every second
+//                elapsedTime++
+//            }
+//        }
+//    }
 
     DisposableEffect(player) {
         onDispose {
@@ -95,7 +95,6 @@ fun FeedbackSection() {
             delay(100)
             if (!player.isPlaying()) {
                 isPlaying.value = false
-                stopTimer()
             }
         }
     }
@@ -112,7 +111,8 @@ fun FeedbackSection() {
             } else {
                 recorder.stop()
                 isRecording.value = false
-                audioFile = File(context.cacheDir, "audio_record.mp4") }
+                audioFile = File(context.cacheDir, "audio_record.mp4")
+            }
         } else {
             // Permission denied, show a toast message
             Toast.makeText(context, "Permission Denied", Toast.LENGTH_SHORT).show()
@@ -240,12 +240,10 @@ fun FeedbackSection() {
                                         val outputFile = File(context.cacheDir, "audio_record.mp4")
                                         recorder.start(outputFile)
                                         isRecording.value = true
-                                        startTimer()
                                     } else {
                                         recorder.stop()
                                         isRecording.value = false
                                         audioFile = File(context.cacheDir, "audio_record.mp4")
-                                        stopTimer()
                                     }
                                 } else {
                                     // Request a permission
