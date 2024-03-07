@@ -82,7 +82,7 @@ fun WeightInputSection(
         ) {
             Text(
                 text = "Total Weight: $totalWeightValue kgs",
-                fontSize = 20.sp,
+                fontSize = 18.sp,
                 fontWeight = FontWeight.W500,
                 color = MyColor.text,
                 modifier = Modifier.padding(8.dp)

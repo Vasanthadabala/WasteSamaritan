@@ -51,7 +51,7 @@ fun RatingSection(
             Text(
                 text = "Rating",
                 fontWeight = FontWeight.W500,
-                fontSize = 20.sp,
+                fontSize = 18.sp,
                 color = if (rating != 0.0) Color.Black else Color.Red
             )
         }

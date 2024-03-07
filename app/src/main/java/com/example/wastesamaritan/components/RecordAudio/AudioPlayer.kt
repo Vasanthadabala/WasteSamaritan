@@ -21,4 +21,8 @@ class AndroidAudioPlayer(private val context: Context):AudioPlayerInterface{
         player?.release()
         player = null
     }
+
+    fun isPlaying(): Boolean {
+        return player?.isPlaying ?: false
+    }
 }

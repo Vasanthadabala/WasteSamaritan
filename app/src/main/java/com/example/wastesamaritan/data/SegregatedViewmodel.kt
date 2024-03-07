@@ -78,4 +78,5 @@ class SegregatedViewModel : ViewModel() {
     companion object {
         const val DEFAULT_CATEGORY = "Wet"
     }
+
 }
