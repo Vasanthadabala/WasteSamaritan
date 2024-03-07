@@ -20,6 +20,7 @@ import androidx.compose.material.Icon
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Delete
 import androidx.compose.material.icons.rounded.Mic
+import androidx.compose.material.icons.rounded.MicNone
 import androidx.compose.material.icons.rounded.PlayCircle
 import androidx.compose.material.icons.rounded.StopCircle
 import androidx.compose.material3.CardDefaults
@@ -154,36 +155,41 @@ fun FeedbackSection() {
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
+                horizontalArrangement = Arrangement.SpaceAround
             ) {
-                Icon(
-                    imageVector = if (isPlaying.value) Icons.Rounded.StopCircle else Icons.Rounded.PlayCircle,
-                    contentDescription = if (isPlaying.value) "Stop" else "Play",
-                    modifier = Modifier
-                        .padding(8.dp)
-                        .size(28.dp)
-                        .clickable {
-                            audioFile?.let {
-                                if (it.exists()) {
-                                    if (!isPlaying.value) {
-                                        player.play(it)
-                                        isPlaying.value = true
+                if(audioFile != null) {
+                    Icon(
+                        imageVector = when {
+                            isPlaying.value -> Icons.Rounded.StopCircle
+                            else -> Icons.Rounded.PlayCircle
+                        },
+                        contentDescription = if (isPlaying.value) "Stop" else "Play",
+                        modifier = Modifier
+                            .padding(8.dp)
+                            .size(28.dp)
+                            .clickable {
+                                audioFile?.let {
+                                    if (it.exists()) {
+                                        if (!isPlaying.value) {
+                                            player.play(it)
+                                            isPlaying.value = true
+                                        } else {
+                                            player.stop()
+                                            isPlaying.value = false
+                                        }
                                     } else {
-                                        player.stop()
-                                        isPlaying.value = false
+                                        Toast
+                                            .makeText(
+                                                context,
+                                                "Audio file not found",
+                                                Toast.LENGTH_SHORT
+                                            )
+                                            .show()
                                     }
-                                } else {
-                                    Toast
-                                        .makeText(
-                                            context,
-                                            "Audio file not found",
-                                            Toast.LENGTH_SHORT
-                                        )
-                                        .show()
                                 }
                             }
-                        }
-                )
+                    )
+                }
                 if (isTimerRunning) {
                     Box(
                         contentAlignment = Alignment.Center
