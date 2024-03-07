@@ -72,7 +72,7 @@ fun FeedbackSection() {
     val startTimer: () -> Unit = {
         isTimerRunning = true
         GlobalScope.launch {
-            while (true) {
+            while (isTimerRunning) {
                 delay(1000) // Update timer every second
                 elapsedTime++
             }
