@@ -48,7 +48,9 @@ import androidx.core.content.ContextCompat
 import com.example.wastesamaritan.R
 import com.example.wastesamaritan.components.RecordAudio.AndroidAudioPlayer
 import com.example.wastesamaritan.components.RecordAudio.AndroidAudioRecorder
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.io.File
 
 
@@ -66,23 +68,20 @@ fun FeedbackSection() {
     var isTimerRunning by remember { mutableStateOf(false) }
     var elapsedTime by remember { mutableStateOf(0L) }
 
-//    val startTimer: () -> Unit = {
-//        isTimerRunning = true
-//    }
-//
-//    val stopTimer: () -> Unit = {
-//        isTimerRunning = false
-//        elapsedTime = 0L
-//    }
-//
-//    LaunchedEffect(isTimerRunning) {
-//        if (isTimerRunning) {
-//            while (true) {
-//                delay(1000) // Update timer every second
-//                elapsedTime++
-//            }
-//        }
-//    }
+    val startTimer: () -> Unit = {
+        isTimerRunning = true
+        GlobalScope.launch {
+            while (true) {
+                delay(1000) // Update timer every second
+                elapsedTime++
+            }
+        }
+    }
+
+    val stopTimer: () -> Unit = {
+        isTimerRunning = false
+        elapsedTime = 0L
+    }
 
     DisposableEffect(player) {
         onDispose {
@@ -240,10 +239,12 @@ fun FeedbackSection() {
                                         val outputFile = File(context.cacheDir, "audio_record.mp4")
                                         recorder.start(outputFile)
                                         isRecording.value = true
+                                        startTimer()
                                     } else {
                                         recorder.stop()
                                         isRecording.value = false
                                         audioFile = File(context.cacheDir, "audio_record.mp4")
+                                        stopTimer()
                                     }
                                 } else {
                                     // Request a permission
