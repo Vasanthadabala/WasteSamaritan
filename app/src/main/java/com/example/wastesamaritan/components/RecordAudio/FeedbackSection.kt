@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
+import androidx.compose.material.LinearProgressIndicator
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Delete
 import androidx.compose.material.icons.rounded.Mic
@@ -68,6 +69,7 @@ fun FeedbackSection() {
 
     var isTimerRunning by remember { mutableStateOf(false) }
     var elapsedTime by remember { mutableStateOf(0L) }
+    var playbackProgress by remember { mutableStateOf(0L) }
 
     val startTimer: () -> Unit = {
         isTimerRunning = true
@@ -95,6 +97,15 @@ fun FeedbackSection() {
             delay(100)
             if (!player.isPlaying()) {
                 isPlaying.value = false
+            }
+        }
+    }
+
+    LaunchedEffect(player) {
+        while (true) {
+            delay(100)
+            if (player.isPlaying()) {
+                playbackProgress = player.currentPosition().toLong()
             }
         }
     }
@@ -190,7 +201,16 @@ fun FeedbackSection() {
                             }
                     )
                 }
-                if (isTimerRunning) {
+                if (isPlaying.value && player.duration() > 0) {
+                    Box(
+                        contentAlignment = Alignment.Center
+                    ) {
+                        LinearProgressIndicator(
+                            progress = (playbackProgress.toFloat() / player.duration().toFloat()),
+                            modifier = Modifier.fillMaxWidth()
+                        )
+                    }
+                } else if (isTimerRunning) {
                     Box(
                         contentAlignment = Alignment.Center
                     ) {
@@ -203,8 +223,7 @@ fun FeedbackSection() {
                             modifier = Modifier.padding(8.dp)
                         )
                     }
-                }
-                else{
+                } else {
                     Text(
                         text = "Record",
                         fontSize = 22.sp,
@@ -234,6 +253,7 @@ fun FeedbackSection() {
                                 audioFile = null // Set audioFile to null after deletion
                                 isRecording.value = false // Ensure isRecording is set to false after deletion
                                 isPlaying.value = false
+                                stopTimer()
                                 Toast.makeText(context, "Recording deleted", Toast.LENGTH_SHORT).show()
                             } else {
                                 val permissionCheckResult = ContextCompat.checkSelfPermission(
