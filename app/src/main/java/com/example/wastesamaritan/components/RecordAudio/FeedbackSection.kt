@@ -137,12 +137,12 @@ fun FeedbackSection() {
             modifier = Modifier.padding(5.dp)
         ) {
             Image(
-                painter = painterResource(id = R.drawable.mic),
+                painter = painterResource(id = R.drawable.voice_record),
                 contentDescription = "",
                 modifier = Modifier
-                    .size(20.dp, 40.dp)
+                    .size(80.dp, 40.dp)
                     .clip(shape = RoundedCornerShape(6.dp)),
-                contentScale = ContentScale.FillHeight
+                contentScale = ContentScale.FillWidth
             )
             Text(
                 text = "Feedback",
