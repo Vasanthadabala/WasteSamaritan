@@ -21,7 +21,6 @@ import androidx.compose.material.LinearProgressIndicator
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Delete
 import androidx.compose.material.icons.rounded.Mic
-import androidx.compose.material.icons.rounded.MicNone
 import androidx.compose.material.icons.rounded.PlayCircle
 import androidx.compose.material.icons.rounded.StopCircle
 import androidx.compose.material3.CardDefaults
@@ -33,7 +32,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -201,19 +199,19 @@ fun FeedbackSection() {
                             }
                     )
                 }
-                if (isPlaying.value && player.duration() > 0) {
-                    Box(
-                        contentAlignment = Alignment.Center
-                    ) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(1f)
+                        .align(Alignment.CenterVertically),
+                    contentAlignment = Alignment.Center
+                ) {
+                    if (isPlaying.value && player.duration() > 0) {
                         LinearProgressIndicator(
                             progress = (playbackProgress.toFloat() / player.duration().toFloat()),
-                            modifier = Modifier.fillMaxWidth()
+                            color = Color.DarkGray
                         )
-                    }
-                } else if (isTimerRunning) {
-                    Box(
-                        contentAlignment = Alignment.Center
-                    ) {
+                    }else if (isTimerRunning) {
                         Text(
                             text = formatElapsedTime(elapsedTime),
                             fontSize = 22.sp,
@@ -222,16 +220,16 @@ fun FeedbackSection() {
                             textAlign = TextAlign.Center,
                             modifier = Modifier.padding(8.dp)
                         )
+                    } else {
+                        Text(
+                            text = if (audioFile != null) "Play" else "Record",
+                            fontSize = 22.sp,
+                            color = Color.DarkGray,
+                            fontWeight = FontWeight.W600,
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier.padding(8.dp)
+                        )
                     }
-                } else {
-                    Text(
-                        text = "Record",
-                        fontSize = 22.sp,
-                        color = Color.DarkGray,
-                        fontWeight = FontWeight.W600,
-                        textAlign = TextAlign.Center,
-                        modifier = Modifier.padding(8.dp)
-                    )
                 }
                 Icon(
                     imageVector = when {
@@ -253,6 +251,7 @@ fun FeedbackSection() {
                                 audioFile = null // Set audioFile to null after deletion
                                 isRecording.value = false // Ensure isRecording is set to false after deletion
                                 isPlaying.value = false
+                                player.stop()
                                 stopTimer()
                                 Toast.makeText(context, "Recording deleted", Toast.LENGTH_SHORT).show()
                             } else {
