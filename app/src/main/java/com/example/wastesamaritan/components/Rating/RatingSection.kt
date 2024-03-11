@@ -31,7 +31,6 @@ fun RatingSection(
     initialRating: Double,
     onRatingChanged: (Double) -> Unit
 ) {
-    var rating by remember { mutableStateOf(initialRating) }
     Row(
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically,
@@ -63,9 +62,8 @@ fun RatingSection(
             RatingBar(
                 modifier = Modifier
                     .size(40.dp),
-                rating = rating,
+                rating = initialRating,
                 onRatingChanged = { newRating ->
-                    rating = newRating
                     onRatingChanged(newRating)
                 }
             )

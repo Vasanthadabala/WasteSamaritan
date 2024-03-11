@@ -8,6 +8,7 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -39,8 +40,8 @@ import androidx.core.content.FileProvider
 import androidx.navigation.NavHostController
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.example.wastesamaritan.R
-import com.example.wastesamaritan.components.OutlinedReusableComponent
 import com.example.wastesamaritan.components.CaptureImage.createImageFile
+import com.example.wastesamaritan.components.OutlinedReusableComponent
 import com.example.wastesamaritan.navigation.TopBar
 import com.example.wastesamaritan.ui.theme.MyColor
 
@@ -116,7 +117,7 @@ fun NotSegregatedScreenComponent(navController: NavHostController) {
             painter = painterResource(id = R.drawable.not_segregated_waste_illustration),
             contentDescription = "",
             modifier = Modifier
-                .size(145.dp, 68.dp)
+                .size(130.dp, 60.dp)
                 .clip(shape = RoundedCornerShape(6.dp)),
             contentScale = ContentScale.FillWidth
         )
@@ -146,25 +147,28 @@ fun NotSegregatedScreenComponent(navController: NavHostController) {
                 textColor = textColor
             )
         }
-
-        Button(
-            onClick = { /* handle save button click */ },
-            elevation = ButtonDefaults.buttonElevation(
-                defaultElevation = 1.dp,
-                pressedElevation = 5.dp
-            ),
-            modifier = Modifier
-                .fillMaxWidth(),
-            shape = RoundedCornerShape(24),
-            colors = ButtonDefaults.buttonColors(MyColor.primary)
+        Box(
+            modifier = Modifier.padding(top = 5.dp, start = 5.dp, end = 5.dp)
         ) {
-            Text(
-                text = "Save",
-                textAlign = TextAlign.Center,
-                fontSize = 24.sp,
-                color = Color.Black,
-                modifier = Modifier.padding(2.dp)
-            )
+            Button(
+                onClick = { /* handle save button click */ },
+                elevation = ButtonDefaults.buttonElevation(
+                    defaultElevation = 1.dp,
+                    pressedElevation = 5.dp
+                ),
+                modifier = Modifier
+                    .fillMaxWidth(),
+                shape = RoundedCornerShape(24),
+                colors = ButtonDefaults.buttonColors(MyColor.primary)
+            ) {
+                Text(
+                    text = "Save",
+                    textAlign = TextAlign.Center,
+                    fontSize = 24.sp,
+                    color = Color.Black,
+                    modifier = Modifier.padding(2.dp)
+                )
+            }
         }
     }
 }

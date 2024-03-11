@@ -11,6 +11,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -99,7 +100,7 @@ fun SegregatedScreenComponent(navController: NavHostController, viewModel: Segre
     val textColor = when (selectedCategory) {
         "Wet" -> Color.White
         "Rejected" -> Color.White
-        "Dry" -> Color.Black
+        "Dry" -> Color.White
         "Sanitary" -> Color.White
         "E-Waste" -> Color.Black
         else -> Color.White
@@ -148,17 +149,17 @@ fun SegregatedScreenComponent(navController: NavHostController, viewModel: Segre
             painter = painterResource(id = R.drawable.segregated_waste_illustration),
             contentDescription = "",
             modifier = Modifier
-                .size(145.dp, 68.dp)
+                .size(130.dp, 60.dp)
                 .clip(shape = RoundedCornerShape(8.dp)),
             contentScale = ContentScale.FillWidth
         )
         Card(
-            elevation = CardDefaults.cardElevation(3.dp),
-            shape = RoundedCornerShape(10),
+            elevation = CardDefaults.cardElevation(5.dp),
+            shape = RoundedCornerShape(6),
             colors = CardDefaults.cardColors(Color.White),
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(10.dp)
+                .padding(5.dp)
         ) {
             LazyVerticalGrid(columns = GridCells.Fixed(3) ) {
                 items(Categories) { category ->
@@ -201,25 +202,28 @@ fun SegregatedScreenComponent(navController: NavHostController, viewModel: Segre
                 textColor = textColor
             )
         }
-
-        Button(
-            onClick = { /* handle save button click */ },
-            elevation = ButtonDefaults.buttonElevation(
-                defaultElevation = 1.dp,
-                pressedElevation = 5.dp
-            ),
-            modifier = Modifier
-                .fillMaxWidth(),
-            shape = RoundedCornerShape(24),
-            colors = ButtonDefaults.buttonColors(MyColor.primary)
+        Box(
+            modifier = Modifier.padding(top = 5.dp, start = 5.dp, end = 5.dp)
         ) {
-            Text(
-                text = "Save",
-                textAlign = TextAlign.Center,
-                fontSize = 24.sp,
-                color = Color.Black,
-                modifier = Modifier.padding(2.dp)
-            )
+            Button(
+                onClick = { /* handle save button click */ },
+                elevation = ButtonDefaults.buttonElevation(
+                    defaultElevation = 1.dp,
+                    pressedElevation = 5.dp
+                ),
+                modifier = Modifier
+                    .fillMaxWidth(),
+                shape = RoundedCornerShape(24),
+                colors = ButtonDefaults.buttonColors(MyColor.primary)
+            ) {
+                Text(
+                    text = "Save",
+                    textAlign = TextAlign.Center,
+                    fontSize = 24.sp,
+                    color = Color.Black,
+                    modifier = Modifier.padding(2.dp)
+                )
+            }
         }
     }
 }
@@ -251,7 +255,7 @@ fun WasteCategory(
     val textColor = when (category) {
         "Wet" -> if (isSelected) Color.White else Color.Black
         "Rejected" -> if (isSelected) Color.White else Color.Black
-        "Dry" -> if (isSelected) Color.Black else Color.Black
+        "Dry" -> if (isSelected) Color.White else Color.Black
         "Sanitary" -> if (isSelected) Color.White else Color.Black
         "E-Waste" -> if (isSelected) Color.Black else Color.Black
         else -> Color.White

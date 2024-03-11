@@ -3,16 +3,16 @@ package com.example.wastesamaritan.components
 import FeedbackSection
 import android.content.Context
 import android.net.Uri
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.OutlinedCard
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -52,48 +52,61 @@ fun OutlinedReusableComponent(
     var mutableWeightCards by remember { mutableStateOf(weightCards) }
     var mutableTotalWeight by remember { mutableStateOf(totalWeight) }
 
-    OutlinedCard(
-        elevation = CardDefaults.cardElevation(0.dp),
-        shape = RoundedCornerShape(4),
-        colors = CardDefaults.outlinedCardColors(
-            containerColor = Color.White
-        ),
-        border = BorderStroke(1.dp, Color.Black),
-        modifier = Modifier.padding(10.dp)
-    ) {
-        Column(
-            modifier = Modifier.verticalScroll(rememberScrollState())
+    Column {
+        Card(
+            elevation = CardDefaults.cardElevation(5.dp),
+            shape = RoundedCornerShape(3),
+            colors = CardDefaults.cardColors(Color.White),
+            modifier = Modifier
+                .weight(1f)
+                .padding(5.dp)
         ) {
-            Row(
-                horizontalArrangement = Arrangement.Start
+            Column(
+                modifier = Modifier
+                    .verticalScroll(rememberScrollState())
             ) {
-                CameraButton(
-                    context = context,
-                    currentUri = capturedImageUris.lastOrNull(),
-                    onCameraClicked = onCameraClicked,
-                    createImageFile = context::createImageFile
+                Row(
+                    horizontalArrangement = Arrangement.Start
+                ) {
+                    CameraButton(
+                        context = context,
+                        currentUri = capturedImageUris.lastOrNull(),
+                        onCameraClicked = onCameraClicked,
+                        createImageFile = context::createImageFile
+                    )
+                    CapturedImagesRow(
+                        capturedImageUris = capturedImageUris,
+                        onImageRemove = onImageRemove
+                    )
+                }
+                WeightInputSection(
+                    totalWeight = totalWeight,
+                    initialWeight = weight,
+                    onWeightChange = onWeightChange,
+                    onAddWeightClicked = {
+                        mutableTotalWeight += weight
+                        mutableWeightCards += weight
+                        onAddWeightClicked()
+                    },
+                    initialWeightCards = mutableWeightCards,
+                    onWeightCardRemove = { removedWeight, _ ->
+                        mutableWeightCards = mutableWeightCards.filter { it != removedWeight }
+                        mutableTotalWeight -= removedWeight
+                        onWeightCardRemove(removedWeight, mutableTotalWeight)
+                    },
+                    categoryColor = categoryColor,
+                    textColor = textColor
                 )
-                CapturedImagesRow( capturedImageUris = capturedImageUris, onImageRemove = onImageRemove)
+                RatingSection(initialRating = rating, onRatingChanged = onRatingChanged)
             }
-            WeightInputSection(
-                totalWeight = totalWeight,
-                initialWeight = weight,
-                onWeightChange = onWeightChange,
-                onAddWeightClicked = {
-                    mutableTotalWeight += weight
-                    mutableWeightCards += weight
-                    onAddWeightClicked()
-                },
-                initialWeightCards = mutableWeightCards,
-                onWeightCardRemove = { removedWeight, _ ->
-                    mutableWeightCards = mutableWeightCards.filter { it != removedWeight }
-                    mutableTotalWeight -= removedWeight
-                    onWeightCardRemove(removedWeight, mutableTotalWeight)
-                },
-                categoryColor = categoryColor,
-                textColor = textColor
-            )
-            RatingSection(initialRating = rating, onRatingChanged = onRatingChanged)
+        }
+        Card(
+            elevation = CardDefaults.cardElevation(5.dp),
+            shape = RoundedCornerShape(6),
+            colors = CardDefaults.cardColors(Color.White),
+            modifier = Modifier
+                .padding(5.dp)
+        ) {
             FeedbackSection()
         }
     }

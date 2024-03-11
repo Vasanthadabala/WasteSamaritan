@@ -130,7 +130,7 @@ fun FeedbackSection() {
     Row(
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier.padding(10.dp)
+        modifier = Modifier.padding(5.dp)
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
