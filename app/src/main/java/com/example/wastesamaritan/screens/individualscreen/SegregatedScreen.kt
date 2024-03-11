@@ -87,6 +87,23 @@ fun SegregatedScreenComponent(navController: NavHostController, viewModel: Segre
     // Observe the LiveData for selected category data
     val categoryData = viewModel.getCategoryData(selectedCategory)?.observeAsState()
 
+    val categoryColor = when (selectedCategory) {
+        "Wet" -> Color(0XFF65B741)
+        "Rejected" -> Color(0XFFFF0000)
+        "Dry" -> Color(0XFF39A7FF)
+        "Sanitary" -> Color.Magenta
+        "E-Waste" -> Color.Yellow
+        else -> Color.White
+    }
+
+    val textColor = when (selectedCategory) {
+        "Wet" -> Color.White
+        "Rejected" -> Color.White
+        "Dry" -> Color.Black
+        "Sanitary" -> Color.White
+        "E-Waste" -> Color.Black
+        else -> Color.White
+    }
     // Extract data from LiveData
     val capturedImageUris = categoryData?.value?.capturedImageUris ?: emptyList()
     val weight = categoryData?.value?.totalWeight ?: 0.0
@@ -179,7 +196,9 @@ fun SegregatedScreenComponent(navController: NavHostController, viewModel: Segre
                 },
                 onImageRemove = { removedUri ->
                     viewModel.removeCapturedImageUri(selectedCategory, removedUri)
-                }
+                },
+                categoryColor = categoryColor,
+                textColor = textColor
             )
         }
 

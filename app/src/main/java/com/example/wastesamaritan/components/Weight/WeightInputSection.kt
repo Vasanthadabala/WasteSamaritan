@@ -58,7 +58,9 @@ fun WeightInputSection(
     onWeightChange: (Double) -> Unit,
     onAddWeightClicked: () -> Unit,
     initialWeightCards: List<Double>,
-    onWeightCardRemove: (Double,Double) -> Unit
+    onWeightCardRemove: (Double,Double) -> Unit,
+    categoryColor: Color,
+    textColor:Color
 ) {
     var weight by remember { mutableStateOf(initialWeight) }
     var weightCards by remember { mutableStateOf(initialWeightCards) }
@@ -135,13 +137,13 @@ fun WeightInputSection(
                     modifier = Modifier
                         .padding(10.dp),
                     shape = RoundedCornerShape(24),
-                    colors = ButtonDefaults.buttonColors(MyColor.primary)
+                    colors = ButtonDefaults.buttonColors(categoryColor)
                 ) {
                     Text(
                         text = "Add",
                         textAlign = TextAlign.Center,
                         fontSize = 22.sp,
-                        color = Color.Black,
+                        color = textColor,
                         modifier = Modifier.padding(0.dp)
                     )
                 }

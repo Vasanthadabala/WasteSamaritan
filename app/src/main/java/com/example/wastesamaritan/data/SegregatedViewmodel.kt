@@ -10,15 +10,13 @@ data class ModelForCategoryData(
     val rating: Double
 )
 
-
 class SegregatedViewModel : ViewModel() {
     // Mutable LiveData for the selected category
     private val _selectedCategory = MutableLiveData<String>()
     val selectedCategory: LiveData<String> = _selectedCategory
 
     // Mutable map to hold category data for each category
-    val categoryDataMap = mutableMapOf<String, MutableLiveData<ModelForCategoryData>>()
-
+    private val categoryDataMap = mutableMapOf<String, MutableLiveData<ModelForCategoryData>>()
 
     init {
         // Initialize selected category with a default value
@@ -26,7 +24,9 @@ class SegregatedViewModel : ViewModel() {
 
         // Initialize category data map with default values
         Categories.forEach { category ->
-            categoryDataMap[category] = MutableLiveData(ModelForCategoryData(emptyList(), 0.0, 0.0))
+            categoryDataMap[category] = MutableLiveData(
+                ModelForCategoryData(emptyList(), 0.0, 0.0)
+            )
         }
     }
 
@@ -78,5 +78,4 @@ class SegregatedViewModel : ViewModel() {
     companion object {
         const val DEFAULT_CATEGORY = "Wet"
     }
-
 }

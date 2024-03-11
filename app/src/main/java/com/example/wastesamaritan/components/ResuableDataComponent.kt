@@ -44,7 +44,9 @@ fun OutlinedReusableComponent(
     onWeightCardRemove: (Double,Double) -> Unit,
     rating: Double,
     onRatingChanged: (Double) -> Unit,
-    onImageRemove:(Uri)-> Unit
+    onImageRemove:(Uri)-> Unit,
+    categoryColor: Color,
+    textColor:Color
 ) {
 
     var mutableWeightCards by remember { mutableStateOf(weightCards) }
@@ -87,7 +89,9 @@ fun OutlinedReusableComponent(
                     mutableWeightCards = mutableWeightCards.filter { it != removedWeight }
                     mutableTotalWeight -= removedWeight
                     onWeightCardRemove(removedWeight, mutableTotalWeight)
-                }
+                },
+                categoryColor = categoryColor,
+                textColor = textColor
             )
             RatingSection(initialRating = rating, onRatingChanged = onRatingChanged)
             FeedbackSection()

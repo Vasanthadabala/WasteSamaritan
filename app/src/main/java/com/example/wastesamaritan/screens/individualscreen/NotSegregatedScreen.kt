@@ -70,6 +70,9 @@ fun NotSegregatedScreen(navController: NavHostController) {
 fun NotSegregatedScreenComponent(navController: NavHostController) {
 
     val context = LocalContext.current
+    val categoryColor = MyColor.primary
+    val textColor = Color.White
+
 
     var weight by remember { mutableStateOf(0.0) }
     var rating by remember { mutableStateOf(0.0) }
@@ -138,7 +141,9 @@ fun NotSegregatedScreenComponent(navController: NavHostController) {
                 onRatingChanged = { newRating -> rating = newRating },
                 onImageRemove = { removedUri ->
                     capturedImageUris = capturedImageUris.filter { it != removedUri }
-                }
+                },
+                categoryColor = categoryColor,
+                textColor = textColor
             )
         }
 
