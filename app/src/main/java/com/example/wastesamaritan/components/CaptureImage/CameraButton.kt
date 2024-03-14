@@ -7,6 +7,7 @@ import android.net.Uri
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -52,25 +53,19 @@ fun CameraButton(
     }
 
     Card(
-        shape = RoundedCornerShape(10.dp),
+        shape = RoundedCornerShape(8),
         colors = CardDefaults.cardColors(
             containerColor = Color.White
         ),
         modifier = Modifier
-            .padding(12.dp)
-            .border(
-                width = 1.dp,
-                color = Color.Black,
-                shape = RoundedCornerShape(10.dp)
-            )
-            .size(100.dp)
+            .padding(top = 15.dp, start = 10.dp, bottom = 10.dp, end = 10.dp)
+            .size(95.dp)
             .clickable {
                 val permissionCheckResult = ContextCompat.checkSelfPermission(
                     context,
                     Manifest.permission.CAMERA
                 )
                 if (permissionCheckResult == PackageManager.PERMISSION_GRANTED) {
-                    // No need to pass any arguments here
                     onCameraClicked(currentUri ?: Uri.EMPTY)
                 } else {
                     // Request a permission
@@ -82,8 +77,8 @@ fun CameraButton(
             contentAlignment = Alignment.Center,
             modifier = Modifier.fillMaxSize()
         ) {
-            Icon(
-                painter = painterResource(id = R.drawable.camera),
+            Image(
+                painter = painterResource(id = R.drawable.camera_illustration),
                 contentDescription = "Camera"
             )
         }

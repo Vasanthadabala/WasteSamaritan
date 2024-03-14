@@ -124,6 +124,7 @@ fun NotSegregatedScreenComponent(navController: NavHostController) {
         Column(
             modifier = Modifier
                 .weight(1f)
+                .padding(top = 15.dp)
         ) {
             OutlinedReusableComponent(
                 context = context,

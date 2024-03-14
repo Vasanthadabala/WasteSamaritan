@@ -143,7 +143,7 @@ fun SegregatedScreenComponent(navController: NavHostController, viewModel: Segre
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
             .fillMaxSize()
-            .padding(10.dp)
+            .padding(8.dp)
     ) {
         Image(
             painter = painterResource(id = R.drawable.segregated_waste_illustration),
@@ -174,6 +174,7 @@ fun SegregatedScreenComponent(navController: NavHostController, viewModel: Segre
         Column(
             modifier = Modifier
                 .weight(1f)
+                .padding(top = 15.dp)
         ) {
             OutlinedReusableComponent(
                 context = context,

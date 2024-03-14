@@ -1,6 +1,5 @@
 package com.example.wastesamaritan.components.Weight
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -24,12 +23,12 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableDoubleStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -62,22 +61,18 @@ fun WeightInputSection(
     categoryColor: Color,
     textColor:Color
 ) {
-    var weight by remember { mutableStateOf(initialWeight) }
+    var weight by remember { mutableDoubleStateOf(initialWeight) }
     var weightCards by remember { mutableStateOf(initialWeightCards) }
-    var totalWeightValue by remember { mutableStateOf(totalWeight) }
+    var totalWeightValue by remember { mutableDoubleStateOf(totalWeight) }
 
     val keyboardController = LocalSoftwareKeyboardController.current
 
-    OutlinedCard(
-        elevation = CardDefaults.cardElevation(0.dp),
-        shape = RoundedCornerShape(6),
-        colors = CardDefaults.outlinedCardColors(
-            containerColor = Color.White
-        ),
-        border = BorderStroke(1.dp, Color.Black),
+    Card(
+        elevation = CardDefaults.cardElevation(5.dp),
+        shape = RoundedCornerShape(5),
+        colors = CardDefaults.cardColors(Color.White),
         modifier = Modifier
-            .fillMaxWidth()
-            .padding(10.dp)
+            .padding(8.dp)
     ) {
         Column(
             modifier = Modifier.padding(10.dp)
@@ -94,13 +89,18 @@ fun WeightInputSection(
             ) {
                 OutlinedTextField(
                     singleLine = true,
-                    value = if(weight == 0.0) "" else weight.toString().removePrefix(".0"),
-                    onValueChange = {
-                        weight = it.toDoubleOrNull() ?: weight // Keep the previous value if input is null
+                    value = if (weight == 0.0) "" else if (weight % 1 == 0.0) weight.toInt().toString() else weight.toString(),
+                    onValueChange = {newWeight ->
+                        if (newWeight.isNotEmpty()) {
+                            val newValue = newWeight.toDoubleOrNull()
+                            if (newValue != null) {
+                                weight = newValue
+                            }
+                        }
                     },
                     placeholder = { Text(text = "Quantity") },
                     modifier = Modifier
-                        .padding(10.dp)
+                        .padding(8.dp)
                         .size(52.dp)
                         .weight(1f),
                     shape = RoundedCornerShape(18),
@@ -125,17 +125,19 @@ fun WeightInputSection(
                 )
                 Button(
                     onClick = {
-                        totalWeightValue += weight
-                        weightCards += weight
-                        onAddWeightClicked() // Call the callback to handle adding weight
-                        weight = 0.0
+                        if (weight != 0.0) { // Check if weight is not equal to 0.0
+                            totalWeightValue += weight
+                            weightCards += weight
+                            onAddWeightClicked() // Call the callback to handle adding weight
+                            weight = 0.0
+                        }
                     },
                     elevation = ButtonDefaults.buttonElevation(
                         defaultElevation = 1.dp,
                         pressedElevation = 5.dp,
                     ),
                     modifier = Modifier
-                        .padding(10.dp),
+                        .padding(8.dp),
                     shape = RoundedCornerShape(24),
                     colors = ButtonDefaults.buttonColors(categoryColor)
                 ) {
