@@ -61,6 +61,7 @@ class SegregatedViewModel : ViewModel() {
         categoryDataMap[category]?.value = newData
     }
 
+
     // Function to update weight for a specific category
     fun updateCategoryWeight(category: String, weight: Double) {
         val currentData = categoryDataMap[category]?.value ?: return

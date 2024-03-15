@@ -95,6 +95,7 @@ fun WeightInputSection(
                             val newValue = newWeight.toDoubleOrNull()
                             if (newValue != null) {
                                 weight = newValue
+                                onWeightChange(newValue)
                             }
                         }
                     },
