@@ -1,6 +1,7 @@
 package com.example.wastesamaritan.screens.individualscreen
 
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -19,6 +20,9 @@ import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -29,8 +33,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.wastesamaritan.R
+import com.example.wastesamaritan.data.IndividualHouseViewModel
 import com.example.wastesamaritan.navigation.Home
 import com.example.wastesamaritan.navigation.NotSegregated
 import com.example.wastesamaritan.navigation.Segregated
@@ -58,6 +64,10 @@ fun IndividualHouseScreen(navController: NavHostController) {
 
 @Composable
 fun IndividualHouseScreenComponent(navController: NavHostController){
+
+    val viewModel: IndividualHouseViewModel = viewModel()
+    val scannedResultText by viewModel.scannedResult.observeAsState("")
+
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
@@ -82,7 +92,7 @@ fun IndividualHouseScreenComponent(navController: NavHostController){
         )
         {
             Text(
-                text = "House Number: E.G.001.001",
+                text = "House Number: E.G.${scannedResultText}",
                 color = MyColor.text,
                 fontWeight = FontWeight.W500,
                 fontSize = 18.sp,
@@ -108,16 +118,19 @@ fun IndividualHouseScreenComponent(navController: NavHostController){
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = 20.dp, horizontal = 10.dp)
-                .clickable { navController.navigate(Home.route)  }
+                .clickable { navController.navigate(Home.route) }
         ) {
             Row(
-                modifier = Modifier.fillMaxWidth().padding(10.dp)
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(10.dp)
             ) {
                 Image(
                     painter = painterResource(id = R.drawable.no_waste_illustration),
                     contentDescription = "No waste",
                     modifier = Modifier
-                        .size(100.dp, 50.dp).clip(shape = RoundedCornerShape(8.dp)),
+                        .size(100.dp, 50.dp)
+                        .clip(shape = RoundedCornerShape(8.dp)),
                     contentScale = ContentScale.FillWidth,
                 )
                 Text(
@@ -138,10 +151,11 @@ fun IndividualHouseScreenComponent(navController: NavHostController){
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = 20.dp, horizontal = 10.dp)
-                .clickable { navController.navigate(Segregated.route)  }
+                .clickable { navController.navigate(Segregated.route) }
         ) {
             Row(
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
                     .padding(10.dp)
             ) {
                 Image(
@@ -170,17 +184,19 @@ fun IndividualHouseScreenComponent(navController: NavHostController){
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = 20.dp, horizontal = 10.dp)
-                .clickable { navController.navigate(NotSegregated.route)  }
+                .clickable { navController.navigate(NotSegregated.route) }
         ) {
             Row(
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
                     .padding(10.dp)
             ) {
                 Image(
                     painter = painterResource(id = R.drawable.not_segregated_waste_illustration),
                     contentDescription = "Not Segregated",
                     modifier = Modifier
-                        .size(100.dp, 50.dp).clip(shape = RoundedCornerShape(8.dp)),
+                        .size(100.dp, 50.dp)
+                        .clip(shape = RoundedCornerShape(8.dp)),
                     contentScale = ContentScale.FillWidth,
                 )
                 Text(

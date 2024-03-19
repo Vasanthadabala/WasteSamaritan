@@ -1,7 +1,9 @@
 package com.example.wastesamaritan.screens
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
+import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -49,10 +51,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.wastesamaritan.R
+import com.example.wastesamaritan.components.QrCodeScanner.BarcodeScanner
 import com.example.wastesamaritan.navigation.BottomBar
 import com.example.wastesamaritan.navigation.DrawerNav
 import com.example.wastesamaritan.navigation.HomeTopBar
-import com.example.wastesamaritan.navigation.QrScan
+import com.example.wastesamaritan.navigation.IndividualHouse
 import com.example.wastesamaritan.navigation.bottomNavItems
 import com.example.wastesamaritan.navigation.drawerItems
 import com.example.wastesamaritan.ui.theme.MyColor
@@ -62,7 +65,7 @@ import kotlinx.coroutines.launch
 @ExperimentalMaterial3Api
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun HomeScreen(navController:NavHostController) {
+fun HomeScreen(navController:NavHostController,activity: Activity) {
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
 
@@ -121,12 +124,14 @@ fun HomeScreenComponent(navController: NavHostController) {
             ButtonState.START -> {
                 buttonState = ButtonState.STOP
             }
+
             ButtonState.STOP -> {
                 buttonState = ButtonState.START
             }
         }
     }
 
+    var scannedResult by remember { mutableStateOf("") }
 
     Column(
         modifier = Modifier
@@ -221,31 +226,16 @@ fun HomeScreenComponent(navController: NavHostController) {
 
                 Divider(color = Color(0XFF39A7FF), modifier = Modifier.fillMaxWidth())
 
-                Button(
-                    onClick = { navController.navigate(QrScan.route) },
-                    elevation = ButtonDefaults.buttonElevation(
-                        defaultElevation = 5.dp,
-                        pressedElevation = 5.dp,
-                    ),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 15.dp, horizontal = 60.dp),
-                    shape = RoundedCornerShape(50),
-                    colors = ButtonDefaults.buttonColors(Color(0XFF87C4FF))
-                ) {
-                    Icon(
-                        imageVector = Icons.Rounded.QrCode2,
-                        contentDescription = "",
-                        tint = Color.Black
-                    )
-                    Text(
-                        text = " Scan",
-                        textAlign = TextAlign.Center,
-                        fontSize = 20.sp,
-                        color = MyColor.text,
-                        modifier = Modifier.padding(2.dp)
-                    )
-                }
+                BarcodeScanner(
+                    onScanResult = { result ->
+                        scannedResult = result
+                        Toast.makeText(context, "Scanned result: $result", Toast.LENGTH_SHORT).show()
+                        navController.navigate(IndividualHouse.route)
+                    },
+                    onPermissionDenied = {
+                        Toast.makeText(context, "Camera permission denied. Cannot scan barcodes.", Toast.LENGTH_SHORT).show()
+                    }
+                )
             }
         }
         Column(
@@ -285,6 +275,7 @@ fun HomeScreenComponent(navController: NavHostController) {
                 }
             }
         }
+
     }
 }
 

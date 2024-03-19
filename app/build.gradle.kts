@@ -56,22 +56,15 @@ dependencies {
     implementation("com.github.bumptech.glide:compose:1.0.0-alpha.1")
 
     //Navigation and Material-Design
-    implementation("androidx.navigation:navigation-compose:2.7.6")
-    implementation("androidx.compose.material:material:1.5.4")
-    implementation("androidx.compose.material:material-icons-extended:1.5.4")
+    implementation("androidx.navigation:navigation-compose:2.7.7")
+    implementation("androidx.compose.material:material:1.6.3")
+    implementation("androidx.compose.material:material-icons-extended:1.6.3")
 
-    implementation("androidx.compose.runtime:runtime-livedata:1.0.5")
-
-    // Activity Compose
-    implementation("androidx.activity:activity-compose:1.4.0")
-
-    // CameraX
-    implementation("androidx.camera:camera-camera2:1.0.2")
-    implementation("androidx.camera:camera-lifecycle:1.0.2")
-    implementation("androidx.camera:camera-view:1.0.0-alpha31")
+    implementation("androidx.compose.runtime:runtime-livedata:1.6.3")
 
     // Zxing
-    implementation ("com.google.zxing:core:3.3.3")
+    implementation ("com.google.zxing:core:3.4.1")
+    implementation("com.journeyapps:zxing-android-embedded:4.3.0")
 
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")

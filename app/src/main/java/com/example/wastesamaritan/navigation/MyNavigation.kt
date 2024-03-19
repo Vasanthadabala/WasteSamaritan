@@ -1,6 +1,7 @@
 package com.example.wastesamaritan.navigation
 
 import SegregatedViewModel
+import android.app.Activity
 import android.content.Context
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
@@ -15,7 +16,6 @@ import com.example.wastesamaritan.screens.ComplaintsScreen
 import com.example.wastesamaritan.screens.HomeScreen
 import com.example.wastesamaritan.screens.MyRatingsScreen
 import com.example.wastesamaritan.screens.ProfileScreen
-import com.example.wastesamaritan.screens.QrScanScreen
 import com.example.wastesamaritan.screens.SigninScreen
 import com.example.wastesamaritan.screens.SyncScreen
 import com.example.wastesamaritan.screens.individualscreen.IndividualHouseScreen
@@ -26,7 +26,7 @@ import com.example.wastesamaritan.screens.individualscreen.SegregatedScreen
 @ExperimentalMaterial3Api
 @ExperimentalComposeUiApi
 @Composable
-fun MyNavigation(context:Context,viewModel: SegregatedViewModel){
+fun MyNavigation(context:Context,viewModel: SegregatedViewModel,activity: Activity){
 
     val navController = rememberNavController()
     NavHost(navController = navController, startDestination = destination(context) )//destination(context)
@@ -35,7 +35,7 @@ fun MyNavigation(context:Context,viewModel: SegregatedViewModel){
             SigninScreen(navController)
         }
         composable(Home.route){
-            HomeScreen(navController)
+            HomeScreen(navController,activity)
         }
         composable(Profile.route){
             ProfileScreen(navController)
@@ -54,9 +54,6 @@ fun MyNavigation(context:Context,viewModel: SegregatedViewModel){
         }
         composable(Sync.route){
             SyncScreen(navController)
-        }
-        composable(QrScan.route){
-            QrScanScreen(navController)
         }
         composable(IndividualHouse.route){
             IndividualHouseScreen(navController)
