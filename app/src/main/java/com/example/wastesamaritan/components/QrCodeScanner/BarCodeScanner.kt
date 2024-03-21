@@ -34,7 +34,7 @@ fun BarcodeScanner(
     onScanResult: (String) -> Unit,
     onPermissionDenied: () -> Unit
 ) {
-    var textResult = remember { mutableStateOf("") }
+    val textResult = remember { mutableStateOf("") }
     val context = LocalContext.current
     val viewModel: IndividualHouseViewModel = viewModel()
 
@@ -70,33 +70,31 @@ fun BarcodeScanner(
     }
 
     fun checkCameraPermission() {
-        context?.let { ctx ->
-            if (ContextCompat.checkSelfPermission(
-                    ctx,
-                    Manifest.permission.CAMERA
-                ) == PackageManager.PERMISSION_GRANTED
-            ) {
-                showCamera()
-            } else if (ActivityCompat.shouldShowRequestPermissionRationale(
-                    ctx as androidx.activity.ComponentActivity,
-                    Manifest.permission.CAMERA
-                )
-            ) {
-                Toast.makeText(ctx, "Permission denied", Toast.LENGTH_SHORT).show()
-                onPermissionDenied()
-            } else {
-                requestPermissionLauncher.launch(Manifest.permission.CAMERA)
-            }
-        } ?: run {
-            // Handle if context is null
-            Toast.makeText(context, "Context is null", Toast.LENGTH_SHORT).show()
+        val ctx = context ?: return
+        if (ContextCompat.checkSelfPermission(
+                ctx,
+                Manifest.permission.CAMERA
+            ) == PackageManager.PERMISSION_GRANTED
+        ) {
+            showCamera()
+        } else if (ActivityCompat.shouldShowRequestPermissionRationale(
+                ctx as androidx.activity.ComponentActivity,
+                Manifest.permission.CAMERA
+            )
+        ) {
+            Toast.makeText(ctx, "Permission denied", Toast.LENGTH_SHORT).show()
+            onPermissionDenied()
+        } else {
+            requestPermissionLauncher.launch(Manifest.permission.CAMERA)
         }
     }
+    ButtonToScan(onClick = { checkCameraPermission() })
+}
 
+@Composable
+fun ButtonToScan(onClick: () -> Unit) {
     androidx.compose.material3.Button(
-        onClick = {
-                  checkCameraPermission()
-        },
+        onClick = onClick,
         elevation = ButtonDefaults.buttonElevation(
             defaultElevation = 5.dp,
             pressedElevation = 5.dp,
