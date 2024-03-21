@@ -69,8 +69,6 @@ fun IndividualHouseScreenComponent(navController: NavHostController){
 
     val scannedResultText by viewModel.scannedResult.observeAsState("")
 
-//    Log.d("IndividualHouseViewModel", "Scanned result set: $scannedResultText")
-
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier

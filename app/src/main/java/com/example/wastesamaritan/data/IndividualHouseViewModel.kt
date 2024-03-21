@@ -12,6 +12,5 @@ class IndividualHouseViewModel : ViewModel() {
 
     fun setScannedResult(result: String) {
         _scannedResult.value = result
-        Log.d("IndividualHouse", "Scanned result set: $result")
     }
 }
