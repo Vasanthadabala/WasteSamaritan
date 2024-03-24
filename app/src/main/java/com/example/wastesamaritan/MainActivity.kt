@@ -12,6 +12,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
+import com.example.wastesamaritan.data.IndividualHouseViewModel
 import com.example.wastesamaritan.navigation.MyNavigation
 import com.example.wastesamaritan.ui.theme.WasteSamaritanTheme
 
@@ -19,7 +20,9 @@ import com.example.wastesamaritan.ui.theme.WasteSamaritanTheme
  @ExperimentalMaterial3Api
 @ExperimentalComposeUiApi
 class MainActivity : ComponentActivity() {
-     private val viewModel: SegregatedViewModel by viewModels()
+     private val segregatedViewModel: SegregatedViewModel by viewModels()
+     private val individualHouseViewModel: IndividualHouseViewModel by viewModels()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,7 +33,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    MyNavigation(context = applicationContext,viewModel)
+                    MyNavigation(context = applicationContext,segregatedViewModel,individualHouseViewModel)
                 }
             }
         }

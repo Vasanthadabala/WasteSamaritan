@@ -45,7 +45,7 @@ import com.example.wastesamaritan.ui.theme.MyColor
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @ExperimentalMaterial3Api
 @Composable
-fun IndividualHouseScreen(navController: NavHostController) {
+fun IndividualHouseScreen(navController: NavHostController,viewModel: IndividualHouseViewModel) {
     Scaffold(
         topBar = { TopBar(name = "Individual House", navController = navController) },
     ) {
@@ -55,16 +55,14 @@ fun IndividualHouseScreen(navController: NavHostController) {
                 .background(MyColor.background)
                 .padding(top = 60.dp)
         ) {
-            IndividualHouseScreenComponent(navController)
+            IndividualHouseScreenComponent(navController,viewModel)
         }
     }
 }
 
 @SuppressLint("UnrememberedGetBackStackEntry")
 @Composable
-fun IndividualHouseScreenComponent(navController: NavHostController){
-
-    val viewModel:IndividualHouseViewModel = viewModel()
+fun IndividualHouseScreenComponent(navController: NavHostController,viewModel: IndividualHouseViewModel){
 
     // Observe the scanned result LiveData
     val scannedResultText = viewModel.scannedResult.observeAsState("").value

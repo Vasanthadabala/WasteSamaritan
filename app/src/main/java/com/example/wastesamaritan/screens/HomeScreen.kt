@@ -47,7 +47,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.wastesamaritan.R
 import com.example.wastesamaritan.components.QrCodeScanner.BarcodeScanner
@@ -65,7 +64,7 @@ import kotlinx.coroutines.launch
 @ExperimentalMaterial3Api
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun HomeScreen(navController:NavHostController) {
+fun HomeScreen(navController:NavHostController,viewModel: IndividualHouseViewModel) {
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
 
@@ -100,16 +99,14 @@ fun HomeScreen(navController:NavHostController) {
                     .background(MyColor.background)
                     .padding(top = 50.dp)
             ) {
-                HomeScreenComponent(navController)
+                HomeScreenComponent(navController,viewModel)
             }
         }
     }
 }
 
 @Composable
-fun HomeScreenComponent(navController: NavHostController) {
-
-    val viewModel:IndividualHouseViewModel = viewModel()
+fun HomeScreenComponent(navController: NavHostController,viewModel: IndividualHouseViewModel) {
 
     val context = LocalContext.current
     val sharedPreferences = context.getSharedPreferences("MY_PRE", Context.MODE_PRIVATE)
