@@ -20,9 +20,7 @@ import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -47,7 +45,7 @@ import com.example.wastesamaritan.ui.theme.MyColor
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @ExperimentalMaterial3Api
 @Composable
-fun IndividualHouseScreen(navController: NavHostController) {
+fun IndividualHouseScreen(navController: NavHostController,viewModel: IndividualHouseViewModel) {
     Scaffold(
         topBar = { TopBar(name = "Individual House", navController = navController) },
     ) {
@@ -57,17 +55,24 @@ fun IndividualHouseScreen(navController: NavHostController) {
                 .background(MyColor.background)
                 .padding(top = 60.dp)
         ) {
-            IndividualHouseScreenComponent(navController)
+            IndividualHouseScreenComponent(navController,viewModel)
         }
     }
 }
 
+@SuppressLint("UnrememberedGetBackStackEntry")
 @Composable
-fun IndividualHouseScreenComponent(navController: NavHostController){
+fun IndividualHouseScreenComponent(navController: NavHostController,viewModel: IndividualHouseViewModel){
 
-    val viewModel: IndividualHouseViewModel = viewModel()
 
-    val scannedResultText by viewModel.scannedResult.observeAsState("")
+    // Retrieve the view model instance
+//    val viewModel: IndividualHouseViewModel = viewModel()
+
+    // Observe the scanned result LiveData
+    val scannedResultText = viewModel.scannedResult.observeAsState("").value
+
+    // Log the scanned result for debugging
+    Log.d("IndividualHouse", "Scanned: $scannedResultText")
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,

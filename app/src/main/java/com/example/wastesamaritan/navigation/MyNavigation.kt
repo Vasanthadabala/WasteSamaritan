@@ -1,7 +1,6 @@
 package com.example.wastesamaritan.navigation
 
 import SegregatedViewModel
-import android.app.Activity
 import android.content.Context
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
@@ -10,6 +9,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
+import com.example.wastesamaritan.data.IndividualHouseViewModel
 import com.example.wastesamaritan.screens.AboutProjectScreen
 import com.example.wastesamaritan.screens.AboutScreen
 import com.example.wastesamaritan.screens.ComplaintsScreen
@@ -26,7 +26,7 @@ import com.example.wastesamaritan.screens.individualscreen.SegregatedScreen
 @ExperimentalMaterial3Api
 @ExperimentalComposeUiApi
 @Composable
-fun MyNavigation(context:Context,viewModel: SegregatedViewModel,activity: Activity){
+fun MyNavigation(context:Context,viewModel: SegregatedViewModel,viewModel2: IndividualHouseViewModel){
 
     val navController = rememberNavController()
     NavHost(navController = navController, startDestination = destination(context) )//destination(context)
@@ -35,7 +35,7 @@ fun MyNavigation(context:Context,viewModel: SegregatedViewModel,activity: Activi
             SigninScreen(navController)
         }
         composable(Home.route){
-            HomeScreen(navController,activity)
+            HomeScreen(navController)
         }
         composable(Profile.route){
             ProfileScreen(navController)
@@ -56,7 +56,7 @@ fun MyNavigation(context:Context,viewModel: SegregatedViewModel,activity: Activi
             SyncScreen(navController)
         }
         composable(IndividualHouse.route){
-            IndividualHouseScreen(navController)
+            IndividualHouseScreen(navController,viewModel2)
         }
         composable(NotSegregated.route){
             NotSegregatedScreen(navController)

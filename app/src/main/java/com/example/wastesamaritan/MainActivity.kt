@@ -17,6 +17,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
+import com.example.wastesamaritan.data.IndividualHouseViewModel
 import com.example.wastesamaritan.navigation.MyNavigation
 import com.example.wastesamaritan.ui.theme.WasteSamaritanTheme
 import com.journeyapps.barcodescanner.ScanContract
@@ -27,6 +28,8 @@ import com.journeyapps.barcodescanner.ScanOptions
 @ExperimentalComposeUiApi
 class MainActivity : ComponentActivity() {
      private val viewModel: SegregatedViewModel by viewModels()
+     private val viewModel2: IndividualHouseViewModel by viewModels()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,7 +40,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    MyNavigation(context = applicationContext,viewModel, activity = Activity())
+                    MyNavigation(context = applicationContext,viewModel,viewModel2)
                 }
             }
         }
