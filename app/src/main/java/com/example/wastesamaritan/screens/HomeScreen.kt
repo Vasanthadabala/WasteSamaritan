@@ -1,7 +1,6 @@
 package com.example.wastesamaritan.screens
 
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.content.Context
 import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
@@ -48,9 +47,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.wastesamaritan.R
 import com.example.wastesamaritan.components.QrCodeScanner.BarcodeScanner
+import com.example.wastesamaritan.data.IndividualHouseViewModel
 import com.example.wastesamaritan.navigation.BottomBar
 import com.example.wastesamaritan.navigation.DrawerNav
 import com.example.wastesamaritan.navigation.HomeTopBar
@@ -108,6 +109,8 @@ fun HomeScreen(navController:NavHostController) {
 @Composable
 fun HomeScreenComponent(navController: NavHostController) {
 
+    val viewModel:IndividualHouseViewModel = viewModel()
+
     val context = LocalContext.current
     val sharedPreferences = context.getSharedPreferences("MY_PRE", Context.MODE_PRIVATE)
 
@@ -129,8 +132,6 @@ fun HomeScreenComponent(navController: NavHostController) {
             }
         }
     }
-
-    var scannedResult by remember { mutableStateOf("") }
 
     Column(
         modifier = Modifier
@@ -227,7 +228,7 @@ fun HomeScreenComponent(navController: NavHostController) {
 
                 BarcodeScanner(
                     onScanResult = { result ->
-                        scannedResult = result
+                        viewModel.setScannedResult(result)
                         Toast.makeText(context, "Scanned result: $result", Toast.LENGTH_SHORT).show()
                         navController.navigate(IndividualHouse.route)
                     },

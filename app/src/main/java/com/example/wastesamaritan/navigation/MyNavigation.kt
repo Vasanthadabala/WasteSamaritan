@@ -26,7 +26,7 @@ import com.example.wastesamaritan.screens.individualscreen.SegregatedScreen
 @ExperimentalMaterial3Api
 @ExperimentalComposeUiApi
 @Composable
-fun MyNavigation(context:Context,viewModel: SegregatedViewModel,viewModel2: IndividualHouseViewModel){
+fun MyNavigation(context:Context,viewModel: SegregatedViewModel){
 
     val navController = rememberNavController()
     NavHost(navController = navController, startDestination = destination(context) )//destination(context)
@@ -56,7 +56,7 @@ fun MyNavigation(context:Context,viewModel: SegregatedViewModel,viewModel2: Indi
             SyncScreen(navController)
         }
         composable(IndividualHouse.route){
-            IndividualHouseScreen(navController,viewModel2)
+            IndividualHouseScreen(navController)
         }
         composable(NotSegregated.route){
             NotSegregatedScreen(navController)

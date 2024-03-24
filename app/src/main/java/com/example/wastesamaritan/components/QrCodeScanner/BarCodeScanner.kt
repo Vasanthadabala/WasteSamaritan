@@ -36,14 +36,12 @@ fun BarcodeScanner(
 ) {
     val textResult = remember { mutableStateOf("") }
     val context = LocalContext.current
-    val viewModel: IndividualHouseViewModel = viewModel()
 
     val barCodeLauncher = rememberLauncherForActivityResult(ScanContract()) { result ->
         if (result.contents == null) {
             Toast.makeText(context, "Cancelled", Toast.LENGTH_SHORT).show()
         } else {
             textResult.value = result.contents
-            viewModel.setScannedResult(result.contents)
             onScanResult(result.contents)
         }
     }
