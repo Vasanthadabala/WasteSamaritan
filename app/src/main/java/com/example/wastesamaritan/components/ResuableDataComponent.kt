@@ -38,7 +38,7 @@ fun OutlinedReusableComponent(
     totalWeight: Double,
     weight: Double,
     onWeightChange: (Double) -> Unit,
-    onAddWeightClicked: () -> Unit,
+    onAddWeightClicked: (Double) -> Unit,
     weightCards: List<Double>,
     onWeightCardRemove: (Double,Double) -> Unit,
     rating: Double,
@@ -85,7 +85,7 @@ fun OutlinedReusableComponent(
                     onAddWeightClicked = {
                         mutableTotalWeight += weight
                         mutableWeightCards += weight
-                        onAddWeightClicked()
+                        onAddWeightClicked(weight)
                     },
                     initialWeightCards = mutableWeightCards,
                     onWeightCardRemove = { removedWeight, _ ->

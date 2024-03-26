@@ -33,8 +33,10 @@ object IndividualHouse: Destinations {
 }
 object Segregated: Destinations {
     override val route = "Segregated"
+    const val itemID = "itemId"
 }
 object NotSegregated: Destinations {
     override val route = "NotSegregated"
+    const val itemID = "itemId"
 }
 

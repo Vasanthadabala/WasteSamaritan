@@ -55,7 +55,7 @@ fun WeightInputSection(
     totalWeight: Double,
     initialWeight: Double,
     onWeightChange: (Double) -> Unit,
-    onAddWeightClicked: () -> Unit,
+    onAddWeightClicked: (Double) -> Unit,
     initialWeightCards: List<Double>,
     onWeightCardRemove: (Double,Double) -> Unit,
     categoryColor: Color,
@@ -129,7 +129,7 @@ fun WeightInputSection(
                         if (weight != 0.0) { // Check if weight is not equal to 0.0
                             totalWeightValue += weight
                             weightCards += weight
-                            onAddWeightClicked() // Call the callback to handle adding weight
+                            onAddWeightClicked(weight) // Call the callback to handle adding weight
                             weight = 0.0
                         }
                     },

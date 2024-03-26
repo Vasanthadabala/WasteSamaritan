@@ -1,3 +1,5 @@
+package com.example.wastesamaritan.data.ViewModel
+
 import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

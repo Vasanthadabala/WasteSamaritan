@@ -31,10 +31,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.wastesamaritan.R
-import com.example.wastesamaritan.data.IndividualHouseViewModel
+import com.example.wastesamaritan.data.ViewModel.IndividualHouseViewModel
 import com.example.wastesamaritan.navigation.Home
 import com.example.wastesamaritan.navigation.NotSegregated
 import com.example.wastesamaritan.navigation.Segregated
@@ -66,9 +65,6 @@ fun IndividualHouseScreenComponent(navController: NavHostController,viewModel: I
 
     // Observe the scanned result LiveData
     val scannedResultText = viewModel.scannedResult.observeAsState("").value
-
-    // Log the scanned result for debugging
-    Log.d("IndividualHouse", "Scanned: $scannedResultText")
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -153,7 +149,7 @@ fun IndividualHouseScreenComponent(navController: NavHostController,viewModel: I
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = 20.dp, horizontal = 10.dp)
-                .clickable { navController.navigate(Segregated.route) }
+                .clickable { navController.navigate("${Segregated.route}/$scannedResultText") }
         ) {
             Row(
                 modifier = Modifier
@@ -186,7 +182,7 @@ fun IndividualHouseScreenComponent(navController: NavHostController,viewModel: I
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = 20.dp, horizontal = 10.dp)
-                .clickable { navController.navigate(NotSegregated.route) }
+                .clickable { navController.navigate("${NotSegregated.route}/$scannedResultText") }
         ) {
             Row(
                 modifier = Modifier

@@ -1,7 +1,7 @@
 package com.example.wastesamaritan.screens.individualscreen
 
-import SegregatedViewModel
-import SegregatedViewModel.Companion.DEFAULT_CATEGORY
+import com.example.wastesamaritan.data.ViewModel.SegregatedViewModel
+import com.example.wastesamaritan.data.ViewModel.SegregatedViewModel.Companion.DEFAULT_CATEGORY
 import android.Manifest
 import android.annotation.SuppressLint
 import android.net.Uri
@@ -61,7 +61,7 @@ import com.example.wastesamaritan.ui.theme.MyColor
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @ExperimentalMaterial3Api
 @Composable
-fun SegregatedScreen(navController: NavHostController, viewModel: SegregatedViewModel) {
+fun SegregatedScreen(navController: NavHostController, viewModel: SegregatedViewModel, id:String) {
     Scaffold(
         topBar = { TopBar(name = "Segregated Screen", navController = navController) },
     ) {
@@ -71,7 +71,7 @@ fun SegregatedScreen(navController: NavHostController, viewModel: SegregatedView
                 .background(MyColor.background)
                 .padding(top = 60.dp)
         ) {
-            SegregatedScreenComponent(navController = navController, viewModel = viewModel)
+            SegregatedScreenComponent(navController = navController, viewModel = viewModel,id)
         }
     }
 }
@@ -79,7 +79,7 @@ fun SegregatedScreen(navController: NavHostController, viewModel: SegregatedView
 @ExperimentalGlideComposeApi
 @ExperimentalComposeUiApi
 @Composable
-fun SegregatedScreenComponent(navController: NavHostController, viewModel: SegregatedViewModel) {
+fun SegregatedScreenComponent(navController: NavHostController, viewModel: SegregatedViewModel, id:String) {
 
     val context = LocalContext.current
 
@@ -105,12 +105,13 @@ fun SegregatedScreenComponent(navController: NavHostController, viewModel: Segre
         "E-Waste" -> Color.Black
         else -> Color.White
     }
+    var weight by remember { mutableStateOf(0.0) }
+
     // Extract data from LiveData
     val capturedImageUris = categoryData?.value?.capturedImageUris ?: emptyList()
-    val weight = categoryData?.value?.totalWeight ?: 0.0
+    val totalWeight = categoryData?.value?.totalWeight ?: 0.0
     val rating = categoryData?.value?.rating ?: 0.0
 
-    var totalWeight by remember { mutableStateOf(0.0) }
     var weightCards by remember { mutableStateOf<List<Double>>(emptyList()) }
 
     var currentUri: Uri? by remember { mutableStateOf(null) }
@@ -183,13 +184,14 @@ fun SegregatedScreenComponent(navController: NavHostController, viewModel: Segre
                 totalWeight = totalWeight,
                 weight = weight,
                 onWeightChange = { newWeight ->
-                    viewModel.updateCategoryWeight(selectedCategory, newWeight)
+                    weight=newWeight
                 },
-                onAddWeightClicked = { /* handle add weight clicked */ },
+                onAddWeightClicked = { addedWeight ->
+                    viewModel.updateCategoryWeight(selectedCategory,totalWeight + addedWeight)
+                },
                 weightCards = weightCards,
                 onWeightCardRemove = { removedWeight, updatedTotalWeight ->
                     weightCards = weightCards.filter { it != removedWeight }
-                    totalWeight = updatedTotalWeight // Update the total weight here
                     viewModel.updateCategoryWeight(selectedCategory, updatedTotalWeight)
                 },
                 rating = rating,

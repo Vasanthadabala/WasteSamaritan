@@ -1,4 +1,4 @@
-package com.example.wastesamaritan.data
+package com.example.wastesamaritan.data.ViewModel
 
 import android.util.Log
 import androidx.lifecycle.LiveData
@@ -15,6 +15,5 @@ class IndividualHouseViewModel : ViewModel() {
     // Function to set the scanned result and update LiveData
     fun setScannedResult(result: String) {
         _scannedResult.value = result
-        Log.d("IndividualHouseViewmodel", "Scanned: $result")
     }
 }

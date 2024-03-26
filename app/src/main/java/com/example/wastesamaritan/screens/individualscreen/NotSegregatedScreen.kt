@@ -22,6 +22,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -42,6 +43,7 @@ import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.example.wastesamaritan.R
 import com.example.wastesamaritan.components.CaptureImage.createImageFile
 import com.example.wastesamaritan.components.OutlinedReusableComponent
+import com.example.wastesamaritan.data.ViewModel.NotSegregatedViewModel
 import com.example.wastesamaritan.navigation.TopBar
 import com.example.wastesamaritan.ui.theme.MyColor
 
@@ -51,7 +53,7 @@ import com.example.wastesamaritan.ui.theme.MyColor
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @ExperimentalMaterial3Api
 @Composable
-fun NotSegregatedScreen(navController: NavHostController) {
+fun NotSegregatedScreen(navController: NavHostController, viewModel: NotSegregatedViewModel, id: String) {
     Scaffold(
         topBar = { TopBar(name = "Not Segregated Screen", navController = navController) },
     ) {
@@ -61,32 +63,35 @@ fun NotSegregatedScreen(navController: NavHostController) {
                 .background(MyColor.background)
                 .padding(top = 55.dp)
         ) {
-            NotSegregatedScreenComponent(navController)
+            NotSegregatedScreenComponent(navController,viewModel,id)
         }
     }
 }
 @ExperimentalGlideComposeApi
 @ExperimentalComposeUiApi
 @Composable
-fun NotSegregatedScreenComponent(navController: NavHostController) {
+fun NotSegregatedScreenComponent(navController: NavHostController, viewModel: NotSegregatedViewModel, id:String) {
 
     val context = LocalContext.current
     val categoryColor = MyColor.primary
     val textColor = Color.White
 
-
     var weight by remember { mutableStateOf(0.0) }
-    var rating by remember { mutableStateOf(0.0) }
-    var capturedImageUris by remember { mutableStateOf<List<Uri>>(emptyList()) }
 
-    var totalWeight by remember { mutableStateOf(0.0) }
+    // Observe LiveData properties from the ViewModel
+    val totalWeight = viewModel.totalWeight.observeAsState(initial = 0.0).value
+    val capturedImageUris = viewModel.capturedImageUris.observeAsState(initial = emptyList()).value
+    val rating = viewModel.rating.observeAsState(initial = 0.0).value
+
     var weightCards by remember { mutableStateOf<List<Double>>(emptyList()) }
 
-    var currentUri: Uri? = null
+    var currentUri: Uri? by remember { mutableStateOf(null) }
 
     val cameraLauncher = rememberLauncherForActivityResult(ActivityResultContracts.TakePicture()) { result ->
         if (result) {
-            capturedImageUris = capturedImageUris + listOfNotNull(currentUri)
+            currentUri?.let { uri ->
+                viewModel.addCapturedImageUri(uri)
+            }
         }
     }
     val permissionLauncher = rememberLauncherForActivityResult(
@@ -130,19 +135,25 @@ fun NotSegregatedScreenComponent(navController: NavHostController) {
                 context = context,
                 capturedImageUris = capturedImageUris,
                 onCameraClicked = { permissionLauncher.launch(Manifest.permission.CAMERA) },
-                totalWeight = totalWeight.toDouble(),
-                weight = weight.toDouble(),
-                onWeightChange = { newWeight -> weight = newWeight },
-                onAddWeightClicked = { /* handle add weight clicked */ },
+                totalWeight = totalWeight,
+                weight = weight,
+                onWeightChange = { newWeight ->
+                    weight=newWeight
+                },
+                onAddWeightClicked = { addedWeight ->
+                    viewModel.updateTotalWeight(totalWeight + addedWeight)
+                },
                 weightCards = weightCards,
                 onWeightCardRemove = { removedWeight, updatedTotalWeight ->
                     weightCards = weightCards.filter { it != removedWeight }
-                    totalWeight = updatedTotalWeight // Update the total weight here
+                    viewModel.updateTotalWeight(updatedTotalWeight)
                 },
                 rating = rating,
-                onRatingChanged = { newRating -> rating = newRating },
+                onRatingChanged = { newRating ->
+                    viewModel.updateRating(newRating)
+                },
                 onImageRemove = { removedUri ->
-                    capturedImageUris = capturedImageUris.filter { it != removedUri }
+                    viewModel.removeCapturedImageUri(removedUri)
                 },
                 categoryColor = categoryColor,
                 textColor = textColor
