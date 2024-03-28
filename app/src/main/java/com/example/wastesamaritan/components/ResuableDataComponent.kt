@@ -40,16 +40,13 @@ fun OutlinedReusableComponent(
     onWeightChange: (Double) -> Unit,
     onAddWeightClicked: (Double) -> Unit,
     weightCards: List<Double>,
-    onWeightCardRemove: (Double,Double) -> Unit,
+    onWeightCardRemove: (Double, Double) -> Unit,
     rating: Double,
     onRatingChanged: (Double) -> Unit,
-    onImageRemove:(Uri)-> Unit,
+    onImageRemove: (Uri) -> Unit,
     categoryColor: Color,
-    textColor:Color
+    textColor: Color
 ) {
-
-    var mutableWeightCards by remember { mutableStateOf(weightCards) }
-    var mutableTotalWeight by remember { mutableStateOf(totalWeight) }
 
     Column {
         Card(
@@ -82,21 +79,16 @@ fun OutlinedReusableComponent(
                     totalWeight = totalWeight,
                     initialWeight = initialWeight,
                     onWeightChange = onWeightChange,
-                    onAddWeightClicked = {
-                        mutableTotalWeight += initialWeight
-                        mutableWeightCards += initialWeight
-                        onAddWeightClicked(initialWeight)
-                    },
-                    initialWeightCards = mutableWeightCards,
-                    onWeightCardRemove = { removedWeight, _ ->
-                        mutableWeightCards = mutableWeightCards.filter { it != removedWeight }
-                        mutableTotalWeight -= removedWeight
-                        onWeightCardRemove(removedWeight, mutableTotalWeight)
-                    },
+                    onAddWeightClicked = onAddWeightClicked,
+                    initialWeightCards = weightCards,
+                    onWeightCardRemove = onWeightCardRemove,
                     categoryColor = categoryColor,
                     textColor = textColor
                 )
-                RatingSection(initialRating = rating, onRatingChanged = onRatingChanged)
+                RatingSection(
+                    initialRating = rating,
+                    onRatingChanged = onRatingChanged
+                )
             }
         }
         Card(

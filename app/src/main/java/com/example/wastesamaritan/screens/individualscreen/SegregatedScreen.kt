@@ -184,7 +184,7 @@ fun SegregatedScreenComponent(navController: NavHostController, viewModel: Segre
                 totalWeight = totalWeight,
                 initialWeight = weight,
                 onWeightChange = { newWeight ->
-                    weight=newWeight
+                    weight = newWeight
                 },
                 onAddWeightClicked = { addedWeight ->
                     viewModel.addCategoryWeightCard(selectedCategory,addedWeight)
