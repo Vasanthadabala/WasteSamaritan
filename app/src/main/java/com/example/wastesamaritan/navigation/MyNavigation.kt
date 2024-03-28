@@ -1,6 +1,6 @@
 package com.example.wastesamaritan.navigation
 
-import com.example.wastesamaritan.data.ViewModel.SegregatedViewModel
+import com.example.wastesamaritan.data.viewmodel.SegregatedViewModel
 import android.content.Context
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
@@ -11,8 +11,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
-import com.example.wastesamaritan.data.ViewModel.IndividualHouseViewModel
-import com.example.wastesamaritan.data.ViewModel.NotSegregatedViewModel
+import com.example.wastesamaritan.data.viewmodel.IndividualHouseViewModel
+import com.example.wastesamaritan.data.viewmodel.NotSegregatedViewModel
 import com.example.wastesamaritan.screens.AboutProjectScreen
 import com.example.wastesamaritan.screens.AboutScreen
 import com.example.wastesamaritan.screens.ComplaintsScreen

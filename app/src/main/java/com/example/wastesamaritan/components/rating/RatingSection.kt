@@ -1,6 +1,5 @@
-package com.example.wastesamaritan.components.Rating
+package com.example.wastesamaritan.components.rating
 
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box

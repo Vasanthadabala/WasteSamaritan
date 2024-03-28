@@ -1,4 +1,4 @@
-package com.example.wastesamaritan.components.RecordAudio
+package com.example.wastesamaritan.components.voice_recording
 
 import android.annotation.SuppressLint
 import android.content.Context

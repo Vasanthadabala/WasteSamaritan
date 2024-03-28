@@ -1,4 +1,4 @@
-package com.example.wastesamaritan.components.CaptureImage
+package com.example.wastesamaritan.components.image_capture
 
 import android.net.Uri
 import androidx.compose.foundation.background

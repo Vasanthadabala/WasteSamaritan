@@ -1,7 +1,6 @@
 package com.example.wastesamaritan.screens.individualscreen
 
 import android.annotation.SuppressLint
-import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -33,7 +32,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.wastesamaritan.R
-import com.example.wastesamaritan.data.ViewModel.IndividualHouseViewModel
+import com.example.wastesamaritan.data.viewmodel.IndividualHouseViewModel
 import com.example.wastesamaritan.navigation.Home
 import com.example.wastesamaritan.navigation.NotSegregated
 import com.example.wastesamaritan.navigation.Segregated

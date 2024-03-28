@@ -46,8 +46,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
 import com.example.wastesamaritan.R
-import com.example.wastesamaritan.components.RecordAudio.AndroidAudioPlayer
-import com.example.wastesamaritan.components.RecordAudio.AndroidAudioRecorder
+import com.example.wastesamaritan.components.voice_recording.AndroidAudioPlayer
+import com.example.wastesamaritan.components.voice_recording.AndroidAudioRecorder
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch

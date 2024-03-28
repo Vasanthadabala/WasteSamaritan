@@ -22,11 +22,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
-import com.example.wastesamaritan.components.CaptureImage.CameraButton
-import com.example.wastesamaritan.components.CaptureImage.CapturedImagesRow
-import com.example.wastesamaritan.components.CaptureImage.createImageFile
-import com.example.wastesamaritan.components.Rating.RatingSection
-import com.example.wastesamaritan.components.Weight.WeightInputSection
+import com.example.wastesamaritan.components.image_capture.CameraButton
+import com.example.wastesamaritan.components.image_capture.CapturedImagesRow
+import com.example.wastesamaritan.components.image_capture.createImageFile
+import com.example.wastesamaritan.components.rating.RatingSection
+import com.example.wastesamaritan.components.weight.WeightInputSection
 
 @ExperimentalComposeUiApi
 @ExperimentalGlideComposeApi
@@ -36,7 +36,7 @@ fun OutlinedReusableComponent(
     capturedImageUris: List<Uri>,
     onCameraClicked: (Uri) -> Unit,
     totalWeight: Double,
-    weight: Double,
+    initialWeight: Double,
     onWeightChange: (Double) -> Unit,
     onAddWeightClicked: (Double) -> Unit,
     weightCards: List<Double>,
@@ -80,12 +80,12 @@ fun OutlinedReusableComponent(
                 }
                 WeightInputSection(
                     totalWeight = totalWeight,
-                    initialWeight = weight,
+                    initialWeight = initialWeight,
                     onWeightChange = onWeightChange,
                     onAddWeightClicked = {
-                        mutableTotalWeight += weight
-                        mutableWeightCards += weight
-                        onAddWeightClicked(weight)
+                        mutableTotalWeight += initialWeight
+                        mutableWeightCards += initialWeight
+                        onAddWeightClicked(initialWeight)
                     },
                     initialWeightCards = mutableWeightCards,
                     onWeightCardRemove = { removedWeight, _ ->

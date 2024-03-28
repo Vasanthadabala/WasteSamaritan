@@ -1,7 +1,7 @@
 package com.example.wastesamaritan.screens.individualscreen
 
-import com.example.wastesamaritan.data.ViewModel.SegregatedViewModel
-import com.example.wastesamaritan.data.ViewModel.SegregatedViewModel.Companion.DEFAULT_CATEGORY
+import com.example.wastesamaritan.data.viewmodel.SegregatedViewModel
+import com.example.wastesamaritan.data.viewmodel.SegregatedViewModel.Companion.DEFAULT_CATEGORY
 import android.Manifest
 import android.annotation.SuppressLint
 import android.net.Uri
@@ -50,7 +50,7 @@ import androidx.core.content.FileProvider
 import androidx.navigation.NavHostController
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.example.wastesamaritan.R
-import com.example.wastesamaritan.components.CaptureImage.createImageFile
+import com.example.wastesamaritan.components.image_capture.createImageFile
 import com.example.wastesamaritan.components.OutlinedReusableComponent
 import com.example.wastesamaritan.data.Categories
 import com.example.wastesamaritan.navigation.TopBar
@@ -110,9 +110,9 @@ fun SegregatedScreenComponent(navController: NavHostController, viewModel: Segre
     // Extract data from LiveData
     val capturedImageUris = categoryData?.value?.capturedImageUris ?: emptyList()
     val totalWeight = categoryData?.value?.totalWeight ?: 0.0
+    val weightCards = categoryData?.value?.weightCards ?: emptyList()
     val rating = categoryData?.value?.rating ?: 0.0
 
-    var weightCards by remember { mutableStateOf<List<Double>>(emptyList()) }
 
     var currentUri: Uri? by remember { mutableStateOf(null) }
 
@@ -182,16 +182,17 @@ fun SegregatedScreenComponent(navController: NavHostController, viewModel: Segre
                 capturedImageUris = capturedImageUris,
                 onCameraClicked = { permissionLauncher.launch(Manifest.permission.CAMERA) },
                 totalWeight = totalWeight,
-                weight = weight,
+                initialWeight = weight,
                 onWeightChange = { newWeight ->
                     weight=newWeight
                 },
                 onAddWeightClicked = { addedWeight ->
+                    viewModel.addCategoryWeightCard(selectedCategory,addedWeight)
                     viewModel.updateCategoryWeight(selectedCategory,totalWeight + addedWeight)
                 },
                 weightCards = weightCards,
                 onWeightCardRemove = { removedWeight, updatedTotalWeight ->
-                    weightCards = weightCards.filter { it != removedWeight }
+                    viewModel.removeCategoryWeightCard(selectedCategory,removedWeight)
                     viewModel.updateCategoryWeight(selectedCategory, updatedTotalWeight)
                 },
                 rating = rating,

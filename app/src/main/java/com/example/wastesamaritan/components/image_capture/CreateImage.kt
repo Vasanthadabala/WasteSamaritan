@@ -1,4 +1,4 @@
-package com.example.wastesamaritan.components.CaptureImage
+package com.example.wastesamaritan.components.image_capture
 
 import android.annotation.SuppressLint
 import android.content.Context

@@ -1,4 +1,4 @@
-package com.example.wastesamaritan.components.Rating
+package com.example.wastesamaritan.components.rating
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row

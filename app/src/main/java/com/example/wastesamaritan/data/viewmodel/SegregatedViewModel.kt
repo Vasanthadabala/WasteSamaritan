@@ -1,4 +1,4 @@
-package com.example.wastesamaritan.data.ViewModel
+package com.example.wastesamaritan.data.viewmodel
 
 import android.net.Uri
 import androidx.lifecycle.LiveData
@@ -21,7 +21,7 @@ class SegregatedViewModel : ViewModel() {
         // Initialize category data map with default values
         Categories.forEach { category ->
             categoryDataMap[category] = MutableLiveData(
-                ModelForCategoryData(emptyList(), 0.0, 0.0)
+                ModelForCategoryData(emptyList(), 0.0, emptyList(),0.0)
             )
         }
     }
@@ -29,11 +29,6 @@ class SegregatedViewModel : ViewModel() {
     // Function to update the selected category
     fun setSelectedCategory(category: String) {
         _selectedCategory.value = category
-    }
-
-    // Function to update the data for a specific category
-    fun updateCategoryData(category: String, newData: ModelForCategoryData) {
-        categoryDataMap[category]?.value = newData
     }
 
     // Function to get LiveData for category data of a specific category
@@ -65,6 +60,23 @@ class SegregatedViewModel : ViewModel() {
         categoryDataMap[category]?.value = newData
     }
 
+    fun addCategoryWeightCard(category: String, weight: Double) {
+        val currentData = categoryDataMap[category]?.value ?: return
+        val currentList = currentData.weightCards
+        val newList = currentList + weight
+        val newData = currentData.copy(weightCards = newList)
+        categoryDataMap[category]?.value = newData
+    }
+
+    fun removeCategoryWeightCard(category: String, weight: Double) {
+        val currentData = categoryDataMap[category]?.value ?: return
+        val currentList = currentData.weightCards
+        val newList = currentList.toMutableList()
+        newList.remove(weight)
+        val newData = currentData.copy(weightCards = newList)
+        categoryDataMap[category]?.value = newData
+    }
+
     // Function to update rating for a specific category
     fun updateCategoryRating(category: String, rating: Double) {
         val currentData = categoryDataMap[category]?.value ?: return
@@ -80,5 +92,6 @@ class SegregatedViewModel : ViewModel() {
 data class ModelForCategoryData(
     val capturedImageUris: List<Uri>,
     val totalWeight: Double,
+    val weightCards: List<Double>,
     val rating: Double
 )

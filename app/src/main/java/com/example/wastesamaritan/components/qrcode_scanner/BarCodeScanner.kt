@@ -1,4 +1,4 @@
-package com.example.wastesamaritan.components.QrCodeScanner
+package com.example.wastesamaritan.components.qrcode_scanner
 
 import android.Manifest
 import android.content.pm.PackageManager

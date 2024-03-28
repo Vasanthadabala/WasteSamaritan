@@ -1,4 +1,4 @@
-package com.example.wastesamaritan.components.Weight
+package com.example.wastesamaritan.components.weight
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -126,7 +126,7 @@ fun WeightInputSection(
                 )
                 Button(
                     onClick = {
-                        if (weight != 0.0) { // Check if weight is not equal to 0.0
+                        if (weight != 0.0) {
                             totalWeightValue += weight
                             weightCards += weight
                             onAddWeightClicked(weight) // Call the callback to handle adding weight
@@ -179,9 +179,12 @@ fun WeightInputSection(
                     }
                     IconButton(
                         onClick = {
-                            weightCards = weightCards - listOf(weight)
-                            totalWeightValue -= weight
-                            onWeightCardRemove(weight, totalWeightValue)
+                            val index = weightCards.indexOf(weight)
+                            if (index != -1) {
+                                weightCards = weightCards.toMutableList().apply { removeAt(index) }
+                                totalWeightValue -= weight
+                                onWeightCardRemove(weight, totalWeightValue)
+                            }
                         },
                         modifier = Modifier
                             .offset {
