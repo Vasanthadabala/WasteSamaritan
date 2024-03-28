@@ -26,6 +26,7 @@ class SegregatedViewModel : ViewModel() {
         }
     }
 
+
     // Function to update the selected category
     fun setSelectedCategory(category: String) {
         _selectedCategory.value = category
@@ -53,7 +54,7 @@ class SegregatedViewModel : ViewModel() {
     }
 
 
-    // Function to update weight for a specific category
+    // In SegregatedViewModel
     fun updateCategoryWeight(category: String, weight: Double) {
         val currentData = categoryDataMap[category]?.value ?: return
         val newData = currentData.copy(totalWeight = weight)
