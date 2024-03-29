@@ -54,27 +54,28 @@ class SegregatedViewModel : ViewModel() {
     }
 
 
-    // In SegregatedViewModel
+    // Function to add weight to a specific category
     fun updateCategoryWeight(category: String, weight: Double) {
         val currentData = categoryDataMap[category]?.value ?: return
         val newData = currentData.copy(totalWeight = weight)
         categoryDataMap[category]?.value = newData
     }
 
+    // Function to add weight card to a specific category
     fun addCategoryWeightCard(category: String, weight: Double) {
         val currentData = categoryDataMap[category]?.value ?: return
-        val currentList = currentData.weightCards
-        val newList = currentList + weight
-        val newData = currentData.copy(weightCards = newList)
+        val initialCard = currentData.weightCards.toMutableList()
+        val updatedWeightCards = initialCard + weight
+        val newData = currentData.copy(weightCards = updatedWeightCards)
         categoryDataMap[category]?.value = newData
     }
 
+    // Function to remove weight card from a specific category
     fun removeCategoryWeightCard(category: String, weight: Double) {
         val currentData = categoryDataMap[category]?.value ?: return
-        val currentList = currentData.weightCards
-        val newList = currentList.toMutableList()
-        newList.remove(weight)
-        val newData = currentData.copy(weightCards = newList)
+        val initialCard = currentData.weightCards.toMutableList()
+        val updatedWeightCards = initialCard - weight
+        val newData = currentData.copy(weightCards = updatedWeightCards)
         categoryDataMap[category]?.value = newData
     }
 
