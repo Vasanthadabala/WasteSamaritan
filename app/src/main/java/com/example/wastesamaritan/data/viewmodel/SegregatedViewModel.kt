@@ -6,6 +6,13 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.wastesamaritan.data.Categories
 
+data class ModelForCategoryData(
+    val capturedImageUris: List<Uri>,
+    val totalWeight: Double,
+    val weightCards: List<Double>,
+    val rating: Double
+)
+
 class SegregatedViewModel : ViewModel() {
     // Mutable LiveData for the selected category
     private val _selectedCategory = MutableLiveData<String>()
@@ -90,10 +97,3 @@ class SegregatedViewModel : ViewModel() {
         const val DEFAULT_CATEGORY = "Wet"
     }
 }
-
-data class ModelForCategoryData(
-    val capturedImageUris: List<Uri>,
-    val totalWeight: Double,
-    val weightCards: List<Double>,
-    val rating: Double
-)
