@@ -7,16 +7,22 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 
 @Dao
-interface CategoryDataDao {
+interface NotSegregatedDataDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertCategoryData(categoryData: CategoryDataEntity)
+    suspend fun insertCategoryData(categoryData: NotSegregatedDataEntity)
 
-    @Query("SELECT * FROM category_data WHERE screenType = :screenType")
-    fun getCategoryDataByScreenType(screenType: String): LiveData<List<CategoryDataEntity>>
 
-    @Query("SELECT * FROM category_data WHERE screenType = 'Segregated'")
-    fun getSegregatedData(): LiveData<List<CategoryDataEntity>>
+    @Query("SELECT * FROM not_segregated_data WHERE screenType = 'Not Segregated'")
+    fun getNotSegregatedData(): LiveData<List<NotSegregatedDataEntity>>
+}
 
-    @Query("SELECT * FROM category_data WHERE screenType = 'Not Segregated'")
-    fun getNotSegregatedData(): LiveData<List<CategoryDataEntity>>
+
+@Dao
+interface SegregatedDataDao {
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertCategoryData(categoryData: SegregatedDataEntity)
+
+    @Query("SELECT * FROM segregated_data WHERE screenType = 'Segregated'")
+    fun getSegregatedData(): LiveData<List<SegregatedDataEntity>>
+
 }
