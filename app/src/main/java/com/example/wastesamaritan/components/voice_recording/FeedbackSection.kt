@@ -48,12 +48,14 @@ import androidx.core.content.ContextCompat
 import com.example.wastesamaritan.R
 import com.example.wastesamaritan.components.voice_recording.AndroidAudioPlayer
 import com.example.wastesamaritan.components.voice_recording.AndroidAudioRecorder
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.io.File
 
 
+@DelicateCoroutinesApi
 @Composable
 fun FeedbackSection() {
     val context = LocalContext.current

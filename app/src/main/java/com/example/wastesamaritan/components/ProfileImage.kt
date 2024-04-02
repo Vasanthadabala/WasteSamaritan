@@ -23,7 +23,7 @@ fun CircleProfileImage(firstLetter: String, size: Dp, fontsize: Dp) {
             .background(MyColor.primary, shape = CircleShape)
     ) {
         Text(
-            text = firstLetter.toUpperCase(),
+            text = firstLetter.uppercase(),
             color = Color.White,
             fontSize = fontsize.value.sp,
             fontWeight = FontWeight.Bold,

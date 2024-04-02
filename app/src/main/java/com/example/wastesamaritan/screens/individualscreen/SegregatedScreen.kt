@@ -86,7 +86,7 @@ fun SegregatedScreenComponent(navController: NavHostController, viewModel: Segre
     val selectedCategory by viewModel.selectedCategory.observeAsState(initial = DEFAULT_CATEGORY)
 
     // Observe the LiveData for selected category data
-    val categoryData = viewModel.getCategoryData(selectedCategory)?.observeAsState()
+    val categoryData = viewModel.getCategoryData(selectedCategory)?.observeAsState()?.value
 
     val categoryColor = when (selectedCategory) {
         "Wet" -> Color(0XFF65B741)
@@ -108,10 +108,10 @@ fun SegregatedScreenComponent(navController: NavHostController, viewModel: Segre
     var weight by remember { mutableStateOf(0.0) }
 
     // Extract data from LiveData
-    val capturedImageUris = categoryData?.value?.capturedImageUris ?: emptyList()
-    val totalWeight = categoryData?.value?.totalWeight ?: 0.0
-    val weightCards = categoryData?.value?.weightCards ?: emptyList()
-    val rating = categoryData?.value?.rating ?: 0.0
+    val capturedImageUris = categoryData?.capturedImageUris ?: emptyList()
+    val totalWeight = categoryData?.totalWeight ?: 0.0
+    val weightCards = categoryData?.weightCards ?: emptyList()
+    val rating = categoryData?.rating ?: 0.0
 
 
     var currentUri: Uri? by remember { mutableStateOf(null) }

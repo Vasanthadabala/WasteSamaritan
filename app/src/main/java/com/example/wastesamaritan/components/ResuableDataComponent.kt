@@ -1,3 +1,5 @@
+@file:OptIn(DelicateCoroutinesApi::class)
+
 package com.example.wastesamaritan.components
 
 import FeedbackSection
@@ -27,6 +29,7 @@ import com.example.wastesamaritan.components.image_capture.CapturedImagesRow
 import com.example.wastesamaritan.components.image_capture.createImageFile
 import com.example.wastesamaritan.components.rating.RatingSection
 import com.example.wastesamaritan.components.weight.WeightInputSection
+import kotlinx.coroutines.DelicateCoroutinesApi
 
 @ExperimentalComposeUiApi
 @ExperimentalGlideComposeApi
