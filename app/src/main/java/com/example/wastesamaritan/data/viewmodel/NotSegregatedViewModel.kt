@@ -1,10 +1,10 @@
 package com.example.wastesamaritan.data.viewmodel
 
-import android.annotation.SuppressLint
 import android.net.Uri
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import java.io.File
 
 class NotSegregatedViewModel : ViewModel() {
     //LiveData properties for the data relevant to the "Not Segregated" screen
@@ -21,8 +21,8 @@ class NotSegregatedViewModel : ViewModel() {
     private val _capturedImageUris = MutableLiveData<List<Uri>>()
     val capturedImageUris: LiveData<List<Uri>> = _capturedImageUris
 
-    private val _audioFileUri = MutableLiveData<Uri>()
-    val audioFileUri: LiveData<Uri> = _audioFileUri
+    private val _audioFileNotSegregated = MutableLiveData<File?>()
+    val audioFileNotSegregated: LiveData<File?> = _audioFileNotSegregated
 
     // Function to add captured image URI
     fun addCapturedImageUri(uri: Uri) {
@@ -59,13 +59,17 @@ class NotSegregatedViewModel : ViewModel() {
     }
 
     // Function to update audio file URI
-    fun updateAudioFileUri(uri: Uri) {
-        _audioFileUri.value = uri
+    fun updateAudioFile(file: File?) {
+        _audioFileNotSegregated.value = file
     }
 
     // Function to clear audio file URI
-    @SuppressLint("NullSafeMutableLiveData")
-    fun clearAudioFileUri() {
-        _audioFileUri.value = null
+    fun clearAudioFile() {
+        _audioFileNotSegregated.value?.let { file ->
+            if (file.exists()) {
+                file.delete()
+            }
+        }
+        _audioFileNotSegregated.value = null
     }
 }

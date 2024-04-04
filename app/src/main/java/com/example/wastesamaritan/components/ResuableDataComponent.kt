@@ -2,7 +2,7 @@
 
 package com.example.wastesamaritan.components
 
-import FeedbackSection
+import com.example.wastesamaritan.components.voice_recording.FeedbackSection
 import android.content.Context
 import android.net.Uri
 import androidx.compose.foundation.layout.Arrangement
@@ -15,10 +15,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -30,6 +26,7 @@ import com.example.wastesamaritan.components.image_capture.createImageFile
 import com.example.wastesamaritan.components.rating.RatingSection
 import com.example.wastesamaritan.components.weight.WeightInputSection
 import kotlinx.coroutines.DelicateCoroutinesApi
+import java.io.File
 
 @ExperimentalComposeUiApi
 @ExperimentalGlideComposeApi
@@ -48,7 +45,10 @@ fun OutlinedReusableComponent(
     onRatingChanged: (Double) -> Unit,
     onImageRemove: (Uri) -> Unit,
     categoryColor: Color,
-    textColor: Color
+    textColor: Color,
+    audioFileInitial:File?,
+    onAudioFileSave:(File?) -> Unit,
+    onAudioFileRemove:(File?) -> Unit
 ) {
 
     Column {
@@ -101,7 +101,11 @@ fun OutlinedReusableComponent(
             modifier = Modifier
                 .padding(5.dp)
         ) {
-            FeedbackSection()
+            FeedbackSection(
+                audioFile = audioFileInitial,
+                onAudioFileSave = onAudioFileSave,
+                onAudioFileRemove = onAudioFileRemove
+            )
         }
     }
 }

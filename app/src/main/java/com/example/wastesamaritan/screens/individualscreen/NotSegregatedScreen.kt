@@ -41,8 +41,8 @@ import androidx.core.content.FileProvider
 import androidx.navigation.NavHostController
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.example.wastesamaritan.R
-import com.example.wastesamaritan.components.image_capture.createImageFile
 import com.example.wastesamaritan.components.OutlinedReusableComponent
+import com.example.wastesamaritan.components.image_capture.createImageFile
 import com.example.wastesamaritan.data.viewmodel.NotSegregatedViewModel
 import com.example.wastesamaritan.navigation.TopBar
 import com.example.wastesamaritan.ui.theme.MyColor
@@ -83,8 +83,8 @@ fun NotSegregatedScreenComponent(navController: NavHostController, viewModel: No
     val capturedImageUris = viewModel.capturedImageUris.observeAsState(initial = emptyList()).value
     val rating = viewModel.rating.observeAsState(initial = 0.0).value
     val weightCards = viewModel.weightCards.observeAsState(initial = emptyList()).value
+    val audioFile = viewModel.audioFileNotSegregated.observeAsState(initial = null).value
 
-//    var weightCards by remember { mutableStateOf<List<Double>>(emptyList()) }
 
     var currentUri: Uri? by remember { mutableStateOf(null) }
 
@@ -158,7 +158,14 @@ fun NotSegregatedScreenComponent(navController: NavHostController, viewModel: No
                     viewModel.removeCapturedImageUri(removedUri)
                 },
                 categoryColor = categoryColor,
-                textColor = textColor
+                textColor = textColor,
+                audioFileInitial = audioFile,
+                onAudioFileSave = { newfile ->
+                    viewModel.updateAudioFile(newfile)
+                },
+                onAudioFileRemove = {
+                    viewModel.clearAudioFile()
+                }
             )
         }
         Box(

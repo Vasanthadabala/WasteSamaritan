@@ -1,7 +1,5 @@
 package com.example.wastesamaritan.screens.individualscreen
 
-import com.example.wastesamaritan.data.viewmodel.SegregatedViewModel
-import com.example.wastesamaritan.data.viewmodel.SegregatedViewModel.Companion.DEFAULT_CATEGORY
 import android.Manifest
 import android.annotation.SuppressLint
 import android.net.Uri
@@ -50,9 +48,11 @@ import androidx.core.content.FileProvider
 import androidx.navigation.NavHostController
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.example.wastesamaritan.R
-import com.example.wastesamaritan.components.image_capture.createImageFile
 import com.example.wastesamaritan.components.OutlinedReusableComponent
+import com.example.wastesamaritan.components.image_capture.createImageFile
 import com.example.wastesamaritan.data.Categories
+import com.example.wastesamaritan.data.viewmodel.SegregatedViewModel
+import com.example.wastesamaritan.data.viewmodel.SegregatedViewModel.Companion.DEFAULT_CATEGORY
 import com.example.wastesamaritan.navigation.TopBar
 import com.example.wastesamaritan.ui.theme.MyColor
 
@@ -112,6 +112,7 @@ fun SegregatedScreenComponent(navController: NavHostController, viewModel: Segre
     val totalWeight = categoryData?.totalWeight ?: 0.0
     val weightCards = categoryData?.weightCards ?: emptyList()
     val rating = categoryData?.rating ?: 0.0
+    val _audioFile = viewModel.audioFilSegregated.observeAsState(initial = null).value
 
 
     var currentUri: Uri? by remember { mutableStateOf(null) }
@@ -203,7 +204,14 @@ fun SegregatedScreenComponent(navController: NavHostController, viewModel: Segre
                     viewModel.removeCapturedImageUri(selectedCategory, removedUri)
                 },
                 categoryColor = categoryColor,
-                textColor = textColor
+                textColor = textColor,
+                audioFileInitial = _audioFile,
+                onAudioFileSave = { newfile ->
+                    viewModel.saveAudioFileForAllCategories(newfile)
+                },
+                onAudioFileRemove = {
+                    viewModel.clearAudioFileForAllCategories()
+                }
             )
         }
         Box(

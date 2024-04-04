@@ -1,3 +1,4 @@
+package com.example.wastesamaritan.components.voice_recording
 
 import android.Manifest
 import android.annotation.SuppressLint
@@ -30,6 +31,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -46,8 +48,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
 import com.example.wastesamaritan.R
-import com.example.wastesamaritan.components.voice_recording.AndroidAudioPlayer
-import com.example.wastesamaritan.components.voice_recording.AndroidAudioRecorder
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
@@ -55,21 +55,25 @@ import kotlinx.coroutines.launch
 import java.io.File
 
 
+
 @DelicateCoroutinesApi
 @Composable
-fun FeedbackSection() {
+fun FeedbackSection(
+    audioFile:File?,
+    onAudioFileSave: (File?) -> Unit,
+    onAudioFileRemove: (File?) -> Unit
+) {
     val context = LocalContext.current
 
     val recorder by lazy { AndroidAudioRecorder(context) }
     val player by lazy { AndroidAudioPlayer(context) }
     val isRecording = remember { mutableStateOf(false) }
     val isPlaying = remember { mutableStateOf(false) }
-    var audioFile: File? by remember { mutableStateOf(null) }
 
 
     var isTimerRunning by remember { mutableStateOf(false) }
-    var elapsedTime by remember { mutableStateOf(0L) }
-    var playbackProgress by remember { mutableStateOf(0L) }
+    var elapsedTime by remember { mutableLongStateOf(0L) }
+    var playbackProgress by remember { mutableLongStateOf(0L) }
 
     val startTimer: () -> Unit = {
         isTimerRunning = true
@@ -115,20 +119,21 @@ fun FeedbackSection() {
     ) { isPermissionGranted ->
         if (isPermissionGranted) {
             // Permission granted, handle audio recording
+            val outputFile = File(context.cacheDir, "audio_record.mp4")
             if (isRecording.value) {
-                val outputFile = File(context.cacheDir, "audio_record.mp4")
                 recorder.start(outputFile)
                 isRecording.value = true
             } else {
                 recorder.stop()
                 isRecording.value = false
-                audioFile = File(context.cacheDir, "audio_record.mp4")
+                onAudioFileSave(outputFile)
             }
         } else {
             // Permission denied, show a toast message
             Toast.makeText(context, "Permission Denied", Toast.LENGTH_SHORT).show()
         }
     }
+
     Row(
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically,
@@ -249,9 +254,8 @@ fun FeedbackSection() {
                         .size(28.dp)
                         .clickable {
                             if (audioFile != null) {
-                                audioFile?.delete()
-                                audioFile = null // Set audioFile to null after deletion
-                                isRecording.value = false // Ensure isRecording is set to false after deletion
+                                onAudioFileRemove(audioFile)
+                                isRecording.value = false
                                 isPlaying.value = false
                                 player.stop()
                                 stopTimer()
@@ -262,15 +266,15 @@ fun FeedbackSection() {
                                     Manifest.permission.RECORD_AUDIO
                                 )
                                 if (permissionCheckResult == PackageManager.PERMISSION_GRANTED) {
+                                    val outputFile = File(context.cacheDir, "audio_record.mp4")
                                     if (!isRecording.value) {
-                                        val outputFile = File(context.cacheDir, "audio_record.mp4")
                                         recorder.start(outputFile)
                                         isRecording.value = true
                                         startTimer()
                                     } else {
                                         recorder.stop()
                                         isRecording.value = false
-                                        audioFile = File(context.cacheDir, "audio_record.mp4")
+                                        onAudioFileSave(outputFile)
                                         stopTimer()
                                     }
                                 } else {

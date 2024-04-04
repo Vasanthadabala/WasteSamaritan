@@ -40,13 +40,23 @@ class RoomDatabaseViewmodel(application: Application) : AndroidViewModel(applica
         segregatedDataDao = database.segregatedDataDao()
     }
 
-    fun getNotSegregatedDataByScreenType(screenType: String): LiveData<List<NotSegregatedDataEntity>> {
-        return notSegregatedDataDao.getCategoryDataByScreenType(screenType)
+    fun getNotSegregatedDataByScreenType(): LiveData<List<NotSegregatedDataEntity>> {
+        return notSegregatedDataDao.getNotSegregatedData()
     }
 
-    fun getSegregatedDataByScreenType(screenType: String): LiveData<List<SegregatedDataEntity>> {
-        return segregatedDataDao.getCategoryDataByScreenType(screenType)
+    fun getSegregatedDataByScreenType(): LiveData<List<SegregatedDataEntity>> {
+        return segregatedDataDao.getSegregatedData()
     }
+
+    fun getNotSegregatedDataById(id: String):LiveData<NotSegregatedDataEntity>{
+        return notSegregatedDataDao.getDataById(id)
+    }
+
+    fun getSegregatedDataById(id: String):LiveData<SegregatedDataEntity>{
+        return segregatedDataDao.getDataById(id)
+    }
+
+
 
     fun saveNotSegregatedData(
         id: String,

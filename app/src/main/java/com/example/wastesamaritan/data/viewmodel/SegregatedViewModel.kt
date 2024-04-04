@@ -1,17 +1,18 @@
 package com.example.wastesamaritan.data.viewmodel
 
 import android.net.Uri
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.wastesamaritan.data.Categories
+import java.io.File
 
 data class ModelForCategoryData(
     val capturedImageUris: List<Uri>,
     val totalWeight: Double,
     val weightCards: List<Double>,
-    val rating: Double
+    val rating: Double,
+    val audio:File?
 )
 
 class SegregatedViewModel : ViewModel() {
@@ -22,6 +23,9 @@ class SegregatedViewModel : ViewModel() {
     // Mutable map to hold category data for each category
     private val categoryDataMap = mutableMapOf<String, MutableLiveData<ModelForCategoryData>>()
 
+    private val _audioFileSegregated = MutableLiveData<File?>()
+    val audioFilSegregated: LiveData<File?> = _audioFileSegregated
+
     init {
         // Initialize selected category with a default value
         _selectedCategory.value = DEFAULT_CATEGORY
@@ -29,9 +33,10 @@ class SegregatedViewModel : ViewModel() {
         // Initialize category data map with default values
         Categories.forEach { category ->
             categoryDataMap[category] = MutableLiveData(
-                ModelForCategoryData(emptyList(), 0.0, emptyList(),0.0)
+                ModelForCategoryData(emptyList(), 0.0, emptyList(),0.0,null)
             )
         }
+        _audioFileSegregated.value = null
     }
 
 
@@ -92,6 +97,31 @@ class SegregatedViewModel : ViewModel() {
         val currentData = categoryDataMap[category]?.value ?: return
         val newData = currentData.copy(rating = rating)
         categoryDataMap[category]?.value = newData
+    }
+
+    // Function to update the audio file for all categories
+    fun updateAudioFile(file: File?) {
+        _audioFileSegregated.value = file
+    }
+
+    // Function to clear audio file for all categories
+    fun clearAudioFile() {
+        _audioFileSegregated.value?.let { file ->
+            if (file.exists()) {
+                file.delete()
+            }
+        }
+        _audioFileSegregated.value = null
+    }
+
+    // Function to save audio file for all categories
+    fun saveAudioFileForAllCategories(file: File?) {
+        updateAudioFile(file)
+    }
+
+    // Function to clear audio file for all categories
+    fun clearAudioFileForAllCategories() {
+        clearAudioFile()
     }
 
     companion object {
