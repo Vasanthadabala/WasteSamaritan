@@ -22,9 +22,9 @@ object MyRatings: Destinations {
 object Complaints: Destinations {
     override val route = "Complaints"
 }
-object Sync: Destinations {
-    override val route = "Sync"
-}
+//object Sync: Destinations {
+//    override val route = "Sync"
+//}
 object Profile: Destinations {
     override val route = "Profile"
 }
@@ -38,5 +38,8 @@ object Segregated: Destinations {
 object NotSegregated: Destinations {
     override val route = "NotSegregated"
     const val itemID = "itemId"
+}
+object Data: Destinations {
+    override val route = "Data"
 }
 

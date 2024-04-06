@@ -13,9 +13,11 @@ import androidx.navigation.navArgument
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.example.wastesamaritan.data.viewmodel.IndividualHouseViewModel
 import com.example.wastesamaritan.data.viewmodel.NotSegregatedViewModel
+import com.example.wastesamaritan.data.viewmodel.RoomDatabaseViewModel
 import com.example.wastesamaritan.screens.AboutProjectScreen
 import com.example.wastesamaritan.screens.AboutScreen
 import com.example.wastesamaritan.screens.ComplaintsScreen
+import com.example.wastesamaritan.screens.DataScreen
 import com.example.wastesamaritan.screens.HomeScreen
 import com.example.wastesamaritan.screens.MyRatingsScreen
 import com.example.wastesamaritan.screens.ProfileScreen
@@ -29,7 +31,7 @@ import com.example.wastesamaritan.screens.individualscreen.SegregatedScreen
 @ExperimentalMaterial3Api
 @ExperimentalComposeUiApi
 @Composable
-fun MyNavigation(context:Context, segregatedViewModel: SegregatedViewModel, notSegregatedViewModel: NotSegregatedViewModel, individualHouseViewModel: IndividualHouseViewModel, ){
+fun MyNavigation(context:Context, individualHouseViewModel: IndividualHouseViewModel ){
 
     val navController = rememberNavController()
     NavHost(navController = navController, startDestination = destination(context) )//destination(context)
@@ -55,9 +57,9 @@ fun MyNavigation(context:Context, segregatedViewModel: SegregatedViewModel, notS
         composable(Complaints.route){
             ComplaintsScreen(navController)
         }
-        composable(Sync.route){
-            SyncScreen(navController)
-        }
+//        composable(Sync.route){
+//            SyncScreen(navController)
+//        }
         composable(IndividualHouse.route){
             IndividualHouseScreen(navController,individualHouseViewModel)
         }
@@ -66,14 +68,17 @@ fun MyNavigation(context:Context, segregatedViewModel: SegregatedViewModel, notS
             arguments = listOf(navArgument(Segregated.itemID) { type = NavType.StringType })
         ){
             val id = requireNotNull(it.arguments?.getString(Segregated.itemID))
-            SegregatedScreen(navController,segregatedViewModel,id)
+            SegregatedScreen(navController,id)
         }
         composable(
             "${NotSegregated.route}/{${NotSegregated.itemID}}",
             arguments = listOf(navArgument(NotSegregated.itemID) { type = NavType.StringType })
         ){
             val id = requireNotNull(it.arguments?.getString(NotSegregated.itemID))
-            NotSegregatedScreen(navController,notSegregatedViewModel,id)
+            NotSegregatedScreen(navController, id)
+        }
+        composable(Data.route){
+            DataScreen(navController)
         }
     }
 }

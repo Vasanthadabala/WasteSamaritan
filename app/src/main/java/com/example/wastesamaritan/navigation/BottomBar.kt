@@ -115,8 +115,13 @@ val bottomNavItems = listOf(
         selectedIcon = R.drawable.selectedfeedback,
         unselectedIcon = R.drawable.unselectedfeedback
     ),
+//    BottomNavigationItem(
+//        title = "Sync",
+//        selectedIcon = R.drawable.sync,
+//        unselectedIcon = R.drawable.sync
+//    )
     BottomNavigationItem(
-        title = "Sync",
+        title = "Data",
         selectedIcon = R.drawable.sync,
         unselectedIcon = R.drawable.sync
     )

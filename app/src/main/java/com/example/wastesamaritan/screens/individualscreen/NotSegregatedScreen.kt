@@ -38,12 +38,15 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.FileProvider
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.example.wastesamaritan.R
 import com.example.wastesamaritan.components.OutlinedReusableComponent
 import com.example.wastesamaritan.components.image_capture.createImageFile
 import com.example.wastesamaritan.data.viewmodel.NotSegregatedViewModel
+import com.example.wastesamaritan.data.viewmodel.RoomDatabaseViewModel
+import com.example.wastesamaritan.navigation.Home
 import com.example.wastesamaritan.navigation.TopBar
 import com.example.wastesamaritan.ui.theme.MyColor
 
@@ -53,7 +56,10 @@ import com.example.wastesamaritan.ui.theme.MyColor
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @ExperimentalMaterial3Api
 @Composable
-fun NotSegregatedScreen(navController: NavHostController, viewModel: NotSegregatedViewModel, id: String) {
+fun NotSegregatedScreen(navController: NavHostController, id: String) {
+    val viewModel: NotSegregatedViewModel = viewModel()
+    val roomViewModel: RoomDatabaseViewModel = viewModel()
+
     Scaffold(
         topBar = { TopBar(name = "Not Segregated Screen", navController = navController) },
     ) {
@@ -63,14 +69,19 @@ fun NotSegregatedScreen(navController: NavHostController, viewModel: NotSegregat
                 .background(MyColor.background)
                 .padding(top = 55.dp)
         ) {
-            NotSegregatedScreenComponent(navController,viewModel,id)
+            NotSegregatedScreenComponent(navController,viewModel,roomViewModel,id)
         }
     }
 }
 @ExperimentalGlideComposeApi
 @ExperimentalComposeUiApi
 @Composable
-fun NotSegregatedScreenComponent(navController: NavHostController, viewModel: NotSegregatedViewModel, id:String) {
+fun NotSegregatedScreenComponent(
+    navController: NavHostController,
+    viewModel: NotSegregatedViewModel,
+    roomViewModel:RoomDatabaseViewModel,
+    id:String
+) {
 
     val context = LocalContext.current
     val categoryColor = MyColor.primary
@@ -88,13 +99,14 @@ fun NotSegregatedScreenComponent(navController: NavHostController, viewModel: No
 
     var currentUri: Uri? by remember { mutableStateOf(null) }
 
-    val cameraLauncher = rememberLauncherForActivityResult(ActivityResultContracts.TakePicture()) { result ->
-        if (result) {
-            currentUri?.let { uri ->
-                viewModel.addCapturedImageUri(uri)
+    val cameraLauncher =
+        rememberLauncherForActivityResult(ActivityResultContracts.TakePicture()) { result ->
+            if (result) {
+                currentUri?.let { uri ->
+                    viewModel.addCapturedImageUri(uri)
+                }
             }
         }
-    }
     val permissionLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.RequestPermission()
     ) { isPermissionGranted ->
@@ -139,7 +151,7 @@ fun NotSegregatedScreenComponent(navController: NavHostController, viewModel: No
                 totalWeight = totalWeight,
                 initialWeight = weight,
                 onWeightChange = { newWeight ->
-                    weight=newWeight
+                    weight = newWeight
                 },
                 onAddWeightClicked = { addedWeight ->
                     viewModel.addWeightCard(addedWeight)
@@ -172,7 +184,26 @@ fun NotSegregatedScreenComponent(navController: NavHostController, viewModel: No
             modifier = Modifier.padding(top = 5.dp, start = 5.dp, end = 5.dp)
         ) {
             Button(
-                onClick = { /* handle save button click */ },
+                onClick = {
+                    if (rating != 0.0 && weight != 0.0) {
+                        roomViewModel.saveNotSegregatedData(
+                            id,
+                            capturedImageUris,
+                            totalWeight,
+                            weightCards,
+                            rating,
+                            screenType = "Not Segregated"
+                        )
+                    }else{
+                        Toast.makeText(context, "Provide Rating", Toast.LENGTH_SHORT).show()
+                    }
+                    navController.navigate(Home.route){
+                        popUpTo(Home.route){
+                            inclusive = true
+                        }
+                        launchSingleTop  = true
+                    }
+                },
                 elevation = ButtonDefaults.buttonElevation(
                     defaultElevation = 1.dp,
                     pressedElevation = 5.dp

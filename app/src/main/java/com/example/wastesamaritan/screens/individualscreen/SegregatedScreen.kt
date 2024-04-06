@@ -45,12 +45,15 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.FileProvider
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.example.wastesamaritan.R
 import com.example.wastesamaritan.components.OutlinedReusableComponent
 import com.example.wastesamaritan.components.image_capture.createImageFile
 import com.example.wastesamaritan.data.Categories
+import com.example.wastesamaritan.data.viewmodel.NotSegregatedViewModel
+import com.example.wastesamaritan.data.viewmodel.RoomDatabaseViewModel
 import com.example.wastesamaritan.data.viewmodel.SegregatedViewModel
 import com.example.wastesamaritan.data.viewmodel.SegregatedViewModel.Companion.DEFAULT_CATEGORY
 import com.example.wastesamaritan.navigation.TopBar
@@ -61,7 +64,9 @@ import com.example.wastesamaritan.ui.theme.MyColor
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @ExperimentalMaterial3Api
 @Composable
-fun SegregatedScreen(navController: NavHostController, viewModel: SegregatedViewModel, id:String) {
+fun SegregatedScreen(navController: NavHostController, id:String) {
+    val viewModel: SegregatedViewModel = viewModel()
+    val roomViewModel: RoomDatabaseViewModel = viewModel()
     Scaffold(
         topBar = { TopBar(name = "Segregated Screen", navController = navController) },
     ) {

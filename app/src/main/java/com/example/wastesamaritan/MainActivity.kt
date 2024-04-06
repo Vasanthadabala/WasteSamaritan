@@ -1,6 +1,5 @@
- package com.example.wastesamaritan
+package com.example.wastesamaritan
 
-import com.example.wastesamaritan.data.viewmodel.SegregatedViewModel
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -14,17 +13,16 @@ import androidx.compose.ui.Modifier
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.example.wastesamaritan.data.viewmodel.IndividualHouseViewModel
 import com.example.wastesamaritan.data.viewmodel.NotSegregatedViewModel
+import com.example.wastesamaritan.data.viewmodel.RoomDatabaseViewModel
+import com.example.wastesamaritan.data.viewmodel.SegregatedViewModel
 import com.example.wastesamaritan.navigation.MyNavigation
 import com.example.wastesamaritan.ui.theme.WasteSamaritanTheme
 
- @ExperimentalGlideComposeApi
- @ExperimentalMaterial3Api
+@ExperimentalGlideComposeApi
+@ExperimentalMaterial3Api
 @ExperimentalComposeUiApi
 class MainActivity : ComponentActivity() {
-     private val segregatedViewModel: SegregatedViewModel by viewModels()
-     private val notSegregatedViewModel: NotSegregatedViewModel by viewModels()
-     private val individualHouseViewModel: IndividualHouseViewModel by viewModels()
-
+    private val individualHouseViewModel: IndividualHouseViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,7 +33,10 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    MyNavigation(context = applicationContext,segregatedViewModel,notSegregatedViewModel,individualHouseViewModel)
+                    MyNavigation(
+                        context = applicationContext,
+                        individualHouseViewModel
+                    )
                 }
             }
         }

@@ -1,41 +1,30 @@
 package com.example.wastesamaritan.data.viewmodel
 
 import android.app.Application
-import android.content.Context
+import android.net.Uri
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewModelScope
 import androidx.room.Room
 import com.example.wastesamaritan.data.dataBase.AppDatabase
-import com.example.wastesamaritan.data.dataBase.NotSegregatedDataEntity
 import com.example.wastesamaritan.data.dataBase.NotSegregatedDataDao
-import com.example.wastesamaritan.data.dataBase.SegregatedDataEntity
+import com.example.wastesamaritan.data.dataBase.NotSegregatedDataEntity
 import com.example.wastesamaritan.data.dataBase.SegregatedDataDao
+import com.example.wastesamaritan.data.dataBase.SegregatedDataEntity
 import kotlinx.coroutines.launch
-import java.util.UUID
 
-class RoomDatabaseViewmodel(application: Application) : AndroidViewModel(application) {
+class RoomDatabaseViewModel(application: Application) : AndroidViewModel(application) {
     private val notSegregatedDataDao: NotSegregatedDataDao
     private val segregatedDataDao: SegregatedDataDao
 
-    companion object {
-        @Volatile
-        private var INSTANCE: AppDatabase? = null
-
-        fun getInstance(application: Application): AppDatabase {
-            return INSTANCE ?: synchronized(this) {
-                val instance = Room.databaseBuilder(
-                    application.applicationContext,
-                    AppDatabase::class.java,
-                    "app_database"
-                ).build()
-                INSTANCE = instance
-                instance
-            }
-        }
+    private val database: AppDatabase by lazy {
+        Room.databaseBuilder(
+            application.applicationContext,
+            AppDatabase::class.java, "app_database"
+        ).build()
     }
+
     init {
-        val database: AppDatabase = getInstance(application)
         notSegregatedDataDao = database.notSegregatedDataDao()
         segregatedDataDao = database.segregatedDataDao()
     }
@@ -57,18 +46,18 @@ class RoomDatabaseViewmodel(application: Application) : AndroidViewModel(applica
     }
 
 
-
-    fun saveNotSegregatedData(
+    fun insertNotSegregatedData(
         id: String,
-        capturedImageUris: List<String>,
+        capturedImageUris: List<Uri>,
         totalWeight: Double,
         weightCards: List<Double>,
         rating: Double,
         screenType: String
     ) {
+        val capturedImages = capturedImageUris.map { it.toString() }
         val notSegregatedDataEntity = NotSegregatedDataEntity(
             id = id,
-            capturedImageUris = capturedImageUris,
+            capturedImageUris = capturedImages,
             totalWeight = totalWeight,
             weightCards = weightCards,
             rating = rating,
@@ -79,19 +68,31 @@ class RoomDatabaseViewmodel(application: Application) : AndroidViewModel(applica
         }
     }
 
-    fun saveSegregatedData(
+    fun saveNotSegregatedData(
         id: String,
-        category: String,
-        capturedImageUris: List<String>,
+        capturedImageUris: List<Uri>,
         totalWeight: Double,
         weightCards: List<Double>,
         rating: Double,
         screenType: String
     ) {
+        insertNotSegregatedData(id, capturedImageUris, totalWeight, weightCards, rating, screenType)
+    }
+
+    fun insertSegregatedData(
+        id: String,
+        category: String,
+        capturedImageUris: List<Uri>,
+        totalWeight: Double,
+        weightCards: List<Double>,
+        rating: Double,
+        screenType: String
+    ) {
+        val capturedImages = capturedImageUris.map { it.toString() }
         val segregatedDataEntity = SegregatedDataEntity(
             id = id,
             category = category,
-            capturedImageUris = capturedImageUris,
+            capturedImageUris = capturedImages,
             totalWeight = totalWeight,
             weightCards = weightCards,
             rating = rating,

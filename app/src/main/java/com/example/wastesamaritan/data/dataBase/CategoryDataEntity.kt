@@ -1,5 +1,6 @@
 package com.example.wastesamaritan.data.dataBase
 
+import android.net.Uri
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
