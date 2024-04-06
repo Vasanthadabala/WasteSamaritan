@@ -1,4 +1,4 @@
-package com.example.wastesamaritan.screens.individualscreen.notsegregated
+package com.example.wastesamaritan.screens.individualHouse.notsegregated
 
 import android.Manifest
 import android.annotation.SuppressLint
@@ -44,8 +44,6 @@ import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.example.wastesamaritan.R
 import com.example.wastesamaritan.components.OutlinedReusableComponent
 import com.example.wastesamaritan.components.image_capture.createImageFile
-import com.example.wastesamaritan.data.viewmodel.RoomDatabaseViewModel
-import com.example.wastesamaritan.navigation.Home
 import com.example.wastesamaritan.navigation.TopBar
 import com.example.wastesamaritan.ui.theme.MyColor
 
@@ -57,7 +55,7 @@ import com.example.wastesamaritan.ui.theme.MyColor
 @Composable
 fun NotSegregatedScreen(navController: NavHostController, id: String) {
     val viewModel: NotSegregatedViewModel = viewModel()
-    val roomViewModel: RoomDatabaseViewModel = viewModel()
+//    val roomViewModel: RoomDatabaseViewModel = viewModel()
 
     Scaffold(
         topBar = { TopBar(name = "Not Segregated Screen", navController = navController) },
@@ -68,7 +66,7 @@ fun NotSegregatedScreen(navController: NavHostController, id: String) {
                 .background(MyColor.background)
                 .padding(top = 55.dp)
         ) {
-            NotSegregatedScreenComponent(navController,viewModel,roomViewModel,id)
+            NotSegregatedScreenComponent(navController,viewModel,id)
         }
     }
 }
@@ -78,7 +76,6 @@ fun NotSegregatedScreen(navController: NavHostController, id: String) {
 fun NotSegregatedScreenComponent(
     navController: NavHostController,
     viewModel: NotSegregatedViewModel,
-    roomViewModel:RoomDatabaseViewModel,
     id:String
 ) {
 
@@ -184,24 +181,24 @@ fun NotSegregatedScreenComponent(
         ) {
             Button(
                 onClick = {
-                    if (rating != 0.0 && weight != 0.0) {
-                        roomViewModel.saveNotSegregatedData(
-                            id,
-                            capturedImageUris,
-                            totalWeight,
-                            weightCards,
-                            rating,
-                            screenType = "Not Segregated"
-                        )
-                    }else{
-                        Toast.makeText(context, "Provide Rating", Toast.LENGTH_SHORT).show()
-                    }
-                    navController.navigate(Home.route){
-                        popUpTo(Home.route){
-                            inclusive = true
-                        }
-                        launchSingleTop  = true
-                    }
+//                    if (rating != 0.0 && weight != 0.0) {
+//                        roomViewModel.saveNotSegregatedData(
+//                            id,
+//                            capturedImageUris,
+//                            totalWeight,
+//                            weightCards,
+//                            rating,
+//                            screenType = "Not Segregated"
+//                        )
+//                    }else{
+//                        Toast.makeText(context, "Provide Rating", Toast.LENGTH_SHORT).show()
+//                    }
+//                    navController.navigate(Home.route){
+//                        popUpTo(Home.route){
+//                            inclusive = true
+//                        }
+//                        launchSingleTop  = true
+//                    }
                 },
                 elevation = ButtonDefaults.buttonElevation(
                     defaultElevation = 1.dp,

@@ -8,15 +8,12 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
-import com.example.wastesamaritan.data.viewmodel.RoomDatabaseViewModel
 import com.example.wastesamaritan.navigation.BottomBar
 import com.example.wastesamaritan.navigation.bottomNavItems
 import com.example.wastesamaritan.ui.theme.MyColor
@@ -45,9 +42,9 @@ fun DataScreen(navController: NavHostController){
 }
 @Composable
 fun DataScreenComponent(navController: NavHostController){
-    val viewModel: RoomDatabaseViewModel = viewModel()
-    val notSegregatedData = viewModel.getNotSegregatedDataByScreenType().observeAsState(emptyList()).value
-    val segregatedData = viewModel.getSegregatedDataByScreenType().observeAsState(emptyList()).value
+//    val viewModel: RoomDatabaseViewModel = viewModel()
+//    val notSegregatedData = viewModel.getNotSegregatedDataByScreenType().observeAsState(emptyList()).value
+//    val segregatedData = viewModel.getSegregatedDataByScreenType().observeAsState(emptyList()).value
 
 //    Column(
 //        modifier = Modifier

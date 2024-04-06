@@ -1,4 +1,4 @@
-package com.example.wastesamaritan.data.dataBase
+package com.example.wastesamaritan.data.roomdatabase
 
 import androidx.room.Database
 import androidx.room.RoomDatabase

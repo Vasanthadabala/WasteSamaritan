@@ -50,7 +50,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.wastesamaritan.R
 import com.example.wastesamaritan.components.qrcode_scanner.BarcodeScanner
-import com.example.wastesamaritan.data.viewmodel.IndividualHouseViewModel
+import com.example.wastesamaritan.screens.individualHouse.individual.IndividualHouseViewModel
 import com.example.wastesamaritan.navigation.BottomBar
 import com.example.wastesamaritan.navigation.DrawerNav
 import com.example.wastesamaritan.navigation.HomeTopBar

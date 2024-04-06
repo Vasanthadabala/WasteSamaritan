@@ -1,4 +1,4 @@
-package com.example.wastesamaritan.data.viewmodel
+package com.example.wastesamaritan.data.roomdatabase
 
 import android.app.Application
 import android.net.Uri
@@ -6,11 +6,6 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewModelScope
 import androidx.room.Room
-import com.example.wastesamaritan.data.dataBase.AppDatabase
-import com.example.wastesamaritan.data.dataBase.NotSegregatedDataDao
-import com.example.wastesamaritan.data.dataBase.NotSegregatedDataEntity
-import com.example.wastesamaritan.data.dataBase.SegregatedDataDao
-import com.example.wastesamaritan.data.dataBase.SegregatedDataEntity
 import kotlinx.coroutines.launch
 
 class RoomDatabaseViewModel(application: Application) : AndroidViewModel(application) {

@@ -1,10 +1,9 @@
-package com.example.wastesamaritan.screens.individualscreen.segregated
+package com.example.wastesamaritan.screens.individualHouse.segregated
 
 import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.wastesamaritan.data.Categories
 import java.io.File
 
 data class ModelForCategoryData(

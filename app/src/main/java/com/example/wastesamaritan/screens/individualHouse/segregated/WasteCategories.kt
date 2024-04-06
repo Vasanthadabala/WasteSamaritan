@@ -1,4 +1,4 @@
-package com.example.wastesamaritan.data
+package com.example.wastesamaritan.screens.individualHouse.segregated
 
 val Categories = listOf<String>(
     "Wet",

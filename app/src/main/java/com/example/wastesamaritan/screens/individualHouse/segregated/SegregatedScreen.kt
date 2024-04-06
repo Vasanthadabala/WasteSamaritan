@@ -1,4 +1,4 @@
-package com.example.wastesamaritan.screens.individualscreen.segregated
+package com.example.wastesamaritan.screens.individualHouse.segregated
 
 import android.Manifest
 import android.annotation.SuppressLint
@@ -51,10 +51,8 @@ import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.example.wastesamaritan.R
 import com.example.wastesamaritan.components.OutlinedReusableComponent
 import com.example.wastesamaritan.components.image_capture.createImageFile
-import com.example.wastesamaritan.data.Categories
-import com.example.wastesamaritan.data.viewmodel.RoomDatabaseViewModel
-import com.example.wastesamaritan.screens.individualscreen.segregated.SegregatedViewModel.Companion.DEFAULT_CATEGORY
 import com.example.wastesamaritan.navigation.TopBar
+import com.example.wastesamaritan.screens.individualHouse.segregated.SegregatedViewModel.Companion.DEFAULT_CATEGORY
 import com.example.wastesamaritan.ui.theme.MyColor
 
 @ExperimentalGlideComposeApi
@@ -64,7 +62,7 @@ import com.example.wastesamaritan.ui.theme.MyColor
 @Composable
 fun SegregatedScreen(navController: NavHostController, id:String) {
     val viewModel: SegregatedViewModel = viewModel()
-    val roomViewModel: RoomDatabaseViewModel = viewModel()
+//    val roomViewModel: RoomDatabaseViewModel = viewModel()
     Scaffold(
         topBar = { TopBar(name = "Segregated Screen", navController = navController) },
     ) {

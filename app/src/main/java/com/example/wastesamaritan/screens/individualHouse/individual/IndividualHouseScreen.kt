@@ -1,4 +1,4 @@
-package com.example.wastesamaritan.screens.individualscreen
+package com.example.wastesamaritan.screens.individualHouse.individual
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.BorderStroke
@@ -32,7 +32,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.wastesamaritan.R
-import com.example.wastesamaritan.data.viewmodel.IndividualHouseViewModel
 import com.example.wastesamaritan.navigation.Home
 import com.example.wastesamaritan.navigation.NotSegregated
 import com.example.wastesamaritan.navigation.Segregated

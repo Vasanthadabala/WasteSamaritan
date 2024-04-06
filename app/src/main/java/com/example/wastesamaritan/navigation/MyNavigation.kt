@@ -1,6 +1,5 @@
 package com.example.wastesamaritan.navigation
 
-import com.example.wastesamaritan.data.viewmodel.SegregatedViewModel
 import android.content.Context
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
@@ -11,9 +10,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
-import com.example.wastesamaritan.data.viewmodel.IndividualHouseViewModel
-import com.example.wastesamaritan.data.viewmodel.NotSegregatedViewModel
-import com.example.wastesamaritan.data.viewmodel.RoomDatabaseViewModel
+import com.example.wastesamaritan.screens.individualHouse.individual.IndividualHouseViewModel
 import com.example.wastesamaritan.screens.AboutProjectScreen
 import com.example.wastesamaritan.screens.AboutScreen
 import com.example.wastesamaritan.screens.ComplaintsScreen
@@ -22,16 +19,15 @@ import com.example.wastesamaritan.screens.HomeScreen
 import com.example.wastesamaritan.screens.MyRatingsScreen
 import com.example.wastesamaritan.screens.ProfileScreen
 import com.example.wastesamaritan.screens.SigninScreen
-import com.example.wastesamaritan.screens.SyncScreen
-import com.example.wastesamaritan.screens.individualscreen.IndividualHouseScreen
-import com.example.wastesamaritan.screens.individualscreen.NotSegregatedScreen
-import com.example.wastesamaritan.screens.individualscreen.SegregatedScreen
+import com.example.wastesamaritan.screens.individualHouse.individual.IndividualHouseScreen
+import com.example.wastesamaritan.screens.individualHouse.notsegregated.NotSegregatedScreen
+import com.example.wastesamaritan.screens.individualHouse.segregated.SegregatedScreen
 
 @ExperimentalGlideComposeApi
 @ExperimentalMaterial3Api
 @ExperimentalComposeUiApi
 @Composable
-fun MyNavigation(context:Context, individualHouseViewModel: IndividualHouseViewModel ){
+fun MyNavigation(context:Context, individualHouseViewModel: IndividualHouseViewModel){
 
     val navController = rememberNavController()
     NavHost(navController = navController, startDestination = destination(context) )//destination(context)

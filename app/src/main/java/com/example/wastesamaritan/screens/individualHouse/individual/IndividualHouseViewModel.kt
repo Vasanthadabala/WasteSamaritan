@@ -1,4 +1,4 @@
-package com.example.wastesamaritan.data.viewmodel
+package com.example.wastesamaritan.screens.individualHouse.individual
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
