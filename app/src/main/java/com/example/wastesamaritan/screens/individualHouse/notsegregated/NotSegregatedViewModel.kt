@@ -1,4 +1,4 @@
-package com.example.wastesamaritan.data.viewmodel
+package com.example.wastesamaritan.screens.individualscreen.notsegregated
 
 import android.net.Uri
 import androidx.lifecycle.LiveData
