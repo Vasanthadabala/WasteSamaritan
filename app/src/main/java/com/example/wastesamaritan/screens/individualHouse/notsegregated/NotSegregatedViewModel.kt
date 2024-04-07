@@ -1,7 +1,6 @@
 package com.example.wastesamaritan.screens.individualHouse.notsegregated
 
 import android.net.Uri
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -9,11 +8,9 @@ import java.io.File
 
 class NotSegregatedViewModel : ViewModel() {
     //LiveData properties for the data relevant to the "Not Segregated" screen
-    private val _totalWeight = MutableLiveData<String>()
-    val totalWeight: LiveData<String> = _totalWeight
 
-    private val _weightCards = MutableLiveData<List<Double>>()
-    val weightCards: LiveData<List<Double>> = _weightCards
+    private val _weightCards = MutableLiveData<MutableList<Double>>()
+    val weightCards: LiveData<MutableList<Double>> = _weightCards
 
     private val _rating = MutableLiveData<Double>()
     val rating: LiveData<Double> = _rating
@@ -37,22 +34,21 @@ class NotSegregatedViewModel : ViewModel() {
         _capturedImageUris.value = currentList - uri
     }
 
-    // Function to update total weight
-    fun updateTotalWeight(weight: String) {
-        _totalWeight.value = weight
-        Log.d("result","$weight")
-    }
-
     fun addWeightCard(weight: Double) {
-        val currentList = _weightCards.value ?: emptyList()
-        _weightCards.value = currentList+weight
+        val currentList = _weightCards.value ?: mutableListOf()
+        if (!currentList.contains(weight)) {
+            currentList.add(weight)
+            _weightCards.value = currentList
+        }
     }
 
     fun removeWeightCard(weight: Double) {
-        val currentList = _weightCards.value ?: emptyList()
-        val newList = currentList.toMutableList()
-        newList.remove(weight)
-        _weightCards.value = newList
+        val currentList = _weightCards.value ?: mutableListOf()
+        val index = currentList.indexOfFirst { it == weight }
+        if (index != -1) {
+            currentList.removeAt(index)
+            _weightCards.value = currentList
+        }
     }
 
     // Function to update rating

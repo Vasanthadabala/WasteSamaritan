@@ -38,7 +38,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.FileProvider
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.example.wastesamaritan.R
@@ -84,10 +83,9 @@ fun NotSegregatedScreenComponent(
 
 
     // Observe LiveData properties from the ViewModel
-    val totalWeight = viewModel.totalWeight.observeAsState("").value
     val capturedImageUris = viewModel.capturedImageUris.observeAsState(initial = emptyList()).value
     val rating = viewModel.rating.observeAsState(initial = 0.0).value
-    val weightCards = viewModel.weightCards.observeAsState(initial = emptyList()).value
+    val weightCards by viewModel.weightCards.observeAsState(initial = mutableListOf())
     val audioFile = viewModel.audioFileNotSegregated.observeAsState(initial = null).value
 
 
@@ -142,23 +140,19 @@ fun NotSegregatedScreenComponent(
                 context = context,
                 capturedImageUris = capturedImageUris,
                 onCameraClicked = { permissionLauncher.launch(Manifest.permission.CAMERA) },
-                totalWeight = totalWeight,
+                onImageRemove = { removedUri ->
+                    viewModel.removeCapturedImageUri(removedUri)
+                },
                 onAddWeightClicked = { addedWeight ->
                     viewModel.addWeightCard(addedWeight)
-                    val newTotalWeight = totalWeight?.toDoubleOrNull() ?: 0.0 + addedWeight
-                    viewModel.updateTotalWeight(newTotalWeight.toString())
                 },
                 weightCards = weightCards,
-                onWeightCardRemove = { removedWeight, updatedTotalWeight ->
+                onWeightCardRemove = { removedWeight ->
                     viewModel.removeWeightCard(removedWeight)
-                    viewModel.updateTotalWeight(updatedTotalWeight.toString())
                 },
                 rating = rating,
                 onRatingChanged = { newRating ->
                     viewModel.updateRating(newRating)
-                },
-                onImageRemove = { removedUri ->
-                    viewModel.removeCapturedImageUri(removedUri)
                 },
                 categoryColor = categoryColor,
                 textColor = textColor,

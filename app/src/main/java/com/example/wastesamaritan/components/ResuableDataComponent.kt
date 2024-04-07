@@ -35,13 +35,12 @@ fun OutlinedReusableComponent(
     context: Context,
     capturedImageUris: List<Uri>,
     onCameraClicked: (Uri) -> Unit,
-    totalWeight: String,
+    onImageRemove: (Uri) -> Unit,
     onAddWeightClicked: (Double) -> Unit,
-    weightCards: List<Double>,
-    onWeightCardRemove: (Double, Double) -> Unit,
+    weightCards: MutableList<Double>,
+    onWeightCardRemove: (Double) -> Unit,
     rating: Double,
     onRatingChanged: (Double) -> Unit,
-    onImageRemove: (Uri) -> Unit,
     categoryColor: Color,
     textColor: Color,
     audioFileInitial:File?,
@@ -77,9 +76,8 @@ fun OutlinedReusableComponent(
                     )
                 }
                 WeightInputSection(
-                    totalWeight = totalWeight,
                     onAddWeightClicked = onAddWeightClicked,
-                    initialWeightCards = weightCards,
+                    weightCards = weightCards,
                     onWeightCardRemove = onWeightCardRemove,
                     categoryColor = categoryColor,
                     textColor = textColor

@@ -51,16 +51,13 @@ import com.example.wastesamaritan.ui.theme.MyColor
 @ExperimentalComposeUiApi
 @Composable
 fun WeightInputSection(
-    totalWeight: String,
     onAddWeightClicked: (Double) -> Unit,
-    initialWeightCards: List<Double>,
-    onWeightCardRemove: (Double, Double) -> Unit,
+    weightCards: MutableList<Double>,
+    onWeightCardRemove: (Double) -> Unit,
     categoryColor: Color,
     textColor: Color
 ) {
     var weight by remember { mutableStateOf("") }
-    var weightCards by remember { mutableStateOf(initialWeightCards) }
-    var totalWeightValue by remember { mutableStateOf(totalWeight.toDoubleOrNull() ?: 0.0) }
 
     val keyboardController = LocalSoftwareKeyboardController.current
 
@@ -75,7 +72,7 @@ fun WeightInputSection(
             modifier = Modifier.padding(10.dp)
         ) {
             Text(
-                text = "Total Weight: $totalWeightValue kgs",
+                text = "Total Weight: $${weightCards.sum()} kgs",
                 fontSize = 18.sp,
                 fontWeight = FontWeight.W500,
                 color = MyColor.text,
@@ -90,7 +87,7 @@ fun WeightInputSection(
                     onValueChange = {newWeight ->
                         weight = newWeight
                     },
-                    placeholder = { Text(text = "Quantity") },
+                    placeholder = { Text(text = "Weight") },
                     modifier = Modifier
                         .padding(8.dp)
                         .size(52.dp)
@@ -118,11 +115,12 @@ fun WeightInputSection(
                 Button(
                     onClick = {
                         if (weight.isNotEmpty()) {
-                            val weightValue = weight.toDouble()
-                            totalWeightValue += weightValue
-                            weightCards += weightValue
-                            onAddWeightClicked(weightValue) // Call the callback to handle adding weight
-                            weight = ""
+                            val weightValue = weight.toDoubleOrNull()
+                            weightValue?.let {
+                                weightCards.add(it)
+                                onAddWeightClicked(it)
+                                weight = ""
+                            }
                         }
                     },
                     elevation = ButtonDefaults.buttonElevation(
@@ -171,9 +169,7 @@ fun WeightInputSection(
                     }
                     IconButton(
                         onClick = {
-                            weightCards = weightCards.toMutableList().apply { remove(weight) }
-                            totalWeightValue -= weight
-                            onWeightCardRemove(weight, totalWeightValue)
+                            onWeightCardRemove(weight)
                         },
                         modifier = Modifier
                             .offset {

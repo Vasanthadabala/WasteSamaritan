@@ -8,8 +8,7 @@ import java.io.File
 
 data class ModelForCategoryData(
     val capturedImageUris: List<Uri>,
-    val totalWeight: String,
-    val weightCards: List<Double>,
+    val weightCards: MutableList<Double>,
     val rating: Double,
     val audio:File?
 )
@@ -32,7 +31,7 @@ class SegregatedViewModel : ViewModel() {
         // Initialize category data map with default values
         Categories.forEach { category ->
             categoryDataMap[category] = MutableLiveData(
-                ModelForCategoryData(emptyList(), "", emptyList(),0.0,null)
+                ModelForCategoryData(emptyList(), mutableListOf(),0.0,null)
             )
         }
         _audioFileSegregated.value = null
@@ -66,29 +65,26 @@ class SegregatedViewModel : ViewModel() {
     }
 
 
-    // Function to add weight to a specific category
-    fun updateCategoryWeight(category: String, weight: String) {
-        val currentData = categoryDataMap[category]?.value ?: return
-        val newData = currentData.copy(totalWeight = weight)
-        categoryDataMap[category]?.value = newData
-    }
-
     // Function to add weight card to a specific category
     fun addCategoryWeightCard(category: String, weight: Double) {
         val currentData = categoryDataMap[category]?.value ?: return
-        val initialCard = currentData.weightCards.toMutableList()
-        val updatedWeightCards = initialCard + weight
-        val newData = currentData.copy(weightCards = updatedWeightCards)
-        categoryDataMap[category]?.value = newData
+        if (!currentData.weightCards.contains(weight)) {
+            val updatedWeightCards = currentData.weightCards.toMutableList().apply { add(weight) }
+            val newData = currentData.copy(weightCards = updatedWeightCards)
+            categoryDataMap[category]?.value = newData
+        }
     }
 
     // Function to remove weight card from a specific category
     fun removeCategoryWeightCard(category: String, weight: Double) {
         val currentData = categoryDataMap[category]?.value ?: return
-        val initialCard = currentData.weightCards.toMutableList()
-        val updatedWeightCards = initialCard - weight
-        val newData = currentData.copy(weightCards = updatedWeightCards)
-        categoryDataMap[category]?.value = newData
+        val index = currentData.weightCards.indexOfFirst { it == weight }
+        if (index != -1) {
+            val updatedWeightCards = currentData.weightCards.toMutableList().apply { removeAt(index) }
+            val newData = currentData.copy(weightCards = updatedWeightCards)
+            categoryDataMap[category]?.value = newData
+        }
+
     }
 
     // Function to update rating for a specific category
