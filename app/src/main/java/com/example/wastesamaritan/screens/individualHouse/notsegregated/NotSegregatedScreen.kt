@@ -85,7 +85,7 @@ fun NotSegregatedScreenComponent(
     // Observe LiveData properties from the ViewModel
     val capturedImageUris = viewModel.capturedImageUris.observeAsState(initial = emptyList()).value
     val rating = viewModel.rating.observeAsState(initial = 0.0).value
-    val weightCards by viewModel.weightCards.observeAsState(initial = mutableListOf())
+    val weightCards = viewModel.weightCards.observeAsState(initial = mutableListOf()).value
     val audioFile = viewModel.audioFileNotSegregated.observeAsState(initial = null).value
 
 

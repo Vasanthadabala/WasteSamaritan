@@ -1,6 +1,7 @@
 package com.example.wastesamaritan.screens.individualHouse.notsegregated
 
 import android.net.Uri
+import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -35,19 +36,19 @@ class NotSegregatedViewModel : ViewModel() {
     }
 
     fun addWeightCard(weight: Double) {
-        val currentList = _weightCards.value ?: mutableListOf()
+        val currentList = _weightCards.value ?: mutableStateListOf()
         if (!currentList.contains(weight)) {
-            currentList.add(weight)
-            _weightCards.value = currentList
+            val newdata = currentList.apply { add(weight)}
+            _weightCards.value = newdata
         }
     }
 
     fun removeWeightCard(weight: Double) {
-        val currentList = _weightCards.value ?: mutableListOf()
+        val currentList = _weightCards.value ?: mutableStateListOf()
         val index = currentList.indexOfFirst { it == weight }
         if (index != -1) {
-            currentList.removeAt(index)
-            _weightCards.value = currentList
+            val newdata = currentList.apply { removeAt(index)}
+            _weightCards.value = newdata
         }
     }
 
