@@ -53,8 +53,7 @@ import com.example.wastesamaritan.ui.theme.MyColor
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @ExperimentalMaterial3Api
 @Composable
-fun NotSegregatedScreen(navController: NavHostController, id: String) {
-    val viewModel: NotSegregatedViewModel = viewModel()
+fun NotSegregatedScreen(navController: NavHostController,viewModel: NotSegregatedViewModel, id: String) {
 //    val roomViewModel: RoomDatabaseViewModel = viewModel()
 
     Scaffold(
@@ -83,10 +82,9 @@ fun NotSegregatedScreenComponent(
     val categoryColor = MyColor.primary
     val textColor = Color.White
 
-    var weight by remember { mutableStateOf(0.0) }
 
     // Observe LiveData properties from the ViewModel
-    val totalWeight = viewModel.totalWeight.observeAsState(initial = 0.0).value
+    val totalWeight = viewModel.totalWeight.observeAsState("").value
     val capturedImageUris = viewModel.capturedImageUris.observeAsState(initial = emptyList()).value
     val rating = viewModel.rating.observeAsState(initial = 0.0).value
     val weightCards = viewModel.weightCards.observeAsState(initial = emptyList()).value
@@ -145,18 +143,15 @@ fun NotSegregatedScreenComponent(
                 capturedImageUris = capturedImageUris,
                 onCameraClicked = { permissionLauncher.launch(Manifest.permission.CAMERA) },
                 totalWeight = totalWeight,
-                initialWeight = weight,
-                onWeightChange = { newWeight ->
-                    weight = newWeight
-                },
                 onAddWeightClicked = { addedWeight ->
                     viewModel.addWeightCard(addedWeight)
-                    viewModel.updateTotalWeight(totalWeight + addedWeight)
+                    val newTotalWeight = totalWeight?.toDoubleOrNull() ?: 0.0 + addedWeight
+                    viewModel.updateTotalWeight(newTotalWeight.toString())
                 },
                 weightCards = weightCards,
                 onWeightCardRemove = { removedWeight, updatedTotalWeight ->
                     viewModel.removeWeightCard(removedWeight)
-                    viewModel.updateTotalWeight(updatedTotalWeight)
+                    viewModel.updateTotalWeight(updatedTotalWeight.toString())
                 },
                 rating = rating,
                 onRatingChanged = { newRating ->

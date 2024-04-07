@@ -8,7 +8,7 @@ import java.io.File
 
 data class ModelForCategoryData(
     val capturedImageUris: List<Uri>,
-    val totalWeight: Double,
+    val totalWeight: String,
     val weightCards: List<Double>,
     val rating: Double,
     val audio:File?
@@ -32,7 +32,7 @@ class SegregatedViewModel : ViewModel() {
         // Initialize category data map with default values
         Categories.forEach { category ->
             categoryDataMap[category] = MutableLiveData(
-                ModelForCategoryData(emptyList(), 0.0, emptyList(),0.0,null)
+                ModelForCategoryData(emptyList(), "", emptyList(),0.0,null)
             )
         }
         _audioFileSegregated.value = null
@@ -67,7 +67,7 @@ class SegregatedViewModel : ViewModel() {
 
 
     // Function to add weight to a specific category
-    fun updateCategoryWeight(category: String, weight: Double) {
+    fun updateCategoryWeight(category: String, weight: String) {
         val currentData = categoryDataMap[category]?.value ?: return
         val newData = currentData.copy(totalWeight = weight)
         categoryDataMap[category]?.value = newData

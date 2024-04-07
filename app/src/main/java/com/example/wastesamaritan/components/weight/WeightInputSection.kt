@@ -28,7 +28,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableDoubleStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -52,18 +51,16 @@ import com.example.wastesamaritan.ui.theme.MyColor
 @ExperimentalComposeUiApi
 @Composable
 fun WeightInputSection(
-    totalWeight: Double,
-    initialWeight: Double,
-    onWeightChange: (Double) -> Unit,
+    totalWeight: String,
     onAddWeightClicked: (Double) -> Unit,
     initialWeightCards: List<Double>,
-    onWeightCardRemove: (Double,Double) -> Unit,
+    onWeightCardRemove: (Double, Double) -> Unit,
     categoryColor: Color,
-    textColor:Color
+    textColor: Color
 ) {
-    var weight by remember { mutableDoubleStateOf(initialWeight) }
+    var weight by remember { mutableStateOf("") }
     var weightCards by remember { mutableStateOf(initialWeightCards) }
-    var totalWeightValue by remember { mutableDoubleStateOf(totalWeight) }
+    var totalWeightValue by remember { mutableStateOf(totalWeight.toDoubleOrNull() ?: 0.0) }
 
     val keyboardController = LocalSoftwareKeyboardController.current
 
@@ -89,15 +86,9 @@ fun WeightInputSection(
             ) {
                 OutlinedTextField(
                     singleLine = true,
-                    value = if (weight == 0.0) "" else if (weight % 1 == 0.0) weight.toInt().toString() else weight.toString(),
+                    value = weight,
                     onValueChange = {newWeight ->
-                        if (newWeight.isNotEmpty()) {
-                            val newValue = newWeight.toDoubleOrNull()
-                            if (newValue != null) {
-                                weight = newValue
-                                onWeightChange(newValue)
-                            }
-                        }
+                        weight = newWeight
                     },
                     placeholder = { Text(text = "Quantity") },
                     modifier = Modifier
@@ -126,11 +117,12 @@ fun WeightInputSection(
                 )
                 Button(
                     onClick = {
-                        if (weight != 0.0) {
-                            totalWeightValue += weight
-                            weightCards += weight
-                            onAddWeightClicked(weight) // Call the callback to handle adding weight
-                            weight = 0.0
+                        if (weight.isNotEmpty()) {
+                            val weightValue = weight.toDouble()
+                            totalWeightValue += weightValue
+                            weightCards += weightValue
+                            onAddWeightClicked(weightValue) // Call the callback to handle adding weight
+                            weight = ""
                         }
                     },
                     elevation = ButtonDefaults.buttonElevation(
@@ -179,12 +171,9 @@ fun WeightInputSection(
                     }
                     IconButton(
                         onClick = {
-                            val index = weightCards.indexOf(weight)
-                            if (index != -1) {
-                                weightCards = weightCards.toMutableList().apply { removeAt(index) }
-                                totalWeightValue -= weight
-                                onWeightCardRemove(weight, totalWeightValue)
-                            }
+                            weightCards = weightCards.toMutableList().apply { remove(weight) }
+                            totalWeightValue -= weight
+                            onWeightCardRemove(weight, totalWeightValue)
                         },
                         modifier = Modifier
                             .offset {

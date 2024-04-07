@@ -2,7 +2,6 @@
 
 package com.example.wastesamaritan.components
 
-import com.example.wastesamaritan.components.voice_recording.FeedbackSection
 import android.content.Context
 import android.net.Uri
 import androidx.compose.foundation.layout.Arrangement
@@ -24,6 +23,7 @@ import com.example.wastesamaritan.components.image_capture.CameraButton
 import com.example.wastesamaritan.components.image_capture.CapturedImagesRow
 import com.example.wastesamaritan.components.image_capture.createImageFile
 import com.example.wastesamaritan.components.rating.RatingSection
+import com.example.wastesamaritan.components.voice_recording.FeedbackSection
 import com.example.wastesamaritan.components.weight.WeightInputSection
 import kotlinx.coroutines.DelicateCoroutinesApi
 import java.io.File
@@ -35,9 +35,7 @@ fun OutlinedReusableComponent(
     context: Context,
     capturedImageUris: List<Uri>,
     onCameraClicked: (Uri) -> Unit,
-    totalWeight: Double,
-    initialWeight: Double,
-    onWeightChange: (Double) -> Unit,
+    totalWeight: String,
     onAddWeightClicked: (Double) -> Unit,
     weightCards: List<Double>,
     onWeightCardRemove: (Double, Double) -> Unit,
@@ -80,8 +78,6 @@ fun OutlinedReusableComponent(
                 }
                 WeightInputSection(
                     totalWeight = totalWeight,
-                    initialWeight = initialWeight,
-                    onWeightChange = onWeightChange,
                     onAddWeightClicked = onAddWeightClicked,
                     initialWeightCards = weightCards,
                     onWeightCardRemove = onWeightCardRemove,

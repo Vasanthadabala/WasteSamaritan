@@ -1,6 +1,7 @@
 package com.example.wastesamaritan.screens.individualHouse.notsegregated
 
 import android.net.Uri
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -8,8 +9,8 @@ import java.io.File
 
 class NotSegregatedViewModel : ViewModel() {
     //LiveData properties for the data relevant to the "Not Segregated" screen
-    private val _totalWeight = MutableLiveData<Double>()
-    val totalWeight: LiveData<Double> = _totalWeight
+    private val _totalWeight = MutableLiveData<String>()
+    val totalWeight: LiveData<String> = _totalWeight
 
     private val _weightCards = MutableLiveData<List<Double>>()
     val weightCards: LiveData<List<Double>> = _weightCards
@@ -37,8 +38,9 @@ class NotSegregatedViewModel : ViewModel() {
     }
 
     // Function to update total weight
-    fun updateTotalWeight(weight: Double) {
+    fun updateTotalWeight(weight: String) {
         _totalWeight.value = weight
+        Log.d("result","$weight")
     }
 
     fun addWeightCard(weight: Double) {

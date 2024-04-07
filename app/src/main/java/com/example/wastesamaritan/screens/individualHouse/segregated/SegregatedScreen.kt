@@ -60,8 +60,7 @@ import com.example.wastesamaritan.ui.theme.MyColor
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @ExperimentalMaterial3Api
 @Composable
-fun SegregatedScreen(navController: NavHostController, id:String) {
-    val viewModel: SegregatedViewModel = viewModel()
+fun SegregatedScreen(navController: NavHostController, viewModel: SegregatedViewModel, id:String) {
 //    val roomViewModel: RoomDatabaseViewModel = viewModel()
     Scaffold(
         topBar = { TopBar(name = "Segregated Screen", navController = navController) },
@@ -106,11 +105,10 @@ fun SegregatedScreenComponent(navController: NavHostController, viewModel: Segre
         "E-Waste" -> Color.Black
         else -> Color.White
     }
-    var weight by remember { mutableStateOf(0.0) }
 
     // Extract data from LiveData
     val capturedImageUris = categoryData?.capturedImageUris ?: emptyList()
-    val totalWeight = categoryData?.totalWeight ?: 0.0
+    val totalWeight = categoryData?.totalWeight ?: ""
     val weightCards = categoryData?.weightCards ?: emptyList()
     val rating = categoryData?.rating ?: 0.0
     val _audioFile = viewModel.audioFilSegregated.observeAsState(initial = null).value
@@ -184,10 +182,6 @@ fun SegregatedScreenComponent(navController: NavHostController, viewModel: Segre
                 capturedImageUris = capturedImageUris,
                 onCameraClicked = { permissionLauncher.launch(Manifest.permission.CAMERA) },
                 totalWeight = totalWeight,
-                initialWeight = weight,
-                onWeightChange = { newWeight ->
-                    weight = newWeight
-                },
                 onAddWeightClicked = { addedWeight ->
                     viewModel.addCategoryWeightCard(selectedCategory,addedWeight)
                     viewModel.updateCategoryWeight(selectedCategory,totalWeight + addedWeight)
@@ -195,7 +189,7 @@ fun SegregatedScreenComponent(navController: NavHostController, viewModel: Segre
                 weightCards = weightCards,
                 onWeightCardRemove = { removedWeight, updatedTotalWeight ->
                     viewModel.removeCategoryWeightCard(selectedCategory,removedWeight)
-                    viewModel.updateCategoryWeight(selectedCategory, updatedTotalWeight)
+                    viewModel.updateCategoryWeight(selectedCategory, updatedTotalWeight.toString())
                 },
                 rating = rating,
                 onRatingChanged = { newRating ->
