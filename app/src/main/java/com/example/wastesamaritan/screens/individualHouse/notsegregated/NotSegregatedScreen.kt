@@ -157,11 +157,8 @@ fun NotSegregatedScreenComponent(
                 categoryColor = categoryColor,
                 textColor = textColor,
                 audioFileInitial = audioFile,
-                onAudioFileSave = { newfile ->
+                onAudioFileAction  = { newfile ->
                     viewModel.updateAudioFile(newfile)
-                },
-                onAudioFileRemove = {
-                    viewModel.clearAudioFile()
                 }
             )
         }
@@ -170,24 +167,6 @@ fun NotSegregatedScreenComponent(
         ) {
             Button(
                 onClick = {
-//                    if (rating != 0.0 && weight != 0.0) {
-//                        roomViewModel.saveNotSegregatedData(
-//                            id,
-//                            capturedImageUris,
-//                            totalWeight,
-//                            weightCards,
-//                            rating,
-//                            screenType = "Not Segregated"
-//                        )
-//                    }else{
-//                        Toast.makeText(context, "Provide Rating", Toast.LENGTH_SHORT).show()
-//                    }
-//                    navController.navigate(Home.route){
-//                        popUpTo(Home.route){
-//                            inclusive = true
-//                        }
-//                        launchSingleTop  = true
-//                    }
                 },
                 elevation = ButtonDefaults.buttonElevation(
                     defaultElevation = 1.dp,

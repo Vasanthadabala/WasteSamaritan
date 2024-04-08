@@ -44,8 +44,7 @@ fun OutlinedReusableComponent(
     categoryColor: Color,
     textColor: Color,
     audioFileInitial:File?,
-    onAudioFileSave:(File?) -> Unit,
-    onAudioFileRemove:(File?) -> Unit
+    onAudioFileAction:(File?) -> Unit
 ) {
 
     Column {
@@ -97,8 +96,7 @@ fun OutlinedReusableComponent(
         ) {
             FeedbackSection(
                 audioFile = audioFileInitial,
-                onAudioFileSave = onAudioFileSave,
-                onAudioFileRemove = onAudioFileRemove
+                onAudioFileAction = onAudioFileAction,
             )
         }
     }

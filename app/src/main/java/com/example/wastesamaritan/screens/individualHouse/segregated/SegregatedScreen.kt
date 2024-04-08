@@ -196,11 +196,8 @@ fun SegregatedScreenComponent(navController: NavHostController, viewModel: Segre
                 categoryColor = categoryColor,
                 textColor = textColor,
                 audioFileInitial = _audioFile,
-                onAudioFileSave = { newfile ->
-                    viewModel.saveAudioFileForAllCategories(newfile)
-                },
-                onAudioFileRemove = {
-                    viewModel.clearAudioFileForAllCategories()
+                onAudioFileAction = { newfile ->
+                    viewModel.updateAudioFile(newfile)
                 }
             )
         }

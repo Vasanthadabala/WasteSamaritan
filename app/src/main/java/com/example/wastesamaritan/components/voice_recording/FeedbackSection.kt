@@ -60,8 +60,7 @@ import java.io.File
 @Composable
 fun FeedbackSection(
     audioFile:File?,
-    onAudioFileSave: (File?) -> Unit,
-    onAudioFileRemove: (File?) -> Unit
+    onAudioFileAction: (File?) -> Unit,
 ) {
     val context = LocalContext.current
 
@@ -126,7 +125,7 @@ fun FeedbackSection(
             } else {
                 recorder.stop()
                 isRecording.value = false
-                onAudioFileSave(outputFile)
+                onAudioFileAction(outputFile)
             }
         } else {
             // Permission denied, show a toast message
@@ -254,7 +253,7 @@ fun FeedbackSection(
                         .size(28.dp)
                         .clickable {
                             if (audioFile != null) {
-                                onAudioFileRemove(audioFile)
+                                onAudioFileAction(null)
                                 isRecording.value = false
                                 isPlaying.value = false
                                 player.stop()
@@ -274,7 +273,7 @@ fun FeedbackSection(
                                     } else {
                                         recorder.stop()
                                         isRecording.value = false
-                                        onAudioFileSave(outputFile)
+                                        onAudioFileAction(outputFile)
                                         stopTimer()
                                     }
                                 } else {

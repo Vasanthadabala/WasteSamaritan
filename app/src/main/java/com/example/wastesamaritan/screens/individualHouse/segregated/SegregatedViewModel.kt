@@ -99,26 +99,6 @@ class SegregatedViewModel : ViewModel() {
         _audioFileSegregated.value = file
     }
 
-    // Function to clear audio file for all categories
-    fun clearAudioFile() {
-        _audioFileSegregated.value?.let { file ->
-            if (file.exists()) {
-                file.delete()
-            }
-        }
-        _audioFileSegregated.value = null
-    }
-
-    // Function to save audio file for all categories
-    fun saveAudioFileForAllCategories(file: File?) {
-        updateAudioFile(file)
-    }
-
-    // Function to clear audio file for all categories
-    fun clearAudioFileForAllCategories() {
-        clearAudioFile()
-    }
-
     companion object {
         const val DEFAULT_CATEGORY = "Wet"
     }

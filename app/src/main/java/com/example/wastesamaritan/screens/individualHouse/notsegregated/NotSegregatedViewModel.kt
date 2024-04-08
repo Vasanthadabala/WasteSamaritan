@@ -10,7 +10,7 @@ import java.io.File
 class NotSegregatedViewModel : ViewModel() {
     //LiveData properties for the data relevant to the "Not Segregated" screen
 
-    private val _weightCards = MutableLiveData<MutableList<Double>>()
+    private val _weightCards = MutableLiveData<MutableList<Double>>(mutableListOf())
     val weightCards: LiveData<MutableList<Double>> = _weightCards
 
     private val _rating = MutableLiveData<Double>()
@@ -36,19 +36,21 @@ class NotSegregatedViewModel : ViewModel() {
     }
 
     fun addWeightCard(weight: Double) {
-        val currentList = _weightCards.value ?: mutableStateListOf()
+        val currentList = _weightCards.value ?: mutableListOf()
         if (!currentList.contains(weight)) {
-            val newdata = currentList.apply { add(weight)}
-            _weightCards.value = newdata
+            val updatedList = currentList.toMutableList().apply { add(weight) }
+            _weightCards.value = updatedList
         }
     }
 
     fun removeWeightCard(weight: Double) {
-        val currentList = _weightCards.value ?: mutableStateListOf()
-        val index = currentList.indexOfFirst { it == weight }
+        val currentList = _weightCards.value ?: mutableListOf()
+        val index = currentList.indexOf(weight
+        )
         if (index != -1) {
-            val newdata = currentList.apply { removeAt(index)}
-            _weightCards.value = newdata
+            val updatedList = currentList.toMutableList()
+            updatedList.removeAt(index)
+            _weightCards.value = updatedList
         }
     }
 
@@ -60,15 +62,5 @@ class NotSegregatedViewModel : ViewModel() {
     // Function to update audio file URI
     fun updateAudioFile(file: File?) {
         _audioFileNotSegregated.value = file
-    }
-
-    // Function to clear audio file URI
-    fun clearAudioFile() {
-        _audioFileNotSegregated.value?.let { file ->
-            if (file.exists()) {
-                file.delete()
-            }
-        }
-        _audioFileNotSegregated.value = null
     }
 }
