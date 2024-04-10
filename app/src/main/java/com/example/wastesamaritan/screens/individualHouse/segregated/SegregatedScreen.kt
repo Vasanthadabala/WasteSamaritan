@@ -45,11 +45,14 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.FileProvider
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.example.wastesamaritan.R
 import com.example.wastesamaritan.components.OutlinedReusableComponent
 import com.example.wastesamaritan.components.image_capture.createImageFile
+import com.example.wastesamaritan.data.roomdatabase.RoomDatabaseViewModel
+import com.example.wastesamaritan.navigation.Home
 import com.example.wastesamaritan.navigation.TopBar
 import com.example.wastesamaritan.screens.individualHouse.segregated.SegregatedViewModel.Companion.DEFAULT_CATEGORY
 import com.example.wastesamaritan.ui.theme.MyColor
@@ -60,7 +63,9 @@ import com.example.wastesamaritan.ui.theme.MyColor
 @ExperimentalMaterial3Api
 @Composable
 fun SegregatedScreen(navController: NavHostController, viewModel: SegregatedViewModel, id:String) {
-//    val roomViewModel: RoomDatabaseViewModel = viewModel()
+
+    val roomViewModel: RoomDatabaseViewModel = viewModel()
+
     Scaffold(
         topBar = { TopBar(name = "Segregated Screen", navController = navController) },
     ) {
@@ -70,7 +75,7 @@ fun SegregatedScreen(navController: NavHostController, viewModel: SegregatedView
                 .background(MyColor.background)
                 .padding(top = 60.dp)
         ) {
-            SegregatedScreenComponent(navController = navController, viewModel = viewModel,id)
+            SegregatedScreenComponent(navController, viewModel, roomViewModel, id)
         }
     }
 }
@@ -78,7 +83,7 @@ fun SegregatedScreen(navController: NavHostController, viewModel: SegregatedView
 @ExperimentalGlideComposeApi
 @ExperimentalComposeUiApi
 @Composable
-fun SegregatedScreenComponent(navController: NavHostController, viewModel: SegregatedViewModel, id:String) {
+fun SegregatedScreenComponent(navController: NavHostController, viewModel: SegregatedViewModel,roomViewModel: RoomDatabaseViewModel, id:String) {
 
     val context = LocalContext.current
 
@@ -205,7 +210,27 @@ fun SegregatedScreenComponent(navController: NavHostController, viewModel: Segre
             modifier = Modifier.padding(top = 5.dp, start = 5.dp, end = 5.dp)
         ) {
             Button(
-                onClick = { /* handle save button click */ },
+                onClick = {
+                    if (rating != 0.0 && capturedImageUris.isNotEmpty()) {
+                        roomViewModel.saveSegregatedData(
+                            id = id,
+                            category = selectedCategory,
+                            capturedImageUris = capturedImageUris,
+                            weightCards = weightCards,
+                            rating = rating,
+                            screenType = "Segregated"
+                        )
+                        navController.navigate(Home.route){
+                            popUpTo(Home.route){
+                                inclusive = true
+                            }
+                            launchSingleTop  = true
+                        }
+                    }
+                    else {
+                        Toast.makeText(context, "Provide data to all fields", Toast.LENGTH_SHORT).show()
+                    }
+                },
                 elevation = ButtonDefaults.buttonElevation(
                     defaultElevation = 1.dp,
                     pressedElevation = 5.dp

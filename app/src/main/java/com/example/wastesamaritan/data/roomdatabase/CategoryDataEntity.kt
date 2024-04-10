@@ -7,8 +7,7 @@ import androidx.room.PrimaryKey
 data class NotSegregatedDataEntity(
     @PrimaryKey val id: String,
     val capturedImageUris: List<String>,
-    val totalWeight: Double,
-    val weightCards: List<Double>,
+    val weightCards: MutableList<Double>,
     val rating: Double,
     val screenType: String
 )
@@ -18,8 +17,7 @@ data class SegregatedDataEntity(
     @PrimaryKey val id: String,
     val category: String,
     val capturedImageUris: List<String>,
-    val totalWeight: Double,
-    val weightCards: List<Double>,
+    val weightCards: MutableList<Double>,
     val rating: Double,
     val screenType: String
 )

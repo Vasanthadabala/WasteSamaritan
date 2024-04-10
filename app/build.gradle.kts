@@ -1,6 +1,7 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    id("kotlin-kapt")
 }
 
 android {
@@ -57,21 +58,24 @@ dependencies {
 
     //Navigation and Material-Design
     implementation("androidx.navigation:navigation-compose:2.7.7")
-    implementation("androidx.compose.material:material:1.6.3")
-    implementation("androidx.compose.material:material-icons-extended:1.6.3")
-
-    implementation("androidx.compose.runtime:runtime-livedata:1.6.3")
+    implementation("androidx.compose.material:material:1.6.5")
+    implementation("androidx.compose.material:material-icons-extended:1.6.5")
 
     // Zxing
     implementation ("com.google.zxing:core:3.4.1")
     implementation("com.journeyapps:zxing-android-embedded:4.3.0")
 
     //RoomDatabase
-    implementation("androidx.room:room-runtime:2.5.2")
-    implementation("androidx.compose.runtime:runtime-livedata:1.3.2")
+    implementation("androidx.room:room-runtime:2.6.1")
+    implementation("androidx.compose.runtime:runtime-livedata:1.6.5")
+
+    //Gson
+    implementation("com.google.code.gson:gson:2.10")
 
     // Kotlin extensions and coroutines support for Room
-    implementation("androidx.room:room-ktx:2.5.2")
+    implementation("androidx.room:room-ktx:2.6.1")
+    //noinspection KaptUsageInsteadOfKsp
+    kapt("androidx.room:room-compiler:2.6.1")
 
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")

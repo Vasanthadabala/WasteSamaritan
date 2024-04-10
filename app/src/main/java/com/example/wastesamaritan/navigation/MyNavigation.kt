@@ -10,6 +10,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
+import com.example.wastesamaritan.data.roomdatabase.RoomDatabaseViewModel
 import com.example.wastesamaritan.screens.individualHouse.individual.IndividualHouseViewModel
 import com.example.wastesamaritan.screens.AboutProjectScreen
 import com.example.wastesamaritan.screens.AboutScreen
@@ -29,8 +30,12 @@ import com.example.wastesamaritan.screens.individualHouse.segregated.SegregatedV
 @ExperimentalMaterial3Api
 @ExperimentalComposeUiApi
 @Composable
-fun MyNavigation(context:Context, individualHouseViewModel: IndividualHouseViewModel,notSegregatedViewModel: NotSegregatedViewModel,segregatedViewModel:SegregatedViewModel){
-
+fun MyNavigation(
+    context:Context,
+    individualHouseViewModel: IndividualHouseViewModel,
+    notSegregatedViewModel: NotSegregatedViewModel,
+    segregatedViewModel:SegregatedViewModel
+){
     val navController = rememberNavController()
     NavHost(navController = navController, startDestination = destination(context) )//destination(context)
     {
@@ -73,7 +78,7 @@ fun MyNavigation(context:Context, individualHouseViewModel: IndividualHouseViewM
             arguments = listOf(navArgument(NotSegregated.itemID) { type = NavType.StringType })
         ){
             val id = requireNotNull(it.arguments?.getString(NotSegregated.itemID))
-            NotSegregatedScreen(navController,notSegregatedViewModel, id)
+            NotSegregatedScreen(navController,notSegregatedViewModel,id)
         }
         composable(Data.route){
             DataScreen(navController)

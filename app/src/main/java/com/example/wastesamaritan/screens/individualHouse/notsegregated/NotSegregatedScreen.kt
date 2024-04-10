@@ -38,11 +38,14 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.FileProvider
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.example.wastesamaritan.R
 import com.example.wastesamaritan.components.OutlinedReusableComponent
 import com.example.wastesamaritan.components.image_capture.createImageFile
+import com.example.wastesamaritan.data.roomdatabase.RoomDatabaseViewModel
+import com.example.wastesamaritan.navigation.Home
 import com.example.wastesamaritan.navigation.TopBar
 import com.example.wastesamaritan.ui.theme.MyColor
 
@@ -53,7 +56,8 @@ import com.example.wastesamaritan.ui.theme.MyColor
 @ExperimentalMaterial3Api
 @Composable
 fun NotSegregatedScreen(navController: NavHostController,viewModel: NotSegregatedViewModel, id: String) {
-//    val roomViewModel: RoomDatabaseViewModel = viewModel()
+
+    val roomViewModel: RoomDatabaseViewModel = viewModel()
 
     Scaffold(
         topBar = { TopBar(name = "Not Segregated Screen", navController = navController) },
@@ -64,7 +68,7 @@ fun NotSegregatedScreen(navController: NavHostController,viewModel: NotSegregate
                 .background(MyColor.background)
                 .padding(top = 55.dp)
         ) {
-            NotSegregatedScreenComponent(navController,viewModel,id)
+            NotSegregatedScreenComponent(navController,viewModel,roomViewModel, id)
         }
     }
 }
@@ -74,6 +78,7 @@ fun NotSegregatedScreen(navController: NavHostController,viewModel: NotSegregate
 fun NotSegregatedScreenComponent(
     navController: NavHostController,
     viewModel: NotSegregatedViewModel,
+    roomViewModel: RoomDatabaseViewModel,
     id:String
 ) {
 
@@ -87,6 +92,7 @@ fun NotSegregatedScreenComponent(
     val rating = viewModel.rating.observeAsState(initial = 0.0).value
     val weightCards = viewModel.weightCards.observeAsState(initial = mutableListOf()).value
     val audioFile = viewModel.audioFileNotSegregated.observeAsState(initial = null).value
+
 
 
     var currentUri: Uri? by remember { mutableStateOf(null) }
@@ -167,6 +173,24 @@ fun NotSegregatedScreenComponent(
         ) {
             Button(
                 onClick = {
+                    if (rating != 0.0 && capturedImageUris.isNotEmpty()) {
+                            roomViewModel.saveNotSegregatedData(
+                                id = id,
+                                capturedImageUris = capturedImageUris,
+                                weightCards = weightCards,
+                                rating = rating,
+                                screenType = "Not Segregated"
+                            )
+                        navController.navigate(Home.route){
+                            popUpTo(Home.route){
+                                inclusive = true
+                            }
+                            launchSingleTop  = true
+                        }
+                    }
+                    else {
+                        Toast.makeText(context, "Provide data to all fields", Toast.LENGTH_SHORT).show()
+                    }
                 },
                 elevation = ButtonDefaults.buttonElevation(
                     defaultElevation = 1.dp,
