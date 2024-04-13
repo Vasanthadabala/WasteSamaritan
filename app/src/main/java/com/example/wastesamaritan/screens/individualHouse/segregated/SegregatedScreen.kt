@@ -225,9 +225,9 @@ fun SegregatedScreenComponent(navController: NavHostController, viewModel: Segre
                                 roomViewModel.saveSegregatedData(
                                     id = id,
                                     category = category,
-                                    capturedImageUris = categoryData.capturedImageUris,
-                                    weightCards = categoryData.weightCards,
-                                    rating = categoryData.rating,
+                                    capturedImageUris = categoryDataMap[category]?.value?.capturedImageUris ?: emptyList(),
+                                    weightCards = categoryDataMap[category]?.value?.weightCards ?: mutableListOf(),
+                                    rating = categoryDataMap[category]?.value?.rating ?: 0.0,
                                     screenType = "Segregated"
                                 )
                             }
