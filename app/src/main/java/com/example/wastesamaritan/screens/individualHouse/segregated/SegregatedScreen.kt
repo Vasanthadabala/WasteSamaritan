@@ -119,10 +119,6 @@ fun SegregatedScreenComponent(navController: NavHostController, viewModel: Segre
 
     var currentUri: Uri? by remember { mutableStateOf(null) }
 
-    val allDataProvided = remember(viewModel.categoryDataMap) {
-        allDataProvidedForAllCategories(viewModel.categoryDataMap.mapValues { it.value.value })
-    }
-
 
     val cameraLauncher = rememberLauncherForActivityResult(ActivityResultContracts.TakePicture()) { result ->
         if (result) {
@@ -146,6 +142,13 @@ fun SegregatedScreenComponent(navController: NavHostController, viewModel: Segre
         } else {
             Toast.makeText(context, "Permission Denied", Toast.LENGTH_SHORT).show()
         }
+    }
+
+    // Extract data from LiveData
+    val categoryDataMap = viewModel.categoryDataMap
+
+    val allDataProvided = remember(categoryDataMap) {
+        allDataProvidedForAllCategories(categoryDataMap.mapValues { it.value.value })
     }
 
     Column(
@@ -217,7 +220,7 @@ fun SegregatedScreenComponent(navController: NavHostController, viewModel: Segre
             Button(
                 onClick = {
                     if (allDataProvided) {
-                        viewModel.categoryDataMap.forEach { (category, data) ->
+                        categoryDataMap.forEach { (category, data) ->
                             data?.let { categoryData ->
                                 roomViewModel.saveSegregatedData(
                                     id = id,
