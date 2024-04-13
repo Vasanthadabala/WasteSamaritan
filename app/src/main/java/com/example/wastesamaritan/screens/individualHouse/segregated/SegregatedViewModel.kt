@@ -19,7 +19,7 @@ class SegregatedViewModel : ViewModel() {
     val selectedCategory: LiveData<String> = _selectedCategory
 
     // Mutable map to hold category data for each category
-    private val categoryDataMap = mutableMapOf<String, MutableLiveData<ModelForCategoryData>>()
+    val categoryDataMap = mutableMapOf<String, MutableLiveData<ModelForCategoryData>>()
 
     private val _audioFileSegregated = MutableLiveData<File?>()
     val audioFilSegregated: LiveData<File?> = _audioFileSegregated

@@ -119,6 +119,11 @@ fun SegregatedScreenComponent(navController: NavHostController, viewModel: Segre
 
     var currentUri: Uri? by remember { mutableStateOf(null) }
 
+    val allDataProvided = remember(viewModel.categoryDataMap) {
+        allDataProvidedForAllCategories(viewModel.categoryDataMap.mapValues { it.value.value })
+    }
+
+
     val cameraLauncher = rememberLauncherForActivityResult(ActivityResultContracts.TakePicture()) { result ->
         if (result) {
             currentUri?.let { uri ->
@@ -211,23 +216,26 @@ fun SegregatedScreenComponent(navController: NavHostController, viewModel: Segre
         ) {
             Button(
                 onClick = {
-                    if (rating != 0.0 && capturedImageUris.isNotEmpty()) {
-                        roomViewModel.saveSegregatedData(
-                            id = id,
-                            category = selectedCategory,
-                            capturedImageUris = capturedImageUris,
-                            weightCards = weightCards,
-                            rating = rating,
-                            screenType = "Segregated"
-                        )
-                        navController.navigate(Home.route){
-                            popUpTo(Home.route){
+                    if (allDataProvided) {
+                        viewModel.categoryDataMap.forEach { (category, data) ->
+                            data?.let { categoryData ->
+                                roomViewModel.saveSegregatedData(
+                                    id = id,
+                                    category = category,
+                                    capturedImageUris = categoryData.capturedImageUris,
+                                    weightCards = categoryData.weightCards,
+                                    rating = categoryData.rating,
+                                    screenType = "Segregated"
+                                )
+                            }
+                        }
+                        navController.navigate(Home.route) {
+                            popUpTo(Home.route) {
                                 inclusive = true
                             }
-                            launchSingleTop  = true
+                            launchSingleTop = true
                         }
-                    }
-                    else {
+                    } else {
                         Toast.makeText(context, "Provide data to all fields", Toast.LENGTH_SHORT).show()
                     }
                 },
@@ -298,5 +306,11 @@ fun WasteCategory(
             color = textColor,
             fontWeight = FontWeight.W800
         )
+    }
+}
+
+private fun allDataProvidedForAllCategories(categoryDataMap: Map<String, ModelForCategoryData?>): Boolean {
+    return categoryDataMap.all { (_, data) ->
+        data?.rating != 0.0
     }
 }
