@@ -145,7 +145,7 @@ fun SegregatedScreenComponent(navController: NavHostController, viewModel: Segre
     }
 
     // Extract data from LiveData
-    val categoryDataMap = viewModel.categoryDataMap
+    val categoryDataMap = viewModel.getCategoryDataMap()
 
     val allDataProvided = remember(categoryDataMap) {
         allDataProvidedForAllCategories(categoryDataMap.mapValues { it.value.value })
