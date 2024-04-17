@@ -10,21 +10,20 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
-import com.example.wastesamaritan.data.roomdatabase.RoomDatabaseViewModel
-import com.example.wastesamaritan.screens.individualHouse.individual.IndividualHouseViewModel
+import com.example.wastesamaritan.screens.individual_house.individual.IndividualHouseViewModel
 import com.example.wastesamaritan.screens.AboutProjectScreen
 import com.example.wastesamaritan.screens.AboutScreen
 import com.example.wastesamaritan.screens.ComplaintsScreen
 import com.example.wastesamaritan.screens.DataScreen
-import com.example.wastesamaritan.screens.HomeScreen
+import com.example.wastesamaritan.screens.home_screen.HomeScreen
 import com.example.wastesamaritan.screens.MyRatingsScreen
 import com.example.wastesamaritan.screens.ProfileScreen
 import com.example.wastesamaritan.screens.SigninScreen
-import com.example.wastesamaritan.screens.individualHouse.individual.IndividualHouseScreen
-import com.example.wastesamaritan.screens.individualHouse.notsegregated.NotSegregatedScreen
-import com.example.wastesamaritan.screens.individualHouse.notsegregated.NotSegregatedViewModel
-import com.example.wastesamaritan.screens.individualHouse.segregated.SegregatedScreen
-import com.example.wastesamaritan.screens.individualHouse.segregated.SegregatedViewModel
+import com.example.wastesamaritan.screens.individual_house.individual.IndividualHouseScreen
+import com.example.wastesamaritan.screens.individual_house.notsegregated.NotSegregatedScreen
+import com.example.wastesamaritan.screens.individual_house.notsegregated.NotSegregatedViewModel
+import com.example.wastesamaritan.screens.individual_house.segregated.SegregatedScreen
+import com.example.wastesamaritan.screens.individual_house.segregated.SegregatedViewModel
 
 @ExperimentalGlideComposeApi
 @ExperimentalMaterial3Api

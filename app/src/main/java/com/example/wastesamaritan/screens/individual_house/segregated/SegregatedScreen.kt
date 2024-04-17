@@ -1,4 +1,4 @@
-package com.example.wastesamaritan.screens.individualHouse.segregated
+package com.example.wastesamaritan.screens.individual_house.segregated
 
 import android.Manifest
 import android.annotation.SuppressLint
@@ -54,7 +54,7 @@ import com.example.wastesamaritan.components.image_capture.createImageFile
 import com.example.wastesamaritan.data.roomdatabase.RoomDatabaseViewModel
 import com.example.wastesamaritan.navigation.Home
 import com.example.wastesamaritan.navigation.TopBar
-import com.example.wastesamaritan.screens.individualHouse.segregated.SegregatedViewModel.Companion.DEFAULT_CATEGORY
+import com.example.wastesamaritan.screens.individual_house.segregated.SegregatedViewModel.Companion.DEFAULT_CATEGORY
 import com.example.wastesamaritan.ui.theme.MyColor
 
 @ExperimentalGlideComposeApi
@@ -145,10 +145,10 @@ fun SegregatedScreenComponent(navController: NavHostController, viewModel: Segre
     }
 
     // Extract data from LiveData
-    val categoryDataMap = viewModel.getCategoryDataMap()
+    val categoryDataMap by viewModel.getCategoryDataMap().observeAsState(emptyMap())
 
     val allDataProvided = remember(categoryDataMap) {
-        allDataProvidedForAllCategories(categoryDataMap.mapValues { it.value.value })
+        allDataProvidedForAllCategories(categoryDataMap.mapValues { it.value })
     }
 
     Column(
@@ -225,9 +225,9 @@ fun SegregatedScreenComponent(navController: NavHostController, viewModel: Segre
                                 roomViewModel.saveSegregatedData(
                                     id = id,
                                     category = category,
-                                    capturedImageUris = categoryDataMap[category]?.value?.capturedImageUris ?: emptyList(),
-                                    weightCards = categoryDataMap[category]?.value?.weightCards ?: mutableListOf(),
-                                    rating = categoryDataMap[category]?.value?.rating ?: 0.0,
+                                    capturedImageUris = categoryDataMap[category]?.capturedImageUris ?: emptyList(),
+                                    weightCards = categoryDataMap[category]?.weightCards ?: mutableListOf(),
+                                    rating = categoryDataMap[category]?.rating ?: 0.0,
                                     screenType = "Segregated"
                                 )
                             }

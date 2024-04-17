@@ -11,11 +11,10 @@ import androidx.compose.material3.Surface
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
-import com.example.wastesamaritan.data.roomdatabase.RoomDatabaseViewModel
-import com.example.wastesamaritan.screens.individualHouse.individual.IndividualHouseViewModel
+import com.example.wastesamaritan.screens.individual_house.individual.IndividualHouseViewModel
 import com.example.wastesamaritan.navigation.MyNavigation
-import com.example.wastesamaritan.screens.individualHouse.notsegregated.NotSegregatedViewModel
-import com.example.wastesamaritan.screens.individualHouse.segregated.SegregatedViewModel
+import com.example.wastesamaritan.screens.individual_house.notsegregated.NotSegregatedViewModel
+import com.example.wastesamaritan.screens.individual_house.segregated.SegregatedViewModel
 import com.example.wastesamaritan.ui.theme.WasteSamaritanTheme
 
 @ExperimentalGlideComposeApi

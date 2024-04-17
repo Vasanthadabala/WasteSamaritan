@@ -1,4 +1,4 @@
-package com.example.wastesamaritan.screens.individualHouse.segregated
+package com.example.wastesamaritan.screens.individual_house.segregated
 
 import android.net.Uri
 import androidx.lifecycle.LiveData
@@ -49,9 +49,12 @@ class SegregatedViewModel : ViewModel() {
     }
 
     // Function to get the category data map
-    fun getCategoryDataMap(): Map<String, MutableLiveData<ModelForCategoryData>> {
-        return categoryDataMap
+    fun getCategoryDataMap(): MutableLiveData<Map<String, ModelForCategoryData?>> {
+//        return MutableLiveData(categoryDataMap.mapValues { it.value.value }.toMap())
+        val dataMap = categoryDataMap.mapValues { it.value.value }
+        return MutableLiveData(dataMap)
     }
+
 
     // Function to add captured image URI for a specific category
     fun addCapturedImageUri(category: String, uri: Uri) {

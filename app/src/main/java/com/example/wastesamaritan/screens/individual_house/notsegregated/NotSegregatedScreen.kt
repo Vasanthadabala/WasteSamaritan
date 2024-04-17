@@ -1,4 +1,4 @@
-package com.example.wastesamaritan.screens.individualHouse.notsegregated
+package com.example.wastesamaritan.screens.individual_house.notsegregated
 
 import android.Manifest
 import android.annotation.SuppressLint

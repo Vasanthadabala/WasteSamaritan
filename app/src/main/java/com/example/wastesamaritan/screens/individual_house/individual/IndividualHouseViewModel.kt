@@ -1,4 +1,4 @@
-package com.example.wastesamaritan.screens.individualHouse.individual
+package com.example.wastesamaritan.screens.individual_house.individual
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
