@@ -30,6 +30,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -66,7 +67,7 @@ import kotlinx.coroutines.launch
 @ExperimentalMaterial3Api
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun HomeScreen(navController:NavHostController,viewModel: IndividualHouseViewModel,segregatedviewmodel: SegregatedViewModel,notsegregatedviewmodel: NotSegregatedViewModel) {
+fun HomeScreen(navController:NavHostController,individualHouseViewModel: IndividualHouseViewModel,homeScreenViewModel:HomeScreenViewModel,segregatedviewmodel: SegregatedViewModel,notsegregatedviewmodel: NotSegregatedViewModel) {
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
 
@@ -101,21 +102,21 @@ fun HomeScreen(navController:NavHostController,viewModel: IndividualHouseViewMod
                     .background(MyColor.background)
                     .padding(top = 50.dp)
             ) {
-                HomeScreenComponent(navController,viewModel,segregatedviewmodel,notsegregatedviewmodel)
+                HomeScreenComponent(navController,individualHouseViewModel,homeScreenViewModel,segregatedviewmodel,notsegregatedviewmodel)
             }
         }
     }
 }
 
 @Composable
-fun HomeScreenComponent(navController: NavHostController,viewModel: IndividualHouseViewModel,segregatedviewmodel: SegregatedViewModel,notsegregatedviewmodel: NotSegregatedViewModel) {
+fun HomeScreenComponent(navController: NavHostController,individualHouseViewModel: IndividualHouseViewModel,homeScreenViewModel:HomeScreenViewModel,segregatedviewmodel: SegregatedViewModel,notsegregatedviewmodel: NotSegregatedViewModel) {
 
     val context = LocalContext.current
     val sharedPreferences = context.getSharedPreferences("MY_PRE", Context.MODE_PRIVATE)
 
     val username = sharedPreferences.getString("username", "")
 
-    var codes = 0
+    val scannedCodes by individualHouseViewModel.scannedCodes.observeAsState(listOf())
 
     Column(
         modifier = Modifier
@@ -186,13 +187,13 @@ fun HomeScreenComponent(navController: NavHostController,viewModel: IndividualHo
                             horizontalArrangement = Arrangement.Center
                         ) {
                             Text(
-                                text = "$codes",
+                                text = "${scannedCodes.size}",
                                 fontSize = 24.sp,
                                 fontWeight = FontWeight.W600,
                                 color = MyColor.text
                             )
                             Text(
-                                text = "of 20",
+                                text = "of 50",
                                 fontSize = 18.sp,
                                 fontWeight = FontWeight.W500,
                                 color = MyColor.text,
@@ -214,7 +215,7 @@ fun HomeScreenComponent(navController: NavHostController,viewModel: IndividualHo
                     onScanResult = { result ->
                         segregatedviewmodel.resetData()
                         notsegregatedviewmodel.resetData()
-                        viewModel.setScannedResult(result)
+                        individualHouseViewModel.setScannedResult(result)
                         Toast.makeText(context, "Scanned result: $result", Toast.LENGTH_SHORT).show()
                         navController.navigate(IndividualHouse.route)
                     },
@@ -229,11 +230,12 @@ fun HomeScreenComponent(navController: NavHostController,viewModel: IndividualHo
             modifier = Modifier.padding(vertical = 20.dp, horizontal = 10.dp)
         ) {
             HomeScreenScanner(
-                onScanResult = { scannedresult ->
-                    Toast.makeText(context, "Scanned result: $scannedresult", Toast.LENGTH_SHORT).show()
-                },
+                viewModel = homeScreenViewModel,
                 onPermissionDenied = {
                     Toast.makeText(context, "Camera permission denied. Cannot scan barcodes.", Toast.LENGTH_SHORT).show()
+                },
+                onError = {
+                    Toast.makeText(context, "Incorrect Qr Code", Toast.LENGTH_SHORT).show()
                 }
             )
         }

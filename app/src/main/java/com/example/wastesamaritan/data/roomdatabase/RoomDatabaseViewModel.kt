@@ -4,10 +4,8 @@ import android.app.Application
 import android.net.Uri
 import android.util.Log
 import android.widget.Toast
-import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.room.Room
 import kotlinx.coroutines.launch
@@ -43,6 +41,26 @@ class RoomDatabaseViewModel(application: Application) : AndroidViewModel(applica
 
     fun getSegregatedDataById(id: String): LiveData<SegregatedDataEntity> {
         return segregatedDataDao.getDataById(id)
+    }
+
+    fun getNotSegregatedDataSortedById(): LiveData<List<NotSegregatedDataEntity>> {
+        return notSegregatedDataDao.getNotSegregatedDataSortedById()
+    }
+
+    fun getSegregatedDataSortedById(): LiveData<List<SegregatedDataEntity>> {
+        return segregatedDataDao.getSegregatedDataSortedById()
+    }
+
+    fun deletenotsegregatedData(id: Int) {
+        viewModelScope.launch {
+            notSegregatedDataDao.deleteListById(id)
+        }
+    }
+
+    fun deletesegregatedData(id: Int) {
+        viewModelScope.launch {
+            segregatedDataDao.deleteListById(id)
+        }
     }
 
 
@@ -98,9 +116,7 @@ class RoomDatabaseViewModel(application: Application) : AndroidViewModel(applica
     ) {
         val capturedImages = capturedImageUris.map { it.toString() }
         val audioPath = audio?.absolutePath
-        val idCategory = "$id$category" // Combine ID and Category
         val segregatedDataEntity = SegregatedDataEntity(
-            idCategory = idCategory,
             id = id,
             category = category,
             capturedImageUris = capturedImages,

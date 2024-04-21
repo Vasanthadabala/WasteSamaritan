@@ -36,7 +36,11 @@ object NotSegregated: Destinations {
     override val route = "NotSegregated"
     const val itemID = "itemId"
 }
-object Data: Destinations {
-    override val route = "Data"
+object SegregatedDataScreen: Destinations {
+    override val route = "Segregated"
+}
+
+object NotSegregatedDataScreen: Destinations {
+    override val route = "NotSegregated"
 }
 

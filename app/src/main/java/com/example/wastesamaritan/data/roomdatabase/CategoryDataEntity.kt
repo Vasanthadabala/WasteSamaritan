@@ -7,7 +7,8 @@ import java.io.File
 
 @Entity(tableName = "not_segregated_data")
 data class NotSegregatedDataEntity(
-    @PrimaryKey val id: String,
+    @PrimaryKey(autoGenerate = true) val primaryKey: Int = 0,
+    val id: String,
     val capturedImageUris: List<String>,
     val weightCards: MutableList<Double>,
     val rating: Double,
@@ -17,7 +18,7 @@ data class NotSegregatedDataEntity(
 
 @Entity(tableName = "segregated_data")
 data class SegregatedDataEntity(
-    @PrimaryKey val idCategory: String, // Combined ID and Category as primary key
+    @PrimaryKey(autoGenerate = true) val primaryKey: Int = 0,
     val id: String,
     val category: String,
     val capturedImageUris: List<String>,

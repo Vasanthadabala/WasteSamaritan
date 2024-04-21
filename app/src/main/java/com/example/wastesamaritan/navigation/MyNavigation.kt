@@ -10,16 +10,18 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
-import com.example.wastesamaritan.screens.individual_house.individual.IndividualHouseViewModel
 import com.example.wastesamaritan.screens.AboutProjectScreen
 import com.example.wastesamaritan.screens.AboutScreen
 import com.example.wastesamaritan.screens.ComplaintsScreen
-import com.example.wastesamaritan.screens.DataScreen
-import com.example.wastesamaritan.screens.home_screen.HomeScreen
 import com.example.wastesamaritan.screens.MyRatingsScreen
+import com.example.wastesamaritan.screens.NotSegregatedDataScreen
 import com.example.wastesamaritan.screens.ProfileScreen
+import com.example.wastesamaritan.screens.SegregatedDataScreen
 import com.example.wastesamaritan.screens.SigninScreen
+import com.example.wastesamaritan.screens.home_screen.HomeScreen
+import com.example.wastesamaritan.screens.home_screen.HomeScreenViewModel
 import com.example.wastesamaritan.screens.individual_house.individual.IndividualHouseScreen
+import com.example.wastesamaritan.screens.individual_house.individual.IndividualHouseViewModel
 import com.example.wastesamaritan.screens.individual_house.notsegregated.NotSegregatedScreen
 import com.example.wastesamaritan.screens.individual_house.notsegregated.NotSegregatedViewModel
 import com.example.wastesamaritan.screens.individual_house.segregated.SegregatedScreen
@@ -32,6 +34,7 @@ import com.example.wastesamaritan.screens.individual_house.segregated.Segregated
 fun MyNavigation(
     context:Context,
     individualHouseViewModel: IndividualHouseViewModel,
+    homeScreenViewModel:HomeScreenViewModel,
     notSegregatedViewModel: NotSegregatedViewModel,
     segregatedViewModel:SegregatedViewModel
 ){
@@ -42,7 +45,7 @@ fun MyNavigation(
             SigninScreen(navController)
         }
         composable(Home.route){
-            HomeScreen(navController,individualHouseViewModel,segregatedViewModel,notSegregatedViewModel)
+            HomeScreen(navController,individualHouseViewModel,homeScreenViewModel,segregatedViewModel,notSegregatedViewModel)
         }
         composable(Profile.route){
             ProfileScreen(navController)
@@ -76,8 +79,12 @@ fun MyNavigation(
             val id = requireNotNull(it.arguments?.getString(NotSegregated.itemID))
             NotSegregatedScreen(navController,notSegregatedViewModel,id)
         }
-        composable(Data.route){
-            DataScreen(navController)
+        composable(SegregatedDataScreen.route){
+            SegregatedDataScreen(navController)
+        }
+
+        composable(NotSegregatedDataScreen.route){
+            NotSegregatedDataScreen(navController)
         }
     }
 }

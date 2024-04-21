@@ -16,6 +16,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -33,18 +34,30 @@ import com.journeyapps.barcodescanner.ScanOptions
 
 @Composable
 fun HomeScreenScanner(
-    onScanResult: (String) -> Unit,
-    onPermissionDenied: () -> Unit
+    viewModel: HomeScreenViewModel,
+    onPermissionDenied: () -> Unit,
+    onError: () -> Unit
 ) {
-    val textResult = remember { mutableStateOf("") }
     val context = LocalContext.current
+
+    // Observe the scan result from the view model
+    val scannedResult by viewModel.scannedResult.observeAsState()
+
+    /// Convert the observed string state to ButtonState
+    val buttonState = scannedResult?.let {
+        ButtonState.values().firstOrNull { buttonState -> buttonState.text == it }
+    } ?: ButtonState.START
 
     val barCodeLauncher = rememberLauncherForActivityResult(ScanContract()) { result ->
         if (result.contents == null) {
             Toast.makeText(context, "Cancelled", Toast.LENGTH_SHORT).show()
         } else {
-            textResult.value = result.contents
-            onScanResult(result.contents)
+            val scannedResult = result.contents
+            if (scannedResult == "Start" || scannedResult == "Stop") {
+                viewModel.setScannedResult(scannedResult)
+            } else {
+                onError()
+            }
         }
     }
 
@@ -88,30 +101,26 @@ fun HomeScreenScanner(
             requestPermissionLauncher.launch(Manifest.permission.CAMERA)
         }
     }
-    ButtonToScan(onClick = { checkCameraPermission() })
+    ButtonToScan(buttonState = buttonState,onClick = { checkCameraPermission() })
 }
 
 @Composable
-fun ButtonToScan(onClick: () -> Unit) {
-    var buttonState by remember { mutableStateOf(ButtonState.START) }
+fun ButtonToScan(buttonState: ButtonState, onClick: () -> Unit) {
 
-    // Function to handle the button click
+    // Use the provided buttonState directly
+    var currentButtonState by remember { mutableStateOf(buttonState) }
+
+    // Define the button click handler to toggle the button state
     val onButtonClick: () -> Unit = {
-        when (buttonState) {
-            ButtonState.START -> {
-                buttonState = ButtonState.STOP
-            }
-
-            ButtonState.STOP -> {
-                buttonState = ButtonState.START
-            }
+        currentButtonState = when (buttonState) {
+            ButtonState.START -> ButtonState.STOP
+            ButtonState.STOP -> ButtonState.START
         }
+        onClick() // Call the provided onClick callback
     }
+
     Button(
-        onClick = {
-            onClick()
-            onButtonClick()
-        },
+        onClick = onButtonClick,
         elevation = ButtonDefaults.buttonElevation(
             defaultElevation = 1.dp,
             pressedElevation = 5.dp
@@ -120,7 +129,7 @@ fun ButtonToScan(onClick: () -> Unit) {
             .fillMaxWidth()
             .padding(vertical = 20.dp, horizontal = 8.dp),
         shape = RoundedCornerShape(24),
-        colors = when (buttonState) {
+        colors = when (currentButtonState) { // Use currentButtonState here
             ButtonState.START -> ButtonDefaults.buttonColors(MyColor.primary)
             ButtonState.STOP -> ButtonDefaults.buttonColors(Color.Red)
         }
@@ -131,7 +140,7 @@ fun ButtonToScan(onClick: () -> Unit) {
             tint = Color.White
         )
         Text(
-            text = buttonState.text,
+            text = currentButtonState.text, // Use currentButtonState text here
             textAlign = TextAlign.Center,
             fontSize = 22.sp,
             color = Color.White,

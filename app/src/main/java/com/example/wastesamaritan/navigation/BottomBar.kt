@@ -105,24 +105,25 @@ val bottomNavItems = listOf(
         selectedIcon = R.drawable.selectedhome,
         unselectedIcon = R.drawable.unselectedhome
     ),
-    BottomNavigationItem(
-        title = "My Ratings",
-        selectedIcon = R.drawable.selectedstar,
-        unselectedIcon = R.drawable.unselectedstar
-    ),
-    BottomNavigationItem(
-        title = "Complaints",
-        selectedIcon = R.drawable.selectedfeedback,
-        unselectedIcon = R.drawable.unselectedfeedback
-    ),
 //    BottomNavigationItem(
-//        title = "Sync",
-//        selectedIcon = R.drawable.sync,
-//        unselectedIcon = R.drawable.sync
-//    )
+//        title = "My Ratings",
+//        selectedIcon = R.drawable.selectedstar,
+//        unselectedIcon = R.drawable.unselectedstar
+//    ),
+//    BottomNavigationItem(
+//        title = "Complaints",
+//        selectedIcon = R.drawable.selectedfeedback,
+//        unselectedIcon = R.drawable.unselectedfeedback
+//    ),
     BottomNavigationItem(
-        title = "Data",
+        title = "Segregated",
+        selectedIcon = R.drawable.sync,
+        unselectedIcon = R.drawable.sync
+    ),
+    BottomNavigationItem(
+        title = "NotSegregated",
         selectedIcon = R.drawable.sync,
         unselectedIcon = R.drawable.sync
     )
+
 )
