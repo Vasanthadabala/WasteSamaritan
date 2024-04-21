@@ -179,6 +179,7 @@ fun NotSegregatedScreenComponent(
                                 capturedImageUris = capturedImageUris,
                                 weightCards = weightCards,
                                 rating = rating,
+                                audio = audioFile,
                                 screenType = "Not Segregated"
                             )
                         navController.navigate(Home.route){

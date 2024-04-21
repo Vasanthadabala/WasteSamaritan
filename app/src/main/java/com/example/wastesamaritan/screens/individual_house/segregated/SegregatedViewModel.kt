@@ -105,6 +105,24 @@ class SegregatedViewModel : ViewModel() {
     // Function to update the audio file for all categories
     fun updateAudioFile(file: File?) {
         _audioFileSegregated.value = file
+        categoryDataMap.values.forEach { categoryLiveData ->
+            val currentData = categoryLiveData.value ?: return@forEach
+            val newData = currentData.copy(audio = file)
+            categoryLiveData.value = newData
+        }
+    }
+
+    fun resetData() {
+        // Reset selected category
+        _selectedCategory.value = DEFAULT_CATEGORY
+
+        // Reset all category data to default values
+        Categories.forEach { category ->
+            categoryDataMap[category]?.value = ModelForCategoryData(emptyList(), mutableListOf(),0.0,null)
+        }
+
+        // Reset audio file
+        _audioFileSegregated.value = null
     }
 
     companion object {

@@ -3,6 +3,7 @@ package com.example.wastesamaritan.data.roomdatabase
 import androidx.room.TypeConverter
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import java.io.File
 
 class Converters {
     @TypeConverter
@@ -25,5 +26,15 @@ class Converters {
     @TypeConverter
     fun toDoubleList(list: List<Double>): String {
         return Gson().toJson(list)
+    }
+
+    @TypeConverter
+    fun fromFile(file: File?): String? {
+        return file?.absolutePath
+    }
+
+    @TypeConverter
+    fun toFile(path: String?): File? {
+        return if (!path.isNullOrBlank()) File(path) else null
     }
 }

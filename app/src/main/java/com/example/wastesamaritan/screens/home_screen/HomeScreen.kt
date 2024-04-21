@@ -57,6 +57,8 @@ import com.example.wastesamaritan.navigation.HomeTopBar
 import com.example.wastesamaritan.navigation.IndividualHouse
 import com.example.wastesamaritan.navigation.bottomNavItems
 import com.example.wastesamaritan.navigation.drawerItems
+import com.example.wastesamaritan.screens.individual_house.notsegregated.NotSegregatedViewModel
+import com.example.wastesamaritan.screens.individual_house.segregated.SegregatedViewModel
 import com.example.wastesamaritan.ui.theme.MyColor
 import kotlinx.coroutines.launch
 
@@ -64,7 +66,7 @@ import kotlinx.coroutines.launch
 @ExperimentalMaterial3Api
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun HomeScreen(navController:NavHostController,viewModel: IndividualHouseViewModel) {
+fun HomeScreen(navController:NavHostController,viewModel: IndividualHouseViewModel,segregatedviewmodel: SegregatedViewModel,notsegregatedviewmodel: NotSegregatedViewModel) {
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
 
@@ -99,14 +101,14 @@ fun HomeScreen(navController:NavHostController,viewModel: IndividualHouseViewMod
                     .background(MyColor.background)
                     .padding(top = 50.dp)
             ) {
-                HomeScreenComponent(navController,viewModel)
+                HomeScreenComponent(navController,viewModel,segregatedviewmodel,notsegregatedviewmodel)
             }
         }
     }
 }
 
 @Composable
-fun HomeScreenComponent(navController: NavHostController,viewModel: IndividualHouseViewModel) {
+fun HomeScreenComponent(navController: NavHostController,viewModel: IndividualHouseViewModel,segregatedviewmodel: SegregatedViewModel,notsegregatedviewmodel: NotSegregatedViewModel) {
 
     val context = LocalContext.current
     val sharedPreferences = context.getSharedPreferences("MY_PRE", Context.MODE_PRIVATE)
@@ -114,21 +116,6 @@ fun HomeScreenComponent(navController: NavHostController,viewModel: IndividualHo
     val username = sharedPreferences.getString("username", "")
 
     var codes = 0
-
-    var buttonState by remember { mutableStateOf(ButtonState.START) }
-
-    // Function to handle the button click
-    val onButtonClick: () -> Unit = {
-        when (buttonState) {
-            ButtonState.START -> {
-                buttonState = ButtonState.STOP
-            }
-
-            ButtonState.STOP -> {
-                buttonState = ButtonState.START
-            }
-        }
-    }
 
     Column(
         modifier = Modifier
@@ -225,6 +212,8 @@ fun HomeScreenComponent(navController: NavHostController,viewModel: IndividualHo
 
                 BarcodeScanner(
                     onScanResult = { result ->
+                        segregatedviewmodel.resetData()
+                        notsegregatedviewmodel.resetData()
                         viewModel.setScannedResult(result)
                         Toast.makeText(context, "Scanned result: $result", Toast.LENGTH_SHORT).show()
                         navController.navigate(IndividualHouse.route)
@@ -239,44 +228,14 @@ fun HomeScreenComponent(navController: NavHostController,viewModel: IndividualHo
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier.padding(vertical = 20.dp, horizontal = 10.dp)
         ) {
-            Row(
-                horizontalArrangement = Arrangement.Center
-            ) {
-                Button(
-                    onClick = { onButtonClick() },
-                    elevation = ButtonDefaults.buttonElevation(
-                        defaultElevation = 1.dp,
-                        pressedElevation = 5.dp
-                    ),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 20.dp, horizontal = 8.dp),
-                    shape = RoundedCornerShape(24),
-                    colors = when (buttonState) {
-                        ButtonState.START -> ButtonDefaults.buttonColors(MyColor.primary)
-                        ButtonState.STOP -> ButtonDefaults.buttonColors(Color.Red)
-                    }
-                ) {
-                    Icon(
-                        imageVector = Icons.Rounded.QrCode,
-                        contentDescription = "",
-                        tint = Color.White
-                    )
-                    Text(
-                        text = buttonState.text,
-                        textAlign = TextAlign.Center,
-                        fontSize = 22.sp,
-                        color = Color.White,
-                        modifier = Modifier.padding(horizontal = 20.dp)
-                    )
+            HomeScreenScanner(
+                onScanResult = { scannedresult ->
+                    Toast.makeText(context, "Scanned result: $scannedresult", Toast.LENGTH_SHORT).show()
+                },
+                onPermissionDenied = {
+                    Toast.makeText(context, "Camera permission denied. Cannot scan barcodes.", Toast.LENGTH_SHORT).show()
                 }
-            }
+            )
         }
-
     }
-}
-
-enum class ButtonState(val text: String) {
-    START("Start"),
-    STOP("Stop")
 }

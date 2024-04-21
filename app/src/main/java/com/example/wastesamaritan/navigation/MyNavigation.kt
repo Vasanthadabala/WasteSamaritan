@@ -42,7 +42,7 @@ fun MyNavigation(
             SigninScreen(navController)
         }
         composable(Home.route){
-            HomeScreen(navController,individualHouseViewModel)
+            HomeScreen(navController,individualHouseViewModel,segregatedViewModel,notSegregatedViewModel)
         }
         composable(Profile.route){
             ProfileScreen(navController)
@@ -59,9 +59,6 @@ fun MyNavigation(
         composable(Complaints.route){
             ComplaintsScreen(navController)
         }
-//        composable(Sync.route){
-//            SyncScreen(navController)
-//        }
         composable(IndividualHouse.route){
             IndividualHouseScreen(navController,individualHouseViewModel)
         }

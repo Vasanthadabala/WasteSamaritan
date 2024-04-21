@@ -2,14 +2,19 @@ package com.example.wastesamaritan.data.roomdatabase
 
 import android.app.Application
 import android.net.Uri
+import android.util.Log
+import android.widget.Toast
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.room.Room
 import kotlinx.coroutines.launch
+import java.io.File
 
 class RoomDatabaseViewModel(application: Application) : AndroidViewModel(application) {
+
     private val notSegregatedDataDao : NotSegregatedDataDao
     private val segregatedDataDao : SegregatedDataDao
 
@@ -46,18 +51,28 @@ class RoomDatabaseViewModel(application: Application) : AndroidViewModel(applica
         capturedImageUris: List<Uri>,
         weightCards: MutableList<Double>,
         rating: Double,
+        audio:File?,
         screenType: String
     ) {
         val capturedImages = capturedImageUris.map { it.toString() }
+        val audioPath = audio?.absolutePath
         val notSegregatedDataEntity = NotSegregatedDataEntity(
             id = id,
             capturedImageUris = capturedImages,
             weightCards = weightCards,
             rating = rating,
+            audio = audioPath,
             screenType = screenType
         )
         viewModelScope.launch {
-            notSegregatedDataDao.insertCategoryData(notSegregatedDataEntity)
+            try {
+                notSegregatedDataDao.insertCategoryData(notSegregatedDataEntity)
+            }catch (e:Throwable){
+                e.printStackTrace()
+                Log.e("notSegregatedData", "Error occurred while saving data", e)
+                val context = getApplication<Application>().applicationContext
+                Toast.makeText(context, "Error occurred while saving data", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 
@@ -66,9 +81,10 @@ class RoomDatabaseViewModel(application: Application) : AndroidViewModel(applica
         capturedImageUris: List<Uri>,
         weightCards: MutableList<Double>,
         rating: Double,
+        audio:File?,
         screenType: String
     ) {
-        insertNotSegregatedData(id, capturedImageUris, weightCards, rating, screenType)
+        insertNotSegregatedData(id, capturedImageUris, weightCards, rating,audio, screenType)
     }
 
     fun insertSegregatedData(
@@ -77,19 +93,31 @@ class RoomDatabaseViewModel(application: Application) : AndroidViewModel(applica
         capturedImageUris: List<Uri>,
         weightCards: MutableList<Double>,
         rating: Double,
+        audio:File?,
         screenType: String
     ) {
         val capturedImages = capturedImageUris.map { it.toString() }
+        val audioPath = audio?.absolutePath
+        val idCategory = "$id$category" // Combine ID and Category
         val segregatedDataEntity = SegregatedDataEntity(
+            idCategory = idCategory,
             id = id,
             category = category,
             capturedImageUris = capturedImages,
             weightCards = weightCards,
+            audio = audioPath,
             rating = rating,
             screenType = screenType
         )
         viewModelScope.launch {
-            segregatedDataDao.insertCategoryData(segregatedDataEntity)
+            try {
+                segregatedDataDao.insertCategoryData(segregatedDataEntity)
+            }catch (e:Throwable){
+                e.printStackTrace()
+                Log.e("SegregatedData", "Error occurred while saving data", e)
+                val context = getApplication<Application>().applicationContext
+                Toast.makeText(context, "Error occurred while saving data", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 
@@ -99,8 +127,9 @@ class RoomDatabaseViewModel(application: Application) : AndroidViewModel(applica
         capturedImageUris: List<Uri>,
         weightCards: MutableList<Double>,
         rating: Double,
+        audio: File?,
         screenType: String
     ) {
-        insertSegregatedData(id, category, capturedImageUris, weightCards, rating, screenType)
+        insertSegregatedData(id, category, capturedImageUris, weightCards, rating, audio, screenType)
     }
 }

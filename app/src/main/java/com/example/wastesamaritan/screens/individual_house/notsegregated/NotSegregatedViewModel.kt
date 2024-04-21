@@ -62,4 +62,12 @@ class NotSegregatedViewModel : ViewModel() {
     fun updateAudioFile(file: File?) {
         _audioFileNotSegregated.value = file
     }
+
+    // Function to reset all LiveData properties to their initial values
+    fun resetData() {
+        _weightCards.value = mutableListOf()
+        _rating.value = 0.0
+        _capturedImageUris.value = emptyList()
+        _audioFileNotSegregated.value = null
+    }
 }

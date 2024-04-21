@@ -34,4 +34,7 @@ interface SegregatedDataDao {
 
     @Query("SELECT * FROM segregated_data WHERE id = :id AND category = :category")
     fun getDataByCategory(id: String, category: String): LiveData<List<SegregatedDataEntity>>
+
+    @Query("UPDATE segregated_data SET capturedImageUris = :capturedImageUris, category =:category, weightCards = :weightCards, rating = :rating,audio= :audio WHERE id = :id")
+    suspend fun updateItem(id: String, category: String, capturedImageUris: List<String>, weightCards: List<Double>, rating: Double,audio: String?)
 }
